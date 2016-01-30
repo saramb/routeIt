@@ -78,11 +78,6 @@ public interface routeAPI {
             Callback<Response> callback);
 
 
-
-
-
-
-
     @FormUrlEncoded
     @POST("/AddNotif.php")
     public void AddNotif(
