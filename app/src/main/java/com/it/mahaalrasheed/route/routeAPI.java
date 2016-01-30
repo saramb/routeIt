@@ -78,5 +78,19 @@ public interface routeAPI {
             Callback<Response> callback);
 
 
+
+
+
+
+
+//NAJAT!!
+
+    @FormUrlEncoded
+    @POST("/AddNotif.php")
+    public void AddNotif(
+            @Field("content") String content,
+            Callback<Response> callback);
+
+
 }
 
