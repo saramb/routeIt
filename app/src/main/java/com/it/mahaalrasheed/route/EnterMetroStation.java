@@ -131,9 +131,9 @@ public class EnterMetroStation extends AppCompatActivity {
                 //Passing the values by getting it from editTexts
                 LocationID,
                 coor.getText().toString(),
-                coor.getText().toString(),
+                coor2.getText().toString(),
                 name.getText().toString(),
-                "1",
+                "najat",
 
 
                 //Creating an anonymous callback
