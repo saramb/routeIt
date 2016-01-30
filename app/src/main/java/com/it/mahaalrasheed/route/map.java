@@ -58,7 +58,7 @@ public class map extends AppCompatActivity
     public static int id=0;
     public static String notif="";
     Realm notifRealm;
-
+    Notification notification;
 
 
     @Override
@@ -66,9 +66,6 @@ public class map extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        RetrieveNotif();
-
-        Notification notification;
 
         notification=new Notification();
         notification.setID(0);
@@ -287,7 +284,7 @@ public class map extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if ( item.getItemId() == R.id.notifi) { //if user press the notification icon on the menu bar, go to favorite activity
             Intent intent = new Intent (this, notif.class);
-            intent.putExtra("content",notif);
+            intent.putExtra("content", notif);
             //startActivity(intent);
             startActivityForResult(intent, 1);
            return true;
@@ -305,6 +302,11 @@ public class map extends AppCompatActivity
         {
             String message=data.getStringExtra("id");
             id=Integer.parseInt(message);
+            notification.setID(id);
+            notifRealm.beginTransaction();
+            notifRealm.copyToRealmOrUpdate(notification);
+            notifRealm.commitTransaction();
+
         }
 
     }
@@ -349,7 +351,6 @@ public class map extends AppCompatActivity
 
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
-
 
         //Defining the method  RetrieveNotif of our interface
         api.RetrieveNotif(
@@ -400,4 +401,10 @@ public class map extends AppCompatActivity
         );
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        RetrieveNotif();
+
+    }
 }
