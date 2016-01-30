@@ -25,7 +25,7 @@ import retrofit.client.Response;
 
 public class EnterMetroStation extends AppCompatActivity {
     String s,n,c,c2;
-    public static final String ROOT_URL = "http://10.6.203.136/";
+    public static final String ROOT_URL = "http://192.168.100.2/";
     EditText station,name,coor,coor2;
     Spinner MetroLine;
     List<String> spin = new ArrayList<String>();

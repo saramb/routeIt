@@ -25,7 +25,7 @@ import retrofit.client.Response;
 
 public class EnterBusStation extends AppCompatActivity {
 
-    public static final String ROOT_URL = "http://10.6.203.136/";
+    public static final String ROOT_URL = "http://192.168.100.2/";
     Spinner dropdown1;
     Spinner dropdown2;
     List<String> spin = new ArrayList<String>();
@@ -58,9 +58,9 @@ public class EnterBusStation extends AppCompatActivity {
                 n = name.getText().toString();
                 c = coor.getText().toString();
                 c2=coorY.getText().toString();
-                if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || dropdown1.getSelectedItem().toString().equals("") || dropdown2.getSelectedItem().toString().equals("")) {
+                if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || dropdown1.getSelectedItem().toString().equals(" ") || dropdown2.getSelectedItem().toString().equals(" ")) {
 
-                    if (dropdown1.getSelectedItem().toString().equals("")) {
+                    if (dropdown1.getSelectedItem().toString().equals(" ")) {
                         error.requestFocus();
                         error.setError("Please select line ID");
                     }
@@ -69,7 +69,7 @@ public class EnterBusStation extends AppCompatActivity {
                         station.setError("Please fill station ID");
                     }
 
-                    if (dropdown2.getSelectedItem().toString().equals("")) {
+                    if (dropdown2.getSelectedItem().toString().equals(" ")) {
                         error2.setError("Please select a value");
                     }
                     if (name.getText().toString().equals("")) {

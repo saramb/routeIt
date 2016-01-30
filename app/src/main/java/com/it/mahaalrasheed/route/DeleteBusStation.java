@@ -45,7 +45,7 @@ public class DeleteBusStation extends AppCompatActivity {
             public void onClick(View v) {
                 String selected = dropdown.getSelectedItem().toString();
 
-                if (selected.equals("")) {
+                if (selected.equals(" ")) {
                     error.requestFocus();
                     error.setError("The field is empty, Please select a value !");
                 } else {

@@ -37,7 +37,7 @@ public class DeleteLandMark extends AppCompatActivity {
         dropdown = (Spinner) findViewById(R.id.spinner2);
         final TextView error = (TextView) findViewById(R.id.textView17);
 
-        String[] items = new String[]{"", "1", "2", "three"};
+        String[] items = new String[]{" ", "1", "2", "three"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
         Retrieve();
@@ -48,7 +48,7 @@ public class DeleteLandMark extends AppCompatActivity {
             public void onClick(View v) {
                 String selected = dropdown.getSelectedItem().toString();
 
-                if (selected.equals("")) {
+                if (selected.equals(" ")) {
                     error.requestFocus();
                     error.setError("The field is empty, Please select a value !");
                 } else {
