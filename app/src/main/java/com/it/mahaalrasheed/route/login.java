@@ -34,6 +34,32 @@ public class login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+               if(username.getText().toString().equals("") || pass.getText().toString().equals("")){
+                   if(username.getText().toString().equals("")) {
+                       username.setError("Please enter user name");
+                   }
+                   else
+                       username.setError(null);
+
+                   if(username.getText().toString().equals("")) {
+                       pass.setError("Please enter password");
+                   }
+                   else
+                       pass.setError(null);
+               }
+
+                else{
+
+                   username.setError(null);
+                   pass.setError("Please enter password");
+
+               }
+
+
+
+
+
                 login();
 
             }

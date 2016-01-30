@@ -32,7 +32,7 @@ public class EnterBusStation extends AppCompatActivity {
     List<String> spinMetro = new ArrayList<String>();
 
     String s,n,c,c2;
-    EditText station,coor ,name,coorY ;
+    EditText station,coorX ,name,coorY ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +41,7 @@ public class EnterBusStation extends AppCompatActivity {
         Button enter=(Button)findViewById(R.id.button9);
         station=(EditText)findViewById(R.id.editText4);
         name=(EditText)findViewById(R.id.editText5);
-        coor=(EditText)findViewById(R.id.editText15);
+        coorX=(EditText)findViewById(R.id.editText15);
         coorY=(EditText)findViewById(R.id.editText);
         dropdown1=(Spinner)findViewById(R.id.spinner4);
         dropdown2=(Spinner)findViewById(R.id.spinner5);
@@ -56,7 +56,7 @@ public class EnterBusStation extends AppCompatActivity {
 
                 s = station.getText().toString();
                 n = name.getText().toString();
-                c = coor.getText().toString();
+                c = coorX.getText().toString();
                 c2=coorY.getText().toString();
                 if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || dropdown1.getSelectedItem().toString().equals(" ") || dropdown2.getSelectedItem().toString().equals(" ")) {
 
@@ -75,8 +75,8 @@ public class EnterBusStation extends AppCompatActivity {
                     if (name.getText().toString().equals("")) {
                         name.setError("Please fill the name");
                     }
-                    if (coor.getText().toString().equals("")) {
-                        coor.setError("Please fill the X coordination");
+                    if (coorX.getText().toString().equals("")) {
+                        coorX.setError("Please fill the X coordination");
                     }
                     if (coorY.getText().toString().equals("")) {
                         coorY.setError("Please fill the Y coordination");
@@ -85,7 +85,7 @@ public class EnterBusStation extends AppCompatActivity {
 
                 } else {
 
-                    coor.setError(null);
+                    coorX.setError(null);
                     coorY.setError(null);
                     station.setError(null);
                     name.setError(null);
@@ -136,8 +136,8 @@ public class EnterBusStation extends AppCompatActivity {
 
                 //Passing the values by getting it from editTexts
                 LocationID,
-                coor.getText().toString(),
-                coor.getText().toString(),
+                coorX.getText().toString(),
+                coorY.getText().toString(),
                 name.getText().toString(),
                 dropdown2.getSelectedItem().toString(),
                 "1",
