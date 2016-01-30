@@ -42,7 +42,7 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String ROOT_URL = "http://10.6.203.136/";
+    public static final String ROOT_URL = "http://192.168.100.2/";
     GoogleMap googleMap;
     double lng;
     double lat;
