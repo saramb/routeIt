@@ -20,7 +20,7 @@ import retrofit.client.Response;
 public class login extends AppCompatActivity {
 
     //This is our root url
-    public static final String ROOT_URL = "http://192.168.100.2/";
+    public static final String ROOT_URL = "http://192.168.100.19/";
     EditText username , pass;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class login extends AppCompatActivity {
                 else{
 
                    username.setError(null);
-                   pass.setError("Please enter password");
+                   pass.setError(null);
 
                }
 

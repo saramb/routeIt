@@ -36,7 +36,7 @@ public class EnterMetroStation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_metro_station);
-        spin.add("");
+        spin.add(" ");
 
         Button enter=(Button)findViewById(R.id.button18);
         MetroLine=(Spinner)findViewById(R.id.MetroLine);
@@ -59,13 +59,13 @@ public class EnterMetroStation extends AppCompatActivity {
                 c = coor.getText().toString();
                 c2=coor2.getText().toString();
 
-                if(MetroLine.getSelectedItem().toString().equals("")){
-                    error.requestFocus();
-                    error.setError("Please select line ID");
-                }
 
-                if (s.equals("") || n.equals("") || c.equals("") || MetroLine.getSelectedItem().toString().equals("")) {
+                if (s.equals("") || n.equals("") || c.equals("") || MetroLine.getSelectedItem().toString().equals(" ")) {
 
+                    if(MetroLine.getSelectedItem().toString().equals(" ")){
+                        error.requestFocus();
+                        error.setError("Please select line ID");
+                    }
 
 
                     if (station.getText().toString().equals("")) {

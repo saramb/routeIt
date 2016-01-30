@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +35,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import io.realm.Realm;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -42,7 +44,9 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String ROOT_URL = "http://192.168.100.2/";
+  // public static final String ROOT_URL = "http://192.168.100.15:8080/";
+  public static final String ROOT_URL = "http://192.168.100.19/";
+
     GoogleMap googleMap;
     double lng;
     double lat;
@@ -51,6 +55,9 @@ public class map extends AppCompatActivity
     MapFragment fm;
     LocationManager locationManager;
     String provider;
+    public static int id=0;
+    public static String notif="";
+    Realm notifRealm;
 
 
 
@@ -58,12 +65,28 @@ public class map extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        RetrieveNotif();
+
+        Notification notification;
+
+        notification=new Notification();
+        notification.setID(0);
+        notification.setPk(0);
+
+
+
+        Realm realm = Realm.getInstance(getApplicationContext());
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(notification);
+        realm.commitTransaction();
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -150,7 +173,7 @@ public class map extends AppCompatActivity
         from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (map.this, from.class);
+                Intent intent = new Intent(map.this, from.class);
                 startActivity(intent);
             }
         });
@@ -158,10 +181,12 @@ public class map extends AppCompatActivity
         to.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (map.this, to.class);
+                Intent intent = new Intent(map.this, to.class);
                 startActivity(intent);
             }
         });
+
+
     }
 
     private void drawMarker(Location location){
@@ -245,7 +270,8 @@ public class map extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.map, menu);
+        MenuInflater inflater=getMenuInflater();
+                inflater.inflate(R.menu.map, menu);
         return true;
     }
 
@@ -254,16 +280,33 @@ public class map extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        int id1=item.getItemId();
+        String s=R.id.notifi+"";
 
+        Toast.makeText(map.this,  id1+"*"+s, Toast.LENGTH_SHORT).show();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.notif) { //if user press the notification icon on the menu bar, go to favorite activity
-            Intent intent = new Intent (this, favorite.class);
-            startActivity(intent);
-            //return true
+        if ( item.getItemId() == R.id.notifi) { //if user press the notification icon on the menu bar, go to favorite activity
+            Intent intent = new Intent (this, notif.class);
+            intent.putExtra("content",notif);
+            //startActivity(intent);
+            startActivityForResult(intent, 1);
+           return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode==1)
+        {
+            String message=data.getStringExtra("id");
+            id=Integer.parseInt(message);
+        }
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -296,4 +339,65 @@ public class map extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void RetrieveNotif() {
+        //Here we will handle the http request to insert user to mysql db
+        //Creating a RestAdapter
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(ROOT_URL) //Setting the Root URL
+                .build(); //Finally building the adapter
+
+        //Creating object for our interface
+        routeAPI api = adapter.create(routeAPI.class);
+
+
+        //Defining the method  RetrieveNotif of our interface
+        api.RetrieveNotif(
+
+                //Passing the values by getting it from editTexts
+                id,
+                //Creating an anonymous callback
+                new Callback<Response>() {
+                    @Override
+                    public void success(Response result, Response response) {
+                        //On success we will read the server's output using bufferedreader
+                        //Creating a bufferedreader object
+                        BufferedReader reader = null;
+
+                        //An string to store output from the server
+                        String output = "";
+
+                        try {
+                            //Initializing buffered reader
+                            reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
+
+                            //Reading the output in the string
+                            output = reader.readLine();
+
+
+                            if (!output.equals("")) {
+
+                                notif = output;
+                                Toast.makeText(map.this, notif, Toast.LENGTH_SHORT).show();
+
+
+                            }
+
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        //Displaying the output as a toast
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        //If any error occured displaying the error as toast
+                        Toast.makeText(map.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }
+
 }

@@ -83,5 +83,12 @@ public interface routeAPI {
             @Field("content") String content,
             Callback<Response> callback);
 
+
+    @FormUrlEncoded
+    @POST("/RetrieveNotif.php")
+    public void RetrieveNotif(
+            @Field("id") int id,
+            Callback<Response> callback);
+
 }
 

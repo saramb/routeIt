@@ -38,8 +38,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDZ_JZdgj4mZccIgGPUbizU9aaeIEBDTAA"
-            />
+            android:value="AIzaSyA-_jFKH9AdIQ1VhVBFBj1ZdWc6bv7gmLk" />
 
         <activity
             android:name=".from"
@@ -59,7 +58,8 @@
         <activity android:name=".DeleteLandMark" />
         <activity android:name=".DeleteMetroStation" />
         <activity android:name=".Enter" />
-        <activity android:name=".NewPost"></activity>
+        <activity android:name=".NewPost" />
+        <activity android:name=".notif"></activity>
     </application>
 
 </manifest>
