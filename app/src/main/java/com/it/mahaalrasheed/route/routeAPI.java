@@ -83,8 +83,6 @@ public interface routeAPI {
 
 
 
-//NAJAT!!!
-
     @FormUrlEncoded
     @POST("/AddNotif.php")
     public void AddNotif(
