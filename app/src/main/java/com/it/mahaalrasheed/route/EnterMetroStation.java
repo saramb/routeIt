@@ -65,7 +65,9 @@ public class EnterMetroStation extends AppCompatActivity {
                     if(MetroLine.getSelectedItem().toString().equals(" ")){
                         error.requestFocus();
                         error.setError("Please select line ID");
-                    }
+                    }else
+                        error.setError(null);
+
 
 
                     if (station.getText().toString().equals("")) {
