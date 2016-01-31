@@ -25,7 +25,7 @@ import retrofit.client.Response;
 
 public class EnterMetroStation extends AppCompatActivity {
     String s,n,c,c2;
-    public static final String ROOT_URL = "http://192.168.100.2/";
+    public static final String ROOT_URL = "http://192.168.1.69/";
     EditText station,name,coor,coor2;
     Spinner MetroLine;
     List<String> spin = new ArrayList<String>();
@@ -95,8 +95,6 @@ public class EnterMetroStation extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     EnterMetroStation();
                                     finish();
-                                    Toast.makeText(getApplicationContext(), "your metro station Entered successfully", Toast.LENGTH_LONG).show();
-
 
                                 }
                             })
@@ -210,7 +208,7 @@ public class EnterMetroStation extends AppCompatActivity {
 //
 
                             while(!output.equals("")) {
-                                Toast.makeText(EnterMetroStation.this, output, Toast.LENGTH_LONG).show();
+                                //Toast.makeText(EnterMetroStation.this, output, Toast.LENGTH_LONG).show();
                                 String color = output.substring(0, output.indexOf(" "));
                                 output = output.substring(output.indexOf(" ") + 1);
                                 if (!spin.contains(color)) {
@@ -222,7 +220,7 @@ public class EnterMetroStation extends AppCompatActivity {
 
                             MetroLine.setAdapter(adapter);
 
-                            Toast.makeText(EnterMetroStation.this, output, Toast.LENGTH_LONG).show();
+                            //Toast.makeText(EnterMetroStation.this, output, Toast.LENGTH_LONG).show();
 
 
                         } catch (IOException e) {

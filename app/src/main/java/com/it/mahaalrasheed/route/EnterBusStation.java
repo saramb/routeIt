@@ -25,11 +25,13 @@ import retrofit.client.Response;
 
 public class EnterBusStation extends AppCompatActivity {
 
-    public static final String ROOT_URL = "http://192.168.100.2/";
+    public static final String ROOT_URL = "http://192.168.1.69/";
     Spinner dropdown1;
     Spinner dropdown2;
     List<String> spin = new ArrayList<String>();
     List<String> spinMetro = new ArrayList<String>();
+
+    boolean flag1=false;
 
     String s,n,c,c2;
     EditText station,coorX ,name,coorY ;
@@ -48,16 +50,20 @@ public class EnterBusStation extends AppCompatActivity {
         final TextView error=(TextView)findViewById(R.id.textView13);
         final TextView error2=(TextView)findViewById(R.id.textView15);
 
-
         Retrieve();
+
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                spinMetro.add(" ");
 
                 s = station.getText().toString();
                 n = name.getText().toString();
                 c = coorX.getText().toString();
                 c2=coorY.getText().toString();
+;
+
                 if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || dropdown1.getSelectedItem().toString().equals(" ") || dropdown2.getSelectedItem().toString().equals(" ")) {
 
                     if (dropdown1.getSelectedItem().toString().equals(" ")) {
@@ -100,7 +106,7 @@ public class EnterBusStation extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    EnterBusStation();
+                                  EnterBusStation();
                                     finish();
                                     Toast.makeText(getApplicationContext(), "your bus station Entered successfully", Toast.LENGTH_LONG).show();
 
@@ -115,6 +121,8 @@ public class EnterBusStation extends AppCompatActivity {
                             })
                             .show();
                 }
+
+                flag1=true;
             }
         });
     }
@@ -140,7 +148,7 @@ public class EnterBusStation extends AppCompatActivity {
                 coorY.getText().toString(),
                 name.getText().toString(),
                 dropdown2.getSelectedItem().toString(),
-                "1",
+                "najat",
 
 
                 //Creating an anonymous callback
@@ -196,6 +204,7 @@ public class EnterBusStation extends AppCompatActivity {
                 "4",
 
 
+
                 //Creating an anonymous callback
                 new Callback<Response>() {
                     @Override
@@ -213,8 +222,11 @@ public class EnterBusStation extends AppCompatActivity {
 
                             //Reading the output in the string
                             output = reader.readLine();
+//
+                            spin.add(" ");
 
-                            while (!output.equals("")) {
+                            while(!output.equals("")) {
+                               // Toast.makeText(EnterBusStation.this, output, Toast.LENGTH_LONG).show();
                                 String color = output.substring(0, output.indexOf(" "));
                                 output = output.substring(output.indexOf(" ") + 1);
                                 if (!spin.contains(color)) {
@@ -222,9 +234,11 @@ public class EnterBusStation extends AppCompatActivity {
                                 }
                             }
 
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(EnterBusStation.this, android.R.layout.simple_dropdown_item_1line, spin);
+                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(EnterBusStation.this,android.R.layout.simple_dropdown_item_1line, spin);
 
                             dropdown1.setAdapter(adapter);
+
+                            //Toast.makeText(EnterBusStation.this, output, Toast.LENGTH_LONG).show();
 
 
                         } catch (IOException e) {
@@ -242,10 +256,24 @@ public class EnterBusStation extends AppCompatActivity {
                 }
         );
 
+
+
+
+
+
+
+        RestAdapter adapter2 = new RestAdapter.Builder()
+                .setEndpoint(ROOT_URL) //Setting the Root URL
+                .build(); //Finally building the adapter
+
+        //Creating object for our interface
+        routeAPI api2 = adapter.create(routeAPI.class);
+        //Defining the method insertuser of our interface
         api.Retrieve(
 
                 //Passing the values by getting it from editTexts
                 "2",
+
 
 
                 //Creating an anonymous callback
@@ -254,30 +282,34 @@ public class EnterBusStation extends AppCompatActivity {
                     public void success(Response result, Response response) {
                         //On success we will read the server's output using bufferedreader
                         //Creating a bufferedreader object
-                        BufferedReader reader = null;
+                        BufferedReader reader2 = null;
 
                         //An string to store output from the server
-                        String output = "";
+                        String output2 = "";
 
                         try {
                             //Initializing buffered reader
-                            reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
+                            reader2 = new BufferedReader(new InputStreamReader(result.getBody().in()));
 
                             //Reading the output in the string
-                            output = reader.readLine();
+                            output2 = reader2.readLine();
+//
+                            spinMetro.add(" ");
 
-                            while (!output.equals("")) {
-                                String color = output.substring(0, output.indexOf(" "));
-                                output = output.substring(output.indexOf(" ") + 1);
-                                if (!spinMetro.contains(color)) {
-                                    spinMetro.add(color);
+                            while(!output2.equals("")) {
+                                // Toast.makeText(EnterBusStation.this, output, Toast.LENGTH_LONG).show();
+                                String color2 = output2.substring(0, output2.indexOf(" "));
+                                output2 = output2.substring(output2.indexOf(" ") + 1);
+                                if (!spinMetro.contains(color2)) {
+                                    spinMetro.add(color2);
                                 }
                             }
 
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(EnterBusStation.this, android.R.layout.simple_dropdown_item_1line, spinMetro);
+                            ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(EnterBusStation.this,android.R.layout.simple_dropdown_item_1line, spinMetro);
 
-                            dropdown2.setAdapter(adapter);
+                            dropdown2.setAdapter(adapter2);
 
+                            //Toast.makeText(EnterBusStation.this, output, Toast.LENGTH_LONG).show();
 
 
                         } catch (IOException e) {
@@ -294,7 +326,10 @@ public class EnterBusStation extends AppCompatActivity {
                     }
                 }
         );
-    }
 
+
+
+
+    }
 
 }

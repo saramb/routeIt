@@ -45,7 +45,7 @@ public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
   // public static final String ROOT_URL = "http://192.168.100.15:8080/";
-  public static final String ROOT_URL = "http://192.168.100.19/";
+  public static final String ROOT_URL = "http://192.168.1.69/";
 
     GoogleMap googleMap;
     double lng;
