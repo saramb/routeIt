@@ -73,6 +73,7 @@ public class map extends AppCompatActivity
         notification.setPk(0);
 
         realm = Realm.getInstance(getApplicationContext());
+
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(notification);
         realm.commitTransaction();
@@ -313,7 +314,6 @@ public class map extends AppCompatActivity
             String message=data.getStringExtra("id");
             //Toast.makeText(map.this, message, Toast.LENGTH_SHORT).show();
             notifID=Integer.parseInt( message+"");
-            Toast.makeText(map.this, notifID+":notif", Toast.LENGTH_SHORT).show();
 
             notification.setID(notifID);
             realm = Realm.getInstance(getApplicationContext());
@@ -396,7 +396,7 @@ public class map extends AppCompatActivity
 
                             if (!output.equals("")) {
                                 myMenu.findItem(R.id.notifi).setEnabled(true);
-                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
+                             //   myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
                                 notif = output;
                                 Toast.makeText(map.this, notif, Toast.LENGTH_SHORT).show();
 
