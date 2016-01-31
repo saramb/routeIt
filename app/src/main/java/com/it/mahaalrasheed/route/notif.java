@@ -1,5 +1,6 @@
 package com.it.mahaalrasheed.route;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,12 +40,9 @@ public class notif extends AppCompatActivity {
         listView.setAdapter(adapter);
 
 
-        int iid=Integer.parseInt(id);
-        Intent intent=new Intent(notif.this,map.class);
-        Toast.makeText(notif.this, iid+"", Toast.LENGTH_SHORT).show();
-
-        intent.putExtra("id", iid);
-        startActivity(intent);
-       // setResult(1, intent);
+       // int iid=Integer.parseInt(id);
+        Intent intent=new Intent();
+        intent.putExtra("id", id);
+        setResult(Activity.RESULT_OK,intent);
     }
 }
