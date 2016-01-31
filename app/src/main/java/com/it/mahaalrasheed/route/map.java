@@ -396,7 +396,7 @@ public class map extends AppCompatActivity
 
                             if (!output.equals("")) {
                                 myMenu.findItem(R.id.notifi).setEnabled(true);
-                             //   myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
+                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
                                 notif = output;
                                 Toast.makeText(map.this, notif, Toast.LENGTH_SHORT).show();
 
