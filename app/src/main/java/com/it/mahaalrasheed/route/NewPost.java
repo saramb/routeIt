@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,18 +24,18 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class NewPost extends AppCompatActivity {
-    EditText message;
-    public static final String ROOT_URL = "http://192.168.100.2/";
+    public static final String ROOT_URL = "http://192.168.1.69/";
+     EditText message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
-        Button enter = (Button) findViewById(R.id.button13);
-        message = (EditText) findViewById(R.id.editText7);
-        final TextView error = (TextView) findViewById(R.id.textView16);
-        AddNotif();
+        Button enter=(Button)findViewById(R.id.button13);
+         message=(EditText)findViewById(R.id.editText7);
+         final TextView error=(TextView)findViewById(R.id.textView16);
+
 
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,9 +62,10 @@ public class NewPost extends AppCompatActivity {
                                             .setContentTitle("Content Title")
                                             .setContentText("Notification content.")
                                             .setContentIntent(pIntent).getNotification();
-                                    noti.flags = Notification.FLAG_AUTO_CANCEL;
+                                    noti.flags=Notification.FLAG_AUTO_CANCEL;
                                     NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                                     notificationManager.notify(0, noti);
+                                    AddNotif();
                                     finish();
                                     Toast.makeText(getApplicationContext(), "your notification posted successfully", Toast.LENGTH_LONG).show();
 
@@ -84,8 +84,6 @@ public class NewPost extends AppCompatActivity {
             }
         });
     }
-
-
     private void AddNotif() {
         //Here we will handle the http request to insert user to mysql db
         //Creating a RestAdapter
@@ -95,11 +93,16 @@ public class NewPost extends AppCompatActivity {
 
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
+
+
         //Defining the method insertuser of our interface
         api.AddNotif(
 
-                //Passing the values by getting it from editTexts
-                message.toString(),
+
+                message.getText().toString(),
+
+
+
                 //Creating an anonymous callback
                 new Callback<Response>() {
                     @Override
@@ -118,11 +121,6 @@ public class NewPost extends AppCompatActivity {
                             //Reading the output in the string
                             output = reader.readLine();
 
-                            if (output.equals("Successfully logged in")) {
-                                Intent i = new Intent(getApplicationContext(), Menu.class);
-                                startActivity(i);
-                            }
-
                             Toast.makeText(NewPost.this, output, Toast.LENGTH_LONG).show();
 
 
@@ -140,6 +138,6 @@ public class NewPost extends AppCompatActivity {
                     }
                 }
         );
-
     }
+
 }

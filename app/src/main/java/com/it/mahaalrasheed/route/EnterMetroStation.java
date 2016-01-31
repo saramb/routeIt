@@ -25,7 +25,7 @@ import retrofit.client.Response;
 
 public class EnterMetroStation extends AppCompatActivity {
     String s,n,c,c2;
-    public static final String ROOT_URL = "http://192.168.100.2/";
+    public static final String ROOT_URL = "http://192.168.1.69/";
     EditText station,name,coor,coor2;
     Spinner MetroLine;
     List<String> spin = new ArrayList<String>();
@@ -36,7 +36,7 @@ public class EnterMetroStation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_metro_station);
-        spin.add("");
+        spin.add(" ");
 
         Button enter=(Button)findViewById(R.id.button18);
         MetroLine=(Spinner)findViewById(R.id.MetroLine);
@@ -59,12 +59,14 @@ public class EnterMetroStation extends AppCompatActivity {
                 c = coor.getText().toString();
                 c2=coor2.getText().toString();
 
-                if(MetroLine.getSelectedItem().toString().equals("")){
-                    error.requestFocus();
-                    error.setError("Please select line ID");
-                }
 
-                if (s.equals("") || n.equals("") || c.equals("") || MetroLine.getSelectedItem().toString().equals("")) {
+                if (s.equals("") || n.equals("") || c.equals("") || MetroLine.getSelectedItem().toString().equals(" ")) {
+
+                    if(MetroLine.getSelectedItem().toString().equals(" ")){
+                        error.requestFocus();
+                        error.setError("Please select line ID");
+                    }else
+                        error.setError(null);
 
 
 
@@ -95,8 +97,6 @@ public class EnterMetroStation extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     EnterMetroStation();
                                     finish();
-                                    Toast.makeText(getApplicationContext(), "your metro station Entered successfully", Toast.LENGTH_LONG).show();
-
 
                                 }
                             })
@@ -131,9 +131,9 @@ public class EnterMetroStation extends AppCompatActivity {
                 //Passing the values by getting it from editTexts
                 LocationID,
                 coor.getText().toString(),
-                coor.getText().toString(),
+                coor2.getText().toString(),
                 name.getText().toString(),
-                "1",
+                "najat",
 
 
                 //Creating an anonymous callback
@@ -210,7 +210,7 @@ public class EnterMetroStation extends AppCompatActivity {
 //
 
                             while(!output.equals("")) {
-                                Toast.makeText(EnterMetroStation.this, output, Toast.LENGTH_LONG).show();
+                                //Toast.makeText(EnterMetroStation.this, output, Toast.LENGTH_LONG).show();
                                 String color = output.substring(0, output.indexOf(" "));
                                 output = output.substring(output.indexOf(" ") + 1);
                                 if (!spin.contains(color)) {
@@ -222,7 +222,7 @@ public class EnterMetroStation extends AppCompatActivity {
 
                             MetroLine.setAdapter(adapter);
 
-                            Toast.makeText(EnterMetroStation.this, output, Toast.LENGTH_LONG).show();
+                            //Toast.makeText(EnterMetroStation.this, output, Toast.LENGTH_LONG).show();
 
 
                         } catch (IOException e) {

@@ -20,7 +20,7 @@ import retrofit.client.Response;
 
 public class EnterLandMark extends AppCompatActivity {
 
-    public static final String ROOT_URL = "http://10.6.203.136/";
+    public static final String ROOT_URL = "http://192.168.1.69/";
     EditText category, name, coord;
     String n, c, co;
     int LandmarkID = 1;
@@ -109,7 +109,7 @@ public class EnterLandMark extends AppCompatActivity {
                 coord.getText().toString(),
                 name.getText().toString(),
                 category.getText().toString(),
-                "1",
+                "najat",
 
 
                 //Creating an anonymous callback
