@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +34,8 @@ public class EnterBusStation extends AppCompatActivity {
 
     boolean flag1=false;
 
+    TextView error,error2;
+
     String s,n,c,c2;
     EditText station,coorX ,name,coorY ;
     @Override
@@ -47,8 +50,8 @@ public class EnterBusStation extends AppCompatActivity {
         coorY=(EditText)findViewById(R.id.editText);
         dropdown1=(Spinner)findViewById(R.id.spinner4);
         dropdown2=(Spinner)findViewById(R.id.spinner5);
-        final TextView error=(TextView)findViewById(R.id.textView13);
-        final TextView error2=(TextView)findViewById(R.id.textView15);
+        error=(TextView)findViewById(R.id.textView13);
+        error2=(TextView)findViewById(R.id.textView15);
 
         Retrieve();
 
@@ -71,13 +74,17 @@ public class EnterBusStation extends AppCompatActivity {
                         error.setError("Please select line ID");
                     }
 
-                    if (station.getText().toString().equals("")) {
-                        station.setError("Please fill station ID");
-                    }
 
                     if (dropdown2.getSelectedItem().toString().equals(" ")) {
                         error2.setError("Please select a value");
                     }
+
+
+                    if (station.getText().toString().equals("")) {
+                        station.setError("Please fill station ID");
+                    }
+
+
                     if (name.getText().toString().equals("")) {
                         name.setError("Please fill the name");
                     }
@@ -125,7 +132,14 @@ public class EnterBusStation extends AppCompatActivity {
                 flag1=true;
             }
         });
+
+
+
+
     }
+
+
+
 
     private void EnterBusStation(){
         //Here we will handle the http request to insert user to mysql db
@@ -275,7 +289,6 @@ public class EnterBusStation extends AppCompatActivity {
                 "2",
 
 
-
                 //Creating an anonymous callback
                 new Callback<Response>() {
                     @Override
@@ -296,7 +309,7 @@ public class EnterBusStation extends AppCompatActivity {
 //
                             spinMetro.add(" ");
 
-                            while(!output2.equals("")) {
+                            while (!output2.equals("")) {
                                 // Toast.makeText(EnterBusStation.this, output, Toast.LENGTH_LONG).show();
                                 String color2 = output2.substring(0, output2.indexOf(" "));
                                 output2 = output2.substring(output2.indexOf(" ") + 1);
@@ -305,7 +318,7 @@ public class EnterBusStation extends AppCompatActivity {
                                 }
                             }
 
-                            ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(EnterBusStation.this,android.R.layout.simple_dropdown_item_1line, spinMetro);
+                            ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(EnterBusStation.this, android.R.layout.simple_dropdown_item_1line, spinMetro);
 
                             dropdown2.setAdapter(adapter2);
 
@@ -331,5 +344,7 @@ public class EnterBusStation extends AppCompatActivity {
 
 
     }
+
+
 
 }

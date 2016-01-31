@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -22,18 +23,22 @@ public class login extends AppCompatActivity {
     //This is our root url
     public static final String ROOT_URL = "http://192.168.1.69/";
     EditText username , pass;
+    TextView wrong;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
          username =(EditText) findViewById(R.id.username);
          pass =(EditText) findViewById(R.id.pass);
-
         Button login = (Button) findViewById(R.id.button);
+        wrong=(TextView)findViewById(R.id.textView31);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                wrong.setText("");
 
                if(username.getText().toString().equals("")||pass.getText().toString().equals("")){
                    if(username.getText().toString().equals("")) {
@@ -108,7 +113,8 @@ public class login extends AppCompatActivity {
                                 startActivity(i);
                             }
 
-                            Toast.makeText(login.this, output, Toast.LENGTH_LONG).show();
+                            //Toast.makeText(login.this, output, Toast.LENGTH_LONG).show();
+                            wrong.setText("Wrong user name or password !");
 
 
                         } catch (IOException e) {
