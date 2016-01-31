@@ -40,9 +40,11 @@ public class notif extends AppCompatActivity {
 
 
         int iid=Integer.parseInt(id);
-        Intent intent=getIntent();
-        intent.putExtra("id", iid);
-        setResult(1, intent);
+        Intent intent=new Intent(notif.this,map.class);
+        Toast.makeText(notif.this, iid+"", Toast.LENGTH_SHORT).show();
 
+        intent.putExtra("id", iid);
+        startActivity(intent);
+       // setResult(1, intent);
     }
 }

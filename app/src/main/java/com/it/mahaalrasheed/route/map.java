@@ -61,17 +61,15 @@ public class map extends AppCompatActivity
     Notification notification;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-
         notification=new Notification();
         notification.setID(0);
         notification.setPk(0);
-
-
 
         Realm realm = Realm.getInstance(getApplicationContext());
         realm.beginTransaction();
@@ -84,6 +82,7 @@ public class map extends AppCompatActivity
 
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -285,7 +284,6 @@ public class map extends AppCompatActivity
         if ( item.getItemId() == R.id.notifi) { //if user press the notification icon on the menu bar, go to favorite activity
             Intent intent = new Intent (this, notif.class);
             intent.putExtra("content", notif);
-            //startActivity(intent);
             startActivityForResult(intent, 1);
            return true;
         }
@@ -300,12 +298,14 @@ public class map extends AppCompatActivity
         // check if the request code is same as what is passed  here it is 2
         if(requestCode==1)
         {
-            String message=data.getStringExtra("id");
+            String message=data.getExtras().getString("id");
             id=Integer.parseInt(message);
             notification.setID(id);
             notifRealm.beginTransaction();
             notifRealm.copyToRealmOrUpdate(notification);
             notifRealm.commitTransaction();
+
+            Toast.makeText(map.this, notification.getID()+"", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -351,6 +351,8 @@ public class map extends AppCompatActivity
 
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
+
+       // Notification objnotification= notifRealm.allObjects(Notification.class).get(0);
 
         //Defining the method  RetrieveNotif of our interface
         api.RetrieveNotif(
