@@ -20,7 +20,6 @@
         android:layout_alignParentTop="true"
         android:weightSum="1">
 
-
         <fragment
             android:layout_width="match_parent"
             android:layout_height="401dp"

@@ -105,9 +105,6 @@ public class map extends AppCompatActivity
         notifID=realm.allObjects(Notification.class).get(0).getID();
         Toast.makeText(map.this, notifID+" //create", Toast.LENGTH_SHORT).show();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
 
@@ -204,24 +201,6 @@ public class map extends AppCompatActivity
             locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
 
         } //!!!!!!!!!!Map part end
-
-        from.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(map.this, from.class);
-                startActivity(intent);
-            }
-        });
-
-        to.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(map.this, to.class);
-                startActivity(intent);
-            }
-        });
-
-
     }
 
     private void drawMarker(double latitude, double longitude) {
