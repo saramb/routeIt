@@ -29,6 +29,8 @@ public class favorite extends AppCompatActivity {
     FavoriteClass F;
     List<FavoriteClass> item;
     SwipeMenuListView lv;
+    int id;
+    int iddelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +39,30 @@ public class favorite extends AppCompatActivity {
 
         lv = (SwipeMenuListView)findViewById(R.id.listView);
 
-        relam = Realm.getInstance(getApplicationContext());
-        item = relam.allObjects(FavoriteClass.class);
-        String[] array = new String[item.size()];
-        for (int i = 0; i < item.size(); i++) {
-            array[i] = item.get(i).getName();}
+        update();
 
-        ArrayAdapter addapter = new ArrayAdapter(favorite.this, android.R.layout.simple_list_item_1,array);
-        lv.setAdapter(addapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Intent intent = new Intent(favorite.this, Main22Activity.class);
-                //intent.putExtra("id", position);
-                //startActivity(intent);
+            public void onPlaceSelected(Place place) {
+                F = new FavoriteClass();
+                F.setId(id++);
+                F.setLat(place.getLatLng().latitude);
+                F.setLng(place.getLatLng().longitude);
+                F.setName(place.getName().toString());
+
+                relam = Realm.getInstance(getApplicationContext());
+                relam.beginTransaction();
+                relam.copyToRealmOrUpdate(F);
+                relam.commitTransaction();
+                Toast.makeText(favorite.this, "Correctly add favorite", Toast.LENGTH_LONG).show();
+                update();
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+
             }
         });
 
@@ -81,8 +93,9 @@ public class favorite extends AppCompatActivity {
                 switch (index) {
                     case 0:
                         relam.beginTransaction();
-                        F.removeFromRealm();
+                        relam.allObjects(FavoriteClass.class).remove(iddelete);
                         relam.commitTransaction();
+                        update();
                         Toast.makeText(favorite.this, "Correctly delete favorite", Toast.LENGTH_LONG).show();
                         break;
                 }
@@ -95,6 +108,7 @@ public class favorite extends AppCompatActivity {
 
             @Override
             public void onSwipeStart(int position) {
+                iddelete=position;
                 // swipe start
             }
 
@@ -115,29 +129,6 @@ public class favorite extends AppCompatActivity {
             }
         });
 
-        autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                F = new FavoriteClass();
-                F.setLat(place.getLatLng().latitude);
-                F.setLng(place.getLatLng().longitude);
-                F.setName(place.getName().toString());
-
-                relam = Realm.getInstance(getApplicationContext());
-                relam.beginTransaction();
-                relam.copyToRealmOrUpdate(F);
-                relam.commitTransaction();
-                Toast.makeText(favorite.this, "Correctly add favorite", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-
-            }
-        });
-
     }
 
     private int dp2px(int dp) {
@@ -154,9 +145,9 @@ public class favorite extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+    }
 
-        lv = (SwipeMenuListView)findViewById(R.id.listView);
-
+    public void update(){
         relam = Realm.getInstance(getApplicationContext());
         item = relam.allObjects(FavoriteClass.class);
         String[] array = new String[item.size()];
@@ -168,9 +159,13 @@ public class favorite extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Intent intent = new Intent(favorite.this, Main22Activity.class);
-                //intent.putExtra("id", position);
-                //startActivity(intent);
+                Intent n = new Intent(favorite.this,map.class);
+                FavoriteClass F = relam.allObjects(FavoriteClass.class).get(position);
+                n.putExtra("lat", F.getLat());
+                n.putExtra("lng",F.getLng());
+                startActivity(n);
+
+
             }
         });
 

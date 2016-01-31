@@ -29,12 +29,16 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.realm.Realm;
 import retrofit.Callback;
@@ -61,12 +65,31 @@ public class map extends AppCompatActivity
     Realm realm;
     Notification notification;
     Menu myMenu;
+    private Map<Marker, MetroStation> spots;
+    private static MetroStation[] SPOTS_ARRAY ;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        DisplayMap();
+        PlotStation();
+        spots = new HashMap<>();
+
+        //lng = getIntent().getDoubleExtra("lng",0);
+        //lat = getIntent().getDoubleExtra("lat",0);
 
         notification=new Notification();
         notification.setID(notifID);
@@ -82,22 +105,28 @@ public class map extends AppCompatActivity
         notifID=realm.allObjects(Notification.class).get(0).getID();
         Toast.makeText(map.this, notifID+" //create", Toast.LENGTH_SHORT).show();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
 
+        from.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent (map.this, from.class);
+                startActivity(intent);
+            }
+        });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        to.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(map.this, to.class);
+                startActivity(intent);
+            }
+        });
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+    }
 
+    public void DisplayMap(){
 
         //!!!!!!!!!!Map part start
         // Getting Google Play availability status
@@ -119,7 +148,7 @@ public class map extends AppCompatActivity
             googleMap = fm.getMap();
 
             // Enabling MyLocation Layer of Google Map
-            googleMap.setMyLocationEnabled(true);
+            //googleMap.setMyLocationEnabled(true);
 
             // Getting LocationManager object from System Service LOCATION_SERVICE
             locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -127,8 +156,9 @@ public class map extends AppCompatActivity
             // Creating a criteria object to retrieve provider
             Criteria criteria = new Criteria();
 
-            // Getting the name of the best provider
+            // Getiting the name of the best provider
             provider = locationManager.getBestProvider(criteria, true);
+
             // Getting Current Location
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -141,10 +171,11 @@ public class map extends AppCompatActivity
                 return;
             }
             location = locationManager.getLastKnownLocation(provider);
+
             LocationListener locationListener = new LocationListener() {
                 public void onLocationChanged(Location location) {
                     // redraw the marker when get location update.
-                    drawMarker(location);
+                    //drawMarker(location);
                 }
 
                 @Override
@@ -165,32 +196,14 @@ public class map extends AppCompatActivity
 
             if (location != null) {
                 //PLACE THE INITIAL MARKER
-                drawMarker(location);
+                drawMarker(location.getLatitude(),location.getLongitude());
             }
             locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
 
         } //!!!!!!!!!!Map part end
-
-        from.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(map.this, from.class);
-                startActivity(intent);
-            }
-        });
-
-        to.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(map.this, to.class);
-                startActivity(intent);
-            }
-        });
-
-
     }
 
-    private void drawMarker(Location location){
+    private void drawMarker(double latitude, double longitude) {
         googleMap.clear();
         lat= location.getLatitude();
         lng= location.getLongitude();
@@ -200,6 +213,7 @@ public class map extends AppCompatActivity
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16));
 
     }
+
 
     private void PlotStation(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
@@ -224,6 +238,7 @@ public class map extends AppCompatActivity
 
                         //An string to store output from the server
                         String output = "";
+                        String output1 = "";
 
                         try {
                             //Initializing buffered reader
@@ -231,16 +246,29 @@ public class map extends AppCompatActivity
 
                             //Reading the output in the string
                             output = reader.readLine();
+                            output1 = output.substring(0, output.indexOf("/"));
+                            output = output.substring(output.indexOf("/") + 1);
+                            SPOTS_ARRAY = new MetroStation[Integer.parseInt(output1)];
+                            Toast.makeText(map.this, output1, Toast.LENGTH_SHORT).show();
 
+                            int i = 0;
                             while (!output.equals("")) {
                                 String XCoordinates = output.substring(0, output.indexOf(":"));
                                 String YCoordinates = output.substring(output.indexOf(":") + 1, output.indexOf(" "));
                                 output = output.substring(output.indexOf(" ") + 1);
-                                lng = Double.parseDouble(XCoordinates);
-                                lat = Double.parseDouble(YCoordinates);
+
+                                lat = Double.parseDouble(XCoordinates);
+                                lng = Double.parseDouble(YCoordinates);
+
+                                SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
                             }
-                            googleMap.addMarker(new MarkerOptions()
-                                    .position(new LatLng(0, 0)));
+                            for (int k = 0; k < i; k++) {
+                                Marker marker = googleMap.addMarker(new MarkerOptions()
+                                        .position(SPOTS_ARRAY[k].getPosition())
+                                        .title("Title")
+                                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_metro)));
+                                spots.put(marker, SPOTS_ARRAY[k]);
+                            }
 
 
                         } catch (IOException e) {
@@ -314,6 +342,7 @@ public class map extends AppCompatActivity
             String message=data.getStringExtra("id");
             //Toast.makeText(map.this, message, Toast.LENGTH_SHORT).show();
             notifID=Integer.parseInt( message+"");
+            Toast.makeText(map.this, notifID+":notif", Toast.LENGTH_SHORT).show();
 
             notification.setID(notifID);
             realm = Realm.getInstance(getApplicationContext());
@@ -397,6 +426,7 @@ public class map extends AppCompatActivity
                             if (!output.equals("")) {
                                 myMenu.findItem(R.id.notifi).setEnabled(true);
                                 myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
+                              //  myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
                                 notif = output;
                                 Toast.makeText(map.this, notif, Toast.LENGTH_SHORT).show();
 

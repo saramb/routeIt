@@ -61,9 +61,6 @@ public class login extends AppCompatActivity {
 
                }
 
-
-
-
                 if(!(username.getText().toString().equals("")||pass.getText().toString().equals("")))
                 login();
 
