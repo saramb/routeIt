@@ -25,7 +25,7 @@ import retrofit.client.Response;
 
 public class EnterBusStation extends AppCompatActivity {
 
-    public static final String ROOT_URL = "http://192.168.100.2/";
+    public static final String ROOT_URL = "http://192.168.1.69/";
     Spinner dropdown1;
     Spinner dropdown2;
     List<String> spin = new ArrayList<String>();

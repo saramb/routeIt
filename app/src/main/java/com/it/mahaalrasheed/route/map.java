@@ -1,6 +1,7 @@
 package com.it.mahaalrasheed.route;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -45,7 +46,7 @@ public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
   // public static final String ROOT_URL = "http://192.168.100.15:8080/";
-  public static final String ROOT_URL = "http://192.168.100.19/";
+  public static final String ROOT_URL = "http://192.168.1.69/";
 
     GoogleMap googleMap;
     double lng;
@@ -55,11 +56,11 @@ public class map extends AppCompatActivity
     MapFragment fm;
     LocationManager locationManager;
     String provider;
-    public static int id=0;
-    public static String notif="";
-    Realm notifRealm;
+    static int notifID=0;
+    String notif="";
+    Realm realm;
     Notification notification;
-
+    Menu myMenu;
 
 
     @Override
@@ -68,14 +69,17 @@ public class map extends AppCompatActivity
         setContentView(R.layout.activity_map);
 
         notification=new Notification();
-        notification.setID(0);
+        notification.setID(notifID);
         notification.setPk(0);
 
-        Realm realm = Realm.getInstance(getApplicationContext());
+        realm = Realm.getInstance(getApplicationContext());
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(notification);
         realm.commitTransaction();
 
+
+        notifID=realm.allObjects(Notification.class).get(0).getID();
+        Toast.makeText(map.this, notifID+" //create", Toast.LENGTH_SHORT).show();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -254,6 +258,12 @@ public class map extends AppCompatActivity
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -267,7 +277,8 @@ public class map extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater=getMenuInflater();
-                inflater.inflate(R.menu.map, menu);
+        inflater.inflate(R.menu.map, menu);
+        myMenu=menu;
         return true;
     }
 
@@ -298,14 +309,19 @@ public class map extends AppCompatActivity
         // check if the request code is same as what is passed  here it is 2
         if(requestCode==1)
         {
-            String message=data.getExtras().getString("id");
-            id=Integer.parseInt(message);
-            notification.setID(id);
-            notifRealm.beginTransaction();
-            notifRealm.copyToRealmOrUpdate(notification);
-            notifRealm.commitTransaction();
+            if(resultCode== Activity.RESULT_OK){
+            String message=data.getStringExtra("id");
+            //Toast.makeText(map.this, message, Toast.LENGTH_SHORT).show();
+            notifID=Integer.parseInt( message+"");
+            Toast.makeText(map.this, notifID+":notif", Toast.LENGTH_SHORT).show();
 
-            Toast.makeText(map.this, notification.getID()+"", Toast.LENGTH_SHORT).show();
+            notification.setID(notifID);
+            realm = Realm.getInstance(getApplicationContext());
+            realm.beginTransaction();
+            realm.copyToRealmOrUpdate(notification);
+            realm.commitTransaction();
+
+            }
 
         }
 
@@ -358,7 +374,7 @@ public class map extends AppCompatActivity
         api.RetrieveNotif(
 
                 //Passing the values by getting it from editTexts
-                id,
+                notifID,
                 //Creating an anonymous callback
                 new Callback<Response>() {
                     @Override
@@ -379,10 +395,16 @@ public class map extends AppCompatActivity
 
 
                             if (!output.equals("")) {
-
+                                myMenu.findItem(R.id.notifi).setEnabled(true);
+                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
                                 notif = output;
                                 Toast.makeText(map.this, notif, Toast.LENGTH_SHORT).show();
 
+
+                            }
+                            if (output.equals("NULL")) {
+                                myMenu.findItem(R.id.notifi).setEnabled(false);
+                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
 
                             }
 
@@ -406,6 +428,15 @@ public class map extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+        notifID=realm.allObjects(Notification.class).get(0).getID();
+        Toast.makeText(map.this, notifID+" //start", Toast.LENGTH_SHORT).show();
+
+        notification.setID(notifID);
+        realm = Realm.getInstance(getApplicationContext());
+
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(notification);
+        realm.commitTransaction();
         RetrieveNotif();
 
     }
