@@ -109,7 +109,7 @@ public class EnterLandMark extends AppCompatActivity {
                 coord.getText().toString(),
                 name.getText().toString(),
                 category.getText().toString(),
-                "1",
+                "najat",
 
 
                 //Creating an anonymous callback
