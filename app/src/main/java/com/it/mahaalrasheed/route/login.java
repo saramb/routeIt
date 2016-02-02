@@ -105,13 +105,16 @@ public class login extends AppCompatActivity {
                             output = reader.readLine();
 
                             if (output.equals("Successfully logged in")) {
+                                wrong.setError(null);
+                                wrong.setText("");
                                 Intent i = new Intent(getApplicationContext(), Menu.class);
                                 i.putExtra("AdminID", username.getText().toString());
                                 startActivity(i);
                             }
-
+                            else{
                             //Toast.makeText(login.this, output, Toast.LENGTH_LONG).show();
-                            wrong.setText("Wrong user name or password !");
+                            wrong.setText("Wrong user name or password  ");
+                            wrong.setError("");}
 
 
                         } catch (IOException e) {

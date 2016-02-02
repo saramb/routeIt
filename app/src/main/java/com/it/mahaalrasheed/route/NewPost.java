@@ -46,7 +46,7 @@ public class NewPost extends AppCompatActivity {
                     error.setError("");
 
                 } else {
-                    message.setError(null);
+                    error.setError(null);
                     new AlertDialog.Builder(NewPost.this)
                             .setMessage("are you sure you want to continue post process ?")
                             .setPositiveButton("Post", new DialogInterface.OnClickListener() {

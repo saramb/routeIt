@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,7 +37,7 @@ public class EnterBusStation extends AppCompatActivity {
 
     TextView error,error2;
 
-    String s,n,c,c2;
+    String s,n,c,c2,d1,d2;
     EditText station,coorX ,name,coorY ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,20 +65,26 @@ public class EnterBusStation extends AppCompatActivity {
                 s = station.getText().toString();
                 n = name.getText().toString();
                 c = coorX.getText().toString();
-                c2=coorY.getText().toString();
-;
+                c2 = coorY.getText().toString();
+                d1=dropdown1.getSelectedItem().toString();
+                d2=dropdown2.getSelectedItem().toString();
 
-                if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || dropdown1.getSelectedItem().toString().equals(" ") || dropdown2.getSelectedItem().toString().equals(" ")) {
+
+                if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || d1.equals(" ") || d2.equals(" ")) {
 
                     if (dropdown1.getSelectedItem().toString().equals(" ")) {
-                        error.requestFocus();
+                        //error.requestFocus();
                         error.setError("Please select line ID");
-                    }
+                    }else
+                        error.setError(null);
+
 
 
                     if (dropdown2.getSelectedItem().toString().equals(" ")) {
+                       // error2.requestFocus();
                         error2.setError("Please select a value");
-                    }
+                    }else
+                        error2.setError(null);
 
 
                     if (station.getText().toString().equals("")) {
@@ -98,12 +105,12 @@ public class EnterBusStation extends AppCompatActivity {
 
                 } else {
 
+                    error.setError(null);
+                    error2.setError(null);
                     coorX.setError(null);
                     coorY.setError(null);
                     station.setError(null);
                     name.setError(null);
-                    error.setError(null);
-                    error2.setError(null);
 
 
 
@@ -113,7 +120,7 @@ public class EnterBusStation extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                  EnterBusStation();
+                                    EnterBusStation();
                                     finish();
                                     Toast.makeText(getApplicationContext(), "your bus station Entered successfully", Toast.LENGTH_LONG).show();
 
@@ -129,7 +136,7 @@ public class EnterBusStation extends AppCompatActivity {
                             .show();
                 }
 
-                flag1=true;
+                flag1 = true;
             }
         });
 
@@ -201,6 +208,10 @@ public class EnterBusStation extends AppCompatActivity {
                 }
         );
     }
+
+
+
+
 
     private void Retrieve(){
         //Here we will handle the http request to insert user to mysql db
