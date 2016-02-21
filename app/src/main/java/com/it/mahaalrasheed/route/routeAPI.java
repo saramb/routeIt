@@ -92,5 +92,19 @@ public interface routeAPI {
             @Field("id") int id,
             Callback<Response> callback);
 
+    @FormUrlEncoded
+    @POST("/alg.php")
+    public void route(
+            @Field("XCoordinates") String XCoordinates,
+            @Field("YCoordinates") String YCoordinates,
+            @Field("XCoordinates2") String XCoordinates2,
+            @Field("YCoordinates2") String YCoordinates2,
+            Callback<Response> callback);
+
+    @FormUrlEncoded
+    @POST("/link.php")
+    public void link(
+            @Field("ID") String ID,
+            Callback<Response> callback);
 }
 

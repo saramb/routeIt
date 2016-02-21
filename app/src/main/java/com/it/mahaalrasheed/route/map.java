@@ -102,7 +102,9 @@ public class map extends AppCompatActivity
         from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (map.this, from.class);
+               // Intent intent = new Intent (map.this, from.class);////////
+                 Intent intent = new Intent (map.this, testroute.class);////////
+
                 startActivity(intent);
             }
         });
@@ -149,6 +151,7 @@ public class map extends AppCompatActivity
 
             // Getiting the name of the best provider
             provider = locationManager.getBestProvider(criteria, true);
+
 
             // Getting Current Location
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -260,7 +263,6 @@ public class map extends AppCompatActivity
                                 spots.put(marker, SPOTS_ARRAY[k]);
                             }
 
-
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -308,7 +310,7 @@ public class map extends AppCompatActivity
         int id1=item.getItemId();
         String s=R.id.notifi+"";
         //noinspection SimplifiableIfStatement
-        if ( item.getItemId() == R.id.notifi) { //if user press the notification icon on the menu bar, go to notification activity
+        if ( item.getItemId() == R.id.notifi) { //if user press the notification icon on the menu bar, go to  activity
             Intent intent = new Intent (this, notif.class);
             intent.putExtra("content", notif);
             startActivityForResult(intent, 1);
@@ -358,15 +360,15 @@ public class map extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_gallery) {  //favorites
-            Intent intent = new Intent (this, favorite.class);
+            Intent intent = new Intent (this, Favorites.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) { //login
-            Intent intent = new Intent (this, login.class);
+        } else if (id == R.id.nav_slideshow) { //
+            Intent intent = new Intent (this, loginnav.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_manage) {  //about us
-            Intent intent = new Intent (this, aboutus.class);
+            Intent intent = new Intent (this, aboutusnav.class);
             startActivity(intent);
 
 
