@@ -50,8 +50,7 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-   public static final String ROOT_URL = "http://192.168.100.15:8080/";
-  //public static final String ROOT_URL = "http://10.6.194.163:8080/";
+   public static final String ROOT_URL = "http://192.168.1.62/";
 
     GoogleMap googleMap;
     double lng;
@@ -247,8 +246,8 @@ public class map extends AppCompatActivity
                             int i = 0;
                             while (!output.equals("")) {
                                 String XCoordinates = output.substring(0, output.indexOf(":"));
-                                String YCoordinates = output.substring(output.indexOf(":") + 1, output.indexOf(" "));
-                                output = output.substring(output.indexOf(" ") + 1);
+                                String YCoordinates = output.substring(output.indexOf(":") + 1, output.indexOf("%"));
+                                output = output.substring(output.indexOf("%") + 1);
 
                                 lat = Double.parseDouble(XCoordinates);
                                 lng = Double.parseDouble(YCoordinates);

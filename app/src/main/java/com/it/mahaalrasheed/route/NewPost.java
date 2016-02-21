@@ -24,7 +24,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class NewPost extends AppCompatActivity {
-    public static final String ROOT_URL = "http://192.168.1.69/";
+    public static final String ROOT_URL = "http://192.168.1.62/";
      EditText message;
 
     @Override
