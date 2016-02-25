@@ -50,7 +50,7 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-   public static final String ROOT_URL = "http://192.168.1.64:8080/";
+   public static final String ROOT_URL = "http://192.168.1.62/";
 
     GoogleMap googleMap;
     double lng;
@@ -419,8 +419,8 @@ public class map extends AppCompatActivity
 
                             }
                             else if (output.equals("NULL")) {
-                                myMenu.findItem(R.id.notifi).setEnabled(false);
-                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
+/*                                myMenu.findItem(R.id.notifi).setEnabled(false);
+                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);*/
 
                             }
 

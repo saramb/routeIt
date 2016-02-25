@@ -57,7 +57,8 @@ public class testroute extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testroute);
         link();
-
+        Log.i("AStar:", "0-----");
+        Log.v("AStar:", Algorithm.Astar("1.1.0.2", "1.1.0.6") + "");
 
 
          from = (EditText)findViewById(R.id.editText3);
@@ -69,8 +70,8 @@ public class testroute extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               route();
-                Algorithm.Astar("1.1.0.2", "1.1.0.6");
+                route();
+
             }
         });
 
@@ -236,22 +237,25 @@ public class testroute extends AppCompatActivity {
                                 }
 
                             }//while
-                            p(Mline1);
-                            Log.d("Matrix :", "=================");
-                           /* //printt(Mline2);
-                            Log.d("Matrix :", "=================");
-                           // printt(Mline3);
-                            Log.d("Matrix :", "=================");
-                            //printt(Mline4);
-                            Log.d("Matrix :", "=================");
+
+
+
+                          printt(Mline1);
+                            Log.d("Matrix M2 :", "=================");
+                            printt(Mline2);
+                            Log.d("Matrix M3:", "=================");
+                           printt(Mline3);
+                            Log.d("Matrix M4:", "=================");
+                            printt(Mline4);
+                            Log.d("Matrix M5:", "=================");
                             printt(Mline5);
-                            Log.d("Matrix :", "=================");
+                            Log.d("Matrix M6:", "=================");
                             printt(Mline6);
-                            Log.d("Matrix :", "=================");
+                            Log.d("Matrix B2_1:", "=================");
                             printt(Bline2_1);
-                            Log.d("Matrix :", "=================");
+                            Log.d("Matrix B2_2:", "=================");
                             printt(Bline2_2);
-                            Log.d("Matrix :", "=================");
+                            Log.d("Matrix B2_3:", "=================");
                             printt(Bline2_3);
                             Log.d("Matrix :", "=================");
                             printt(Bline2_4);
@@ -265,9 +269,9 @@ public class testroute extends AppCompatActivity {
                             printt(Bline2_8);
                             Log.d("Matrix :", "=================");
                             printt(Bline2_9);
-                            Log.d("Matrix :", "=================");
+                            Log.d("Matrix B2_10:", "=================");
                             printt(Bline2_10);
-                            Log.d("Matrix :", "=================");
+                            Log.d("Matrix B3_1:", "=================");
                             printt(Bline3_1);
                             Log.d("Matrix :", "=================");
                             printt(Bline3_2);
@@ -285,12 +289,12 @@ public class testroute extends AppCompatActivity {
                             printt(Bline3_8);
                             Log.d("Matrix :", "=================");
                             printt(Bline3_9);
-                            Log.d("Matrix :", "=================");
+                            Log.d("Matrix B3_10:", "=================");
                             printt(Bline3_10);
-                            Log.d("Matrix :", "=================");
+                            Log.d("Matrix B4_1:", "=================");
                             printt(Bline4_1);
                             Log.d("Matrix :", "=================");
-                            printt(Bline4_2);*/
+                            printt(Bline4_2);
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -602,11 +606,12 @@ else
             }
         }
     }
-    public  void p(String[][] matrix){
+    public  void printt(String[][] matrix){
 String s="";
         for(int i = 0 ; i < matrix.length ; i ++)
             {s="[";
             for(int j = 0 ; j < matrix.length;j++)
+
                 s=s+ matrix[i][j]+",";
 
                 Log.d("Matrix :", s+"]");}
