@@ -111,7 +111,9 @@ public class map extends AppCompatActivity
         to.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(map.this, to.class);
+               // Intent intent = new Intent(map.this, to.class);
+               Intent intent = new Intent(map.this, routeInfo.class);
+
                 startActivity(intent);
             }
         });

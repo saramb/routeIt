@@ -52,6 +52,8 @@ public class testroute extends AppCompatActivity {
     static final String [][] Bline3_10 = new String [10][10];
     static final String [][] Bline4_1 = new String [10][10];
     static final String [][] Bline4_2 = new String [10][10];
+    static String path;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +185,7 @@ public class testroute extends AppCompatActivity {
                                 toCoorY = output.substring(0, output.indexOf(":"));
                                 output = output.substring(output.indexOf(":") + 1);
 
+
                                 String firstType = fromId.charAt(0) + "";
                                 String secondType = toId.charAt(0) + "";
                                 int firstline = Integer.parseInt(fromId.charAt(2) + "");
@@ -303,7 +306,8 @@ public class testroute extends AppCompatActivity {
                             printt(Bline4_1);
                             Log.d("Matrix :", "=================");
                             printt(Bline4_2);
-                            //Log.v("AStar:", Algorithm.Astar("1.1.0.2", "1.2.0.6") + "");
+                            path = Algorithm.Astar("1.1.0.2", "1.2.0.6");
+                            Log.v("AStar:", Algorithm.Astar("1.1.0.2", "1.2.0.6") + "");
 
                         } catch (IOException e) {
                             e.printStackTrace();
