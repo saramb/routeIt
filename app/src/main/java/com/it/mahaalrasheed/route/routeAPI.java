@@ -106,5 +106,12 @@ public interface routeAPI {
     public void link(
             @Field("ID") String ID,
             Callback<Response> callback);
+
+    @FormUrlEncoded
+    @POST("/stationName.php")
+    public void stationName(
+            @Field("Number") int Number,
+            @Field("ID") String ID,
+            Callback<Response> callback);
 }
 

@@ -51,6 +51,8 @@ public class testroute extends AppCompatActivity {
     static final String [][] Bline3_10 = new String [10][10];
     static final String [][] Bline4_1 = new String [10][10];
     static final String [][] Bline4_2 = new String [10][10];
+    static String path;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +113,6 @@ public class testroute extends AppCompatActivity {
 
                             //Reading the output in the string
                             output = reader.readLine();
-                            Toast.makeText(testroute.this, output + "**********", Toast.LENGTH_LONG).show();
 
                             fromId = output.substring(0, output.indexOf("/"));
                             toId = output.substring(output.indexOf("/") + 1);
@@ -165,7 +166,6 @@ public class testroute extends AppCompatActivity {
 
                             //Reading the output in the string
                             output = reader.readLine();
-                            Toast.makeText(testroute.this, output, Toast.LENGTH_LONG).show();
                             while (!output.equals("")) {
                                 fromId = output.substring(0, output.indexOf("/"));
                                 output = output.substring(output.indexOf("/") + 1);
@@ -296,6 +296,7 @@ public class testroute extends AppCompatActivity {
                             printt(Bline4_1);
                             Log.d("Matrix :", "=================");
                             printt(Bline4_2);
+                            path = Algorithm.Astar("1.1.0.2", "1.2.0.6");
                             Log.v("AStar:", Algorithm.Astar("1.1.0.2", "1.2.0.6") + "");
 
                         } catch (IOException e) {
