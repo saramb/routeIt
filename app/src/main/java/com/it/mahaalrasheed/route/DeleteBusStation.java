@@ -24,7 +24,7 @@ import retrofit.client.Response;
 
 public class DeleteBusStation extends AppCompatActivity {
 
-    public static final String ROOT_URL = "http://192.168.1.69/";
+    private String ROOT_URL = map.ROOT_URL;
     Spinner dropdown;
     List<String> spin = new ArrayList<String>();
 

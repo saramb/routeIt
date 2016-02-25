@@ -29,7 +29,7 @@ public class loginnav extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     //This is our root url
-    public static final String ROOT_URL = "http://192.168.1.69/";
+    private String ROOT_URL = map.ROOT_URL;
     EditText username , pass;
     TextView wrong;
 
