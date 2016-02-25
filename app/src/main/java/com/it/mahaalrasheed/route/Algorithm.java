@@ -1,4 +1,7 @@
 package com.it.mahaalrasheed.route;
+
+import com.it.mahaalrasheed.route.testroute;
+
 import java.util.*;
 
 /**
@@ -23,8 +26,7 @@ public class Algorithm {
 
 
 
-
-
+/*
     static private String[][] matrix1={
             // 1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30
             {"0","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"				},  //1
@@ -161,16 +163,16 @@ public class Algorithm {
             {"0","0","0","0","0","0","0","0","0","1","0","1.1.0.4,1.4.0.11"},  //11
             {"0","0","0","0","0","0","0","0","0","0","0","0"},  //12
 
-    };
+    };*/
 
 
 
     public static void main (String[] args)
     {
         //calling A* algorithm
-        Astar ("1.1.0.2", "1.1.0.6");
+      //  Astar ("1.1.0.2", "1.1.0.6");
         //calling BFS algorithm
-        BFS("1.1.0.2", "1.6.0.11");
+      //  BFS("1.1.0.2", "1.6.0.11");
 
     }
 
@@ -210,7 +212,7 @@ public class Algorithm {
                 explored.add(newStation.getName());
 
                 //locate the station to its matrix
-                assignMatrix(newStation.getName().charAt(0)+"",newStation.getLine ());
+                assignMatrix(newStation.getName().charAt(0)+"",newStation.getLine (),newStation.getStreet ());
 
                 Station Station = null;
 
@@ -294,7 +296,7 @@ public class Algorithm {
             explored.add(newStation.getName());
 
             //locate the station to its matrix
-            assignMatrix(newStation.getName().charAt(0)+"",newStation.getLine ());
+            assignMatrix(newStation.getName().charAt(0)+"",newStation.getLine (),newStation.getStreet ());
 
             Station Station = null;
 
@@ -462,30 +464,105 @@ public class Algorithm {
     //--------------------------assignMatrix---------------------
     //locate the station to its matrix
 
-    public static void assignMatrix(String line,int link){
+    public static void assignMatrix(String line,int link, int street){
 
         switch(line){
             case "1":
-                if(link==1) {TempMatrix =matrix1;   }
+                if(link==1) {TempMatrix = testroute.Mline1;   }
                 else
-                if(link==2  ){TempMatrix =matrix2;}
+                if(link==2  ){TempMatrix =testroute.Mline2;}
                 else
-                if(link==3  ){TempMatrix =matrix3; }
+                if(link==3  ){TempMatrix =testroute.Mline3; }
                 else
-                if(link==4 )   {TempMatrix =matrix4;}
+                if(link==4 )   {TempMatrix =testroute.Mline4;}
                 else
-                if(link==5  ){TempMatrix =matrix5; }
+                if(link==5  ){TempMatrix =testroute.Mline5; }
                 else
-                if(link==6){TempMatrix =matrix6;}
+                if(link==6){TempMatrix =testroute.Mline6;}
 
                 break;
             case "2":
-                   /*if(link==2 )   {TempMatrix =matrix7;}
-                        else
-                           if(link==3  ){TempMatrix =matrix8; }
-                           else
-                              if(link==4  ){TempMatrix =matrix9;}
-                  break;*/}}
+                if(link==2 )   {
+                    switch(street){
+                        case 1:
+                            TempMatrix =testroute.Bline2_1;
+                            break;
+                        case 2:
+                            TempMatrix =testroute.Bline2_2;
+                            break;
+                        case 3:
+                            TempMatrix =testroute.Bline2_3;
+                            break;
+                        case 4:
+                            TempMatrix =testroute.Bline2_4;
+                            break;
+                        case 5:
+                            TempMatrix =testroute.Bline2_5;
+                            break;
+                        case 6:
+                            TempMatrix =testroute.Bline2_6;
+                            break;
+                        case 7:
+                            TempMatrix =testroute.Bline2_7;
+                            break;
+                        case 8:
+                            TempMatrix =testroute.Bline2_8;
+                            break;
+                        case 9:
+                            TempMatrix =testroute.Bline2_9;
+                            break;
+                        case 10:
+                            TempMatrix =testroute.Bline2_10;
+                            break;
+                    } }
+                else
+                if(link==3  ){
+                    switch(street){
+                        case 1:
+                            TempMatrix =testroute.Bline3_1;
+                            break;
+                        case 2:
+                            TempMatrix =testroute.Bline3_2;
+                            break;
+                        case 3:
+                            TempMatrix =testroute.Bline3_3;
+                            break;
+                        case 4:
+                            TempMatrix =testroute.Bline3_4;
+                            break;
+                        case 5:
+                            TempMatrix =testroute.Bline3_5;
+                            break;
+                        case 6:
+                            TempMatrix =testroute.Bline3_6;
+                            break;
+                        case 7:
+                            TempMatrix =testroute.Bline3_7;
+                            break;
+                        case 8:
+                            TempMatrix =testroute.Bline3_8;
+                            break;
+                        case 9:
+                            TempMatrix =testroute.Bline3_9;
+                            break;
+                        case 10:
+                            TempMatrix =testroute.Bline3_10;
+                            break;
+                    } }
+                else
+                if(link==4  ){
+                    switch(street){
+                        case 1:
+                            TempMatrix =testroute.Bline4_1;
+                            break;
+                        case 2:
+                            TempMatrix =testroute.Bline4_2;
+                            break;
+                    }}
+                break;}//Switch Line
+
+    }
+
 
 }//end class Test
 
