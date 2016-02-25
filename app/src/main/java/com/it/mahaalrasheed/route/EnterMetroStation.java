@@ -123,7 +123,7 @@ public class EnterMetroStation extends AppCompatActivity {
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
 
-        String LocationID = "1"+ MetroLine.getSelectedItemPosition()+station.getText().toString();
+        String LocationID = "1."+ MetroLine.getSelectedItemPosition()+"."+station.getText().toString();
 
         //Defining the method insertuser of our interface
         api.EnterMetroStation(
@@ -133,6 +133,7 @@ public class EnterMetroStation extends AppCompatActivity {
                 coor.getText().toString(),
                 coor2.getText().toString(),
                 name.getText().toString(),
+                MetroLine.getSelectedItemPosition(),
                 "najat",
 
 

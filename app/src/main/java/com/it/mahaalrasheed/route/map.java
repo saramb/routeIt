@@ -38,6 +38,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.realm.Realm;
@@ -45,12 +46,12 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-//test githb
+
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-  // public static final String ROOT_URL = "http://192.168.100.15:8080/";
-  public static final String ROOT_URL = "http://192.168.1.69/";
+   public static final String ROOT_URL = "http://192.168.100.15:8080/";
+  //public static final String ROOT_URL = "http://10.6.194.163:8080/";
 
     GoogleMap googleMap;
     double lng;
@@ -60,7 +61,7 @@ public class map extends AppCompatActivity
     MapFragment fm;
     LocationManager locationManager;
     String provider;
-    static int notifID=0;
+    static int notifID;
     String notif="";
     Realm realm;
     Notification notification;
@@ -73,37 +74,27 @@ public class map extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
         DisplayMap();
         PlotStation();
+        RetrieveNotifID();
+
         spots = new HashMap<>();
 
         //lng = getIntent().getDoubleExtra("lng",0);
         //lat = getIntent().getDoubleExtra("lat",0);
 
-        notification=new Notification();
-        notification.setID(notifID);
-        notification.setPk(0);
 
-        realm = Realm.getInstance(getApplicationContext());
-
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(notification);
-        realm.commitTransaction();
-
-
-        notifID=realm.allObjects(Notification.class).get(0).getID();
-        Toast.makeText(map.this, notifID+" //create", Toast.LENGTH_SHORT).show();
 
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
@@ -111,7 +102,9 @@ public class map extends AppCompatActivity
         from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (map.this, from.class);
+               // Intent intent = new Intent (map.this, from.class);////////
+                 Intent intent = new Intent (map.this, testroute.class);////////
+
                 startActivity(intent);
             }
         });
@@ -158,6 +151,7 @@ public class map extends AppCompatActivity
 
             // Getiting the name of the best provider
             provider = locationManager.getBestProvider(criteria, true);
+
 
             // Getting Current Location
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -249,7 +243,6 @@ public class map extends AppCompatActivity
                             output1 = output.substring(0, output.indexOf("/"));
                             output = output.substring(output.indexOf("/") + 1);
                             SPOTS_ARRAY = new MetroStation[Integer.parseInt(output1)];
-                            Toast.makeText(map.this, output1, Toast.LENGTH_SHORT).show();
 
                             int i = 0;
                             while (!output.equals("")) {
@@ -269,7 +262,6 @@ public class map extends AppCompatActivity
                                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_metro)));
                                 spots.put(marker, SPOTS_ARRAY[k]);
                             }
-
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -314,14 +306,11 @@ public class map extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // automatically handle clicks on the notification button
         int id1=item.getItemId();
         String s=R.id.notifi+"";
-
-        Toast.makeText(map.this,  id1+"*"+s, Toast.LENGTH_SHORT).show();
         //noinspection SimplifiableIfStatement
-        if ( item.getItemId() == R.id.notifi) { //if user press the notification icon on the menu bar, go to favorite activity
+        if ( item.getItemId() == R.id.notifi) { //if user press the notification icon on the menu bar, go to  activity
             Intent intent = new Intent (this, notif.class);
             intent.putExtra("content", notif);
             startActivityForResult(intent, 1);
@@ -335,20 +324,23 @@ public class map extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // check if the request code is same as what is passed  here it is 2
+        // check if the request code is same as what is passed  here it is 1
         if(requestCode==1)
         {
+            //If the result is returned correctly
             if(resultCode== Activity.RESULT_OK){
             String message=data.getStringExtra("id");
-            //Toast.makeText(map.this, message, Toast.LENGTH_SHORT).show();
             notifID=Integer.parseInt( message+"");
-            Toast.makeText(map.this, notifID+":notif", Toast.LENGTH_SHORT).show();
 
-            notification.setID(notifID);
-            realm = Realm.getInstance(getApplicationContext());
-            realm.beginTransaction();
-            realm.copyToRealmOrUpdate(notification);
-            realm.commitTransaction();
+                Notification n=new Notification();
+                n.setID(notifID);n.setPk(0);
+                Realm realm = Realm.getInstance(getApplicationContext());
+                //Update realm object with the new notification id
+                realm.beginTransaction();
+                realm.copyToRealmOrUpdate(n);
+                realm.commitTransaction();
+                myMenu.findItem(R.id.notifi).setEnabled(false);
+                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
 
             }
 
@@ -368,15 +360,15 @@ public class map extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_gallery) {  //favorites
-            Intent intent = new Intent (this, favorite.class);
+            Intent intent = new Intent (this, Favorites.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) { //login
-            Intent intent = new Intent (this, login.class);
+        } else if (id == R.id.nav_slideshow) { //
+            Intent intent = new Intent (this, loginnav.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_manage) {  //about us
-            Intent intent = new Intent (this, aboutus.class);
+            Intent intent = new Intent (this, aboutusnav.class);
             startActivity(intent);
 
 
@@ -388,7 +380,7 @@ public class map extends AppCompatActivity
     }
 
     private void RetrieveNotif() {
-        //Here we will handle the http request to insert user to mysql db
+        //Here we will handle the http request to retrieve from mysql db
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(ROOT_URL) //Setting the Root URL
@@ -397,12 +389,10 @@ public class map extends AppCompatActivity
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
 
-       // Notification objnotification= notifRealm.allObjects(Notification.class).get(0);
-
         //Defining the method  RetrieveNotif of our interface
         api.RetrieveNotif(
 
-                //Passing the values by getting it from editTexts
+                //Passing the values
                 notifID,
                 //Creating an anonymous callback
                 new Callback<Response>() {
@@ -422,16 +412,14 @@ public class map extends AppCompatActivity
                             //Reading the output in the string
                             output = reader.readLine();
 
-
-                            if (!output.equals("")) {
+                            //Check if there is an output from server
+                            if (!output.equals("")&& !output.equals("NULL")) {
                                 myMenu.findItem(R.id.notifi).setEnabled(true);
-                              //  myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
+                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
                                 notif = output;
-                                Toast.makeText(map.this, notif, Toast.LENGTH_SHORT).show();
-
 
                             }
-                            if (output.equals("NULL")) {
+                            else if (output.equals("NULL")) {
                                 myMenu.findItem(R.id.notifi).setEnabled(false);
                                 myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
 
@@ -441,8 +429,6 @@ public class map extends AppCompatActivity
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
-                        //Displaying the output as a toast
                     }
 
                     @Override
@@ -455,18 +441,25 @@ public class map extends AppCompatActivity
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        notifID=realm.allObjects(Notification.class).get(0).getID();
-        Toast.makeText(map.this, notifID+" //start", Toast.LENGTH_SHORT).show();
+    protected void onStart() { super.onStart();}
 
-        notification.setID(notifID);
+    public void RetrieveNotifID(){
+        //retrieve realm content
         realm = Realm.getInstance(getApplicationContext());
+        List<Notification> itemNot =realm.allObjects(Notification.class);
 
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(notification);
-        realm.commitTransaction();
+        //store all returned content from realm
+        int[] titles=new int[itemNot.size()];
+        int l=-1;
+        for(int i=0; i<itemNot.size();i++){
+            titles[i]=itemNot.get(i).getID();
+            l=i;
+        }
+          if(l!=-1)
+              notifID=titles[l];
+
         RetrieveNotif();
+
 
     }
 }

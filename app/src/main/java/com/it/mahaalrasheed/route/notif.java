@@ -14,7 +14,7 @@ import java.util.List;
 import io.realm.Realm;
 
 public class notif extends AppCompatActivity {
-
+    String id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +25,7 @@ public class notif extends AppCompatActivity {
         String content=getIntent().getExtras().getString("content");
         List<String> ArrContent=new ArrayList<String>();
     //    String[] contentArray=new String[100];
-        String id="0";
+         id="0";
 
         for(int i=0;i<content.length();i++){
 
@@ -44,5 +44,17 @@ public class notif extends AppCompatActivity {
         Intent intent=new Intent();
         intent.putExtra("id", id);
         setResult(Activity.RESULT_OK,intent);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+       /* Realm realm=Realm.getInstance(getApplicationContext());
+        Notification n=new Notification();
+        n.setID(Integer.parseInt(id));n.setPk(0);
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(n);
+        realm.commitTransaction();*/
+
     }
 }

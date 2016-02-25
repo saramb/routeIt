@@ -9,4 +9,12 @@
     <string name="title_activity_test2">test2</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_swipe">swipe</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_about_us">about_us</string>
+    <string name="title_activity_aboutusnav">aboutusnav</string>
+    <string name="title_activity_loginnav">loginnav</string>
+    <string name="title_activity_notefication_nav">notefication_nav</string>
+    <string name="title_activity_favorites">Favorites</string>
 </resources>

@@ -26,12 +26,6 @@
         <activity
             android:name=".favorite"
             android:label="Favorites" />
-        <activity
-            android:name=".login"
-            android:label="Login" />
-        <activity
-            android:name=".aboutus"
-            android:label="About us" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -59,7 +53,20 @@
         <activity android:name=".DeleteMetroStation" />
         <activity android:name=".Enter" />
         <activity android:name=".NewPost" />
-        <activity android:name=".notif"></activity>
+        <activity android:name=".notif" />
+        <activity
+            android:name=".aboutusnav"
+            android:label="@string/title_activity_aboutusnav"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".loginnav"
+            android:label="@string/title_activity_loginnav"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Favorites"
+            android:label="@string/title_activity_favorites"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".testroute"></activity>
     </application>
 
 </manifest>

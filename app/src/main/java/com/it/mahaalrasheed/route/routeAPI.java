@@ -22,6 +22,7 @@ public interface routeAPI {
             @Field("XCoordinates") String XCoordinates,
             @Field("YCoordinates") String YCoordinates,
             @Field("Name") String Name,
+            @Field("MetroLineID") int MetroLineID,
             @Field("AdminID") String AdminID,
             Callback<Response> callback);
 
@@ -39,6 +40,7 @@ public interface routeAPI {
             @Field("YCoordinates") String YCoordinates,
             @Field("Name") String Name,
             @Field("MetroStationName") String MetroStationName,
+            @Field("BusLineID") int BusLineID,
             @Field("AdminID") String AdminID,
             Callback<Response> callback);
 
@@ -91,11 +93,18 @@ public interface routeAPI {
             Callback<Response> callback);
 
     @FormUrlEncoded
-    @POST("/AddNotif.php")
-    public void AddNotif(
-            @Field("content") String content,
+    @POST("/alg.php")
+    public void route(
+            @Field("XCoordinates") String XCoordinates,
+            @Field("YCoordinates") String YCoordinates,
+            @Field("XCoordinates2") String XCoordinates2,
+            @Field("YCoordinates2") String YCoordinates2,
             Callback<Response> callback);
 
-
+    @FormUrlEncoded
+    @POST("/link.php")
+    public void link(
+            @Field("ID") String ID,
+            Callback<Response> callback);
 }
 

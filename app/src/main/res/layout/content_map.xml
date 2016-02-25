@@ -4,29 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.it.mahaalrasheed.route.map"
     tools:showIn="@layout/app_bar_map">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/map"
         android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:weightSum="1">
+        android:weightSum="1"
+        >
 
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="401dp"
-            android:name="com.google.android.gms.maps.MapFragment"
-            android:id="@+id/fragment"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.31" />
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:id="@+id/fragment"
+        android:layout_weight="0.88" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -59,4 +56,6 @@
         </TableRow>
 
     </LinearLayout>
+
+
 </RelativeLayout>

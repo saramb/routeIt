@@ -158,7 +158,7 @@ public class EnterBusStation extends AppCompatActivity {
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
 
-        String LocationID = "2"+ dropdown1.getSelectedItemPosition()+station.getText().toString();
+        String LocationID = "2."+ dropdown1.getSelectedItemPosition()+"."+station.getText().toString();
 
         //Defining the method insertuser of our interface
         api.EnterBusStation(
@@ -169,6 +169,7 @@ public class EnterBusStation extends AppCompatActivity {
                 coorY.getText().toString(),
                 name.getText().toString(),
                 dropdown2.getSelectedItem().toString(),
+                dropdown1.getSelectedItemPosition(),
                 "najat",
 
 
