@@ -32,10 +32,6 @@ public class Algorithm {
 
         public static void main (String[] args)
         {
-            //calling A* algorithm
-           // Astar ("1.1.0.2", "1.1.0.6");
-            //calling BFS algorithm
-           // BFS("1.1.0.2", "1.6.0.11");
 
         }
 
@@ -94,7 +90,10 @@ public class Algorithm {
                             int count = countCommas (externals);
                             //2.1)if the station is in different street of the current station
                             if( externals.indexOf(".")== -1){
+                                if(newStation.getStreet()==0)
                                 Station = new Station ( capacity[newStation.getLine()-1],newStation.getLine(),Integer.parseInt(externals),i+1,newStation);
+                                else
+                                    Station = new Station ( capacity2[newStation.getLine()-1],newStation.getLine(),Integer.parseInt(externals),i+1,newStation);
                                 if (!explored.contains (Station.getName()) &&  !Stringfrontier.contains(Station.getName())){
                                     //add to the  of frontier
                                     AddToFrontier(Station); }}
@@ -184,8 +183,10 @@ public class Algorithm {
                         int count = countCommas (externals);
                         //2.1)if the station is in different street of the current station
                         if( externals.indexOf(".")==-1){
-                            Station = new Station ( capacity[newStation.getLine()-1],newStation.getLine(),Integer.parseInt(externals),i+1,newStation);
-                            if (!explored.contains (Station.getName()) &&  !Stringfrontier.contains(Station.getName())){
+                            if(newStation.getStreet()==0)
+                                Station = new Station ( capacity[newStation.getLine()-1],newStation.getLine(),Integer.parseInt(externals),i+1,newStation);
+                            else
+                                Station = new Station ( capacity2[newStation.getLine()-1],newStation.getLine(),Integer.parseInt(externals),i+1,newStation);                            if (!explored.contains (Station.getName()) &&  !Stringfrontier.contains(Station.getName())){
                                 if (Station.getName().equals(to)) {
                                     return path(Station);
 
