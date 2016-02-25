@@ -23,42 +23,43 @@ public class testroute extends AppCompatActivity {
 
     EditText from , to;
     String fromId , toId, withen;
-    static String [][] Mline1 = new String [29][29];
-    static String [][] Mline2 = new String [13][13];
-    static String [][] Mline3 = new String [25][25];
-    static String [][] Mline4 = new String [12][12];
-    static String [][] Mline5 = new String [19][19];
-    static String [][] Mline6 = new String [12][12];
-    static String [][] Bline2_1 = new String [46][46];
-    static String [][] Bline2_2 = new String [37][37];
-    static String [][] Bline2_3 = new String [55][55];
-    static String [][] Bline2_4 = new String [79][79];
-    static String [][] Bline2_5 = new String [56][56];
-    static String [][] Bline2_6 = new String [32][32];
-    static String [][] Bline2_7 = new String [70][70];
-    static String [][] Bline2_8 = new String [35][35];
-    static  String [][] Bline2_9= new String [73][73];
-    static String [][] Bline2_10 = new String [69][69];
-    static  String [][] Bline3_1 = new String [7][7];
-    static String [][] Bline3_2 = new String [10][10];
-    static  String [][] Bline3_3 = new String [4][4];
-    static String [][] Bline3_4 = new String [5][5];
-    static String [][] Bline3_5 = new String [10][10];
-    static String [][] Bline3_6 = new String [12][12];
-    static String [][] Bline3_7 = new String [16][16];
-    static String [][] Bline3_8 = new String [10][10];
-    static String [][] Bline3_9 = new String [10][10];
-    static String [][] Bline3_10 = new String [10][10];
-    static String [][] Bline4_1 = new String [10][10];
-    static String [][] Bline4_2 = new String [10][10];
+    static final String [][] Mline1 = new String [29][29];
+    static final String [][] Mline2 = new String [13][13];
+    static final String [][] Mline3 = new String [25][25];
+    static final String [][] Mline4 = new String [12][12];
+    static final String [][] Mline5 = new String [19][19];
+    static final String [][] Mline6 = new String [12][12];
+    static final String [][] Bline2_1 = new String [46][46];
+    static final String [][] Bline2_2 = new String [37][37];
+    static final String [][] Bline2_3 = new String [55][55];
+    static final String [][] Bline2_4 = new String [79][79];
+    static final String [][] Bline2_5 = new String [56][56];
+    static final String [][] Bline2_6 = new String [32][32];
+    static final String [][] Bline2_7 = new String [70][70];
+    static final String [][] Bline2_8 = new String [35][35];
+    static final  String [][] Bline2_9= new String [73][73];
+    static final String [][] Bline2_10 = new String [69][69];
+    static final  String [][] Bline3_1 = new String [7][7];
+    static final String [][] Bline3_2 = new String [10][10];
+    static final  String [][] Bline3_3 = new String [4][4];
+    static final String [][] Bline3_4 = new String [5][5];
+    static final String [][] Bline3_5 = new String [10][10];
+    static final String [][] Bline3_6 = new String [12][12];
+    static final String [][] Bline3_7 = new String [16][16];
+    static final String [][] Bline3_8 = new String [10][10];
+    static final String [][] Bline3_9 = new String [10][10];
+    static final String [][] Bline3_10 = new String [10][10];
+    static final String [][] Bline4_1 = new String [10][10];
+    static final String [][] Bline4_2 = new String [10][10];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testroute);
         link();
-        Log.i("AStar:", "0-----");
-        Log.v("AStar:", Algorithm.Astar("1.1.0.2", "1.1.0.6") + "");
+       /* if(link() == 0)
+        {Log.i("AStar:", "0-----");
+        Log.v("AStar:", Algorithm.Astar("1.1.0.2", "1.1.0.6") + "");}*/
 
 
          from = (EditText)findViewById(R.id.editText3);
@@ -295,6 +296,7 @@ public class testroute extends AppCompatActivity {
                             printt(Bline4_1);
                             Log.d("Matrix :", "=================");
                             printt(Bline4_2);
+                            Log.v("AStar:", Algorithm.Astar("1.1.0.2", "1.2.0.6") + "");
 
                         } catch (IOException e) {
                             e.printStackTrace();

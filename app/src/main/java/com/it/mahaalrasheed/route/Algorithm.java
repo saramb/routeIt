@@ -23,7 +23,8 @@ public class Algorithm {
     static private String[][] TempMatrix;
 
     //capacity of each line
-    static public int [] capacity= {531, 245, 245, 262, 242, 200,35,35,35,35,35,35,35,35,35,35,40,40,40,40,40,40,40,40,40,40,35,35};
+    static public int [] capacity= {531, 245, 245, 262, 242, 200};
+    static public int [] capacity2=   {35,35,35,35,35,35,35,35,35,35,40,40,40,40,40,40,40,40,40,40,35,35};
 
     //First station (Source Station)
     static Station newStation;
@@ -61,11 +62,9 @@ public class Algorithm {
                 //remove from the head of the frontier
                 removeFromFrontier();
 
-             //  System.out.println(newStation.getName());
 
                 //if current station is the detination station
                 if (newStation.getName().equals(to)) {
-                   // System.out.println("Done");
                     return path(newStation);
                      }
 
@@ -80,15 +79,17 @@ public class Algorithm {
 
                     for (int i = 0; i < TempMatrix.length ; i++) {
                         //1)if the station is in the same line of the current station
-                        if(TempMatrix[newStation.getStationNumber()-1][i] != null)
-                        if (  TempMatrix[newStation.getStationNumber()-1][i].equals("1")) {
+                        if (  TempMatrix[newStation.getStationNumber()-1][i] != null && TempMatrix[newStation.getStationNumber()-1][i].equals("1")) {
+                            if(newStation.getStreet()==0)
                             Station = new Station(capacity[newStation.getLine()-1],newStation.getLine(),i+1,newStation);
+                            else
+                                Station = new Station(capacity2[newStation.getLine()-1],newStation.getLine(),i+1,newStation);
                             if (!explored.contains (Station.getName())&& !Stringfrontier.contains(Station.getName())){
                                 //add to the  of frontier
                                 AddToFrontier(Station); }
                         }
                         //2)if the station is in different line or street of the current station
-                        else if (!TempMatrix[newStation.getStationNumber()-1][i].equals("1") ) {
+                        else if ( TempMatrix[newStation.getStationNumber()-1][i] != null && !TempMatrix[newStation.getStationNumber()-1][i].equals("1") ) {
                             String externals = TempMatrix[newStation.getStationNumber()-1][i];
                             int count = countCommas (externals);
                             //2.1)if the station is in different street of the current station
@@ -115,7 +116,7 @@ public class Algorithm {
                                         Station = new Station ( capacity[l-1],l,Integer.parseInt (child.substring(child.indexOf(".",4)+1)),newStation);
                                     //if the type of station is bus
                                     if(type==2)
-                                        Station = new Station ( capacity[l-1],l,Integer.parseInt (child.substring(child.indexOf(".",4)+1)), Integer.parseInt(child.substring(4,child.indexOf(".",4))) ,newStation);
+                                        Station = new Station ( capacity2[l-1],l,Integer.parseInt (child.substring(child.indexOf(".",4)+1)), Integer.parseInt(child.substring(4,child.indexOf(".",4))) ,newStation);
 
                                     if (!explored.contains (Station.getName()) &&  !Stringfrontier.contains(Station.getName())){
                                         //add to the  of frontier
@@ -130,7 +131,7 @@ public class Algorithm {
         //--------------------------BFS algorithm---------------------
 //Perform BFS algorithm
 
-        public static void BFS(String from, String to){
+        public static String BFS(String from, String to){
 
 
             // explored arraylist to mark which vertices have been visited while doing the A*
@@ -142,8 +143,7 @@ public class Algorithm {
 
             //if the source station is the same as destnation station
             if (from.equals(to)) {
-                System.out.println("Done");
-                return; }
+                return ""; }
 
             //Extraction of Source station
             Extraction(from);
@@ -153,7 +153,7 @@ public class Algorithm {
                 //remove from the head of the frontier
                 removeFromFrontier();
 
-                System.out.println(newStation.getName());
+
                 //add to the explored
                 explored.add(newStation.getName());
 
@@ -164,21 +164,22 @@ public class Algorithm {
 
                 for (int i = 0; i < TempMatrix.length ; i++) {
                     //1)if the station is in the same line of the current station
-                    if ( TempMatrix[newStation.getStationNumber()-1][i].equals("1")) {
-                        Station = new Station(capacity[newStation.getLine()-1],newStation.getLine(),i+1,newStation);
-
+                    if (TempMatrix[newStation.getStationNumber()-1][i] != null && TempMatrix[newStation.getStationNumber()-1][i].equals("1")) {
+                        if(newStation.getStreet()==0)
+                            Station = new Station(capacity[newStation.getLine()-1],newStation.getLine(),i+1,newStation);
+                        else
+                            Station = new Station(capacity2[newStation.getLine()-1],newStation.getLine(),i+1,newStation);
                         if (!explored.contains (Station.getName())&& !Stringfrontier.contains(Station.getName())){
                             //if current station is the detination station
                             if (Station.getName().equals(to)) {
-                                System.out.println(path(Station));
-                                System.out.println("Done");
-                                return; }
+                                return path(Station);
+                                 }
 
                             //add to the  of frontier
                             AddToFrontier(Station);} }
 
                     //2)if the station is in different line or street of the current station
-                    else if (TempMatrix[newStation.getStationNumber()-1][i]!=null ) {
+                    else if( TempMatrix[newStation.getStationNumber()-1][i] != null && !TempMatrix[newStation.getStationNumber()-1][i].equals("1") ) {
                         String externals = TempMatrix[newStation.getStationNumber()-1][i];
                         int count = countCommas (externals);
                         //2.1)if the station is in different street of the current station
@@ -186,9 +187,9 @@ public class Algorithm {
                             Station = new Station ( capacity[newStation.getLine()-1],newStation.getLine(),Integer.parseInt(externals),i+1,newStation);
                             if (!explored.contains (Station.getName()) &&  !Stringfrontier.contains(Station.getName())){
                                 if (Station.getName().equals(to)) {
-                                    System.out.println(path(Station));
-                                    System.out.println("Done");
-                                    return; }
+                                    return path(Station);
+
+                                    }
                                 //add to the  of frontier
                                 AddToFrontier(Station); }
                         }
@@ -209,14 +210,13 @@ public class Algorithm {
                                     Station = new Station ( capacity[l-1],l,Integer.parseInt (child.substring(child.indexOf(".",4)+1)),newStation);
                                 //if the type of station is bus
                                 if(type==2)
-                                    Station = new Station ( capacity[l-1],l,Integer.parseInt (child.substring(child.indexOf(".",4)+1)), Integer.parseInt(child.substring(4,child.indexOf(".",4))) ,newStation);
+                                    Station = new Station ( capacity2[l-1],l,Integer.parseInt (child.substring(child.indexOf(".",4)+1)), Integer.parseInt(child.substring(4,child.indexOf(".",4))) ,newStation);
 
                                 if (!explored.contains (Station.getName()) &&  !Stringfrontier.contains(Station.getName())){
                                     //if current station is the detination station
                                     if (Station.getName().equals(to)) {
-                                        System.out.println(path(Station));
-                                        System.out.println("Done");
-                                        return; }
+                                        return path(Station);
+                                         }
                                     //add to the  of frontier
                                     AddToFrontier(Station); }
                             }  }} } }
@@ -277,30 +277,36 @@ public class Algorithm {
         //--------------------------AddToFrontier---------------------
 //add to the  of frontier
         public static void AddToFrontier(Station Station){
+            if(Station.getParent()!= null)
+            System.out.println(Station.getParent().getName()+"=>"+Station.getName());
             frontier.add(Station);
             Stringfrontier.add(Station.getName());}
 
         //--------------------------removeFromFrontier---------------------
 //remove from the head of frontier
         public static void removeFromFrontier(){
-            if( frontier.size()!=0 && frontier.get(0)!=null){
-            newStation = frontier.remove(0);
-            Stringfrontier.remove(Stringfrontier.indexOf(newStation.getName()));}}
+
+            try{newStation = frontier.remove(0);
+            Stringfrontier.remove(Stringfrontier.indexOf(newStation.getName()));}
+        catch(Exception e){}}
 
         //--------------------------Extraction---------------------
 //perform extraction of station
         public static void Extraction(String from) {
 
-            int lineFrom = Integer.parseInt (from.substring(from.indexOf(".")+1, from.indexOf (".", 2)));
+            int lineFrom = Integer.parseInt (from.charAt(2)+"");
             int stationNumber = Integer.parseInt (from.substring(from.indexOf(".",4)+1));
-            int streetNumber = Integer.parseInt(from.substring(4,from.indexOf(".",4)));
+            int streetNumber = Integer.parseInt(from.charAt(4) + "");
+            if (from.charAt(5) != '.')
+                streetNumber = streetNumber + Integer.parseInt(from.charAt(5) + "");
+
             if(from.charAt(0)=='1')
                 newStation = new Station (capacity[lineFrom-1],lineFrom,stationNumber,null);
             else
                 newStation = new Station (capacity[lineFrom-1],lineFrom,streetNumber,stationNumber,null);
 
-            frontier.add(newStation);
-            Stringfrontier.add(newStation.getName());
+            AddToFrontier(newStation);
+
         }
 
         //--------------------------countCommas---------------------
