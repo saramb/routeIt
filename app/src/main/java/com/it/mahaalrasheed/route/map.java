@@ -246,8 +246,8 @@ public class map extends AppCompatActivity
                             int i = 0;
                             while (!output.equals("")) {
                                 String XCoordinates = output.substring(0, output.indexOf(":"));
-                                String YCoordinates = output.substring(output.indexOf(":") + 1, output.indexOf(" "));
-                                output = output.substring(output.indexOf(" ") + 1);
+                                String YCoordinates = output.substring(output.indexOf(":") + 1, output.indexOf("%"));
+                                output = output.substring(output.indexOf("%") + 1);
 
                                 lat = Double.parseDouble(XCoordinates);
                                 lng = Double.parseDouble(YCoordinates);
