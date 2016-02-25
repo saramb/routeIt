@@ -311,7 +311,7 @@ public class Algorithm {
         }
 
         //--------------------------countCommas---------------------
-//count the number of commas to know the no# of the extrnal sation
+        //count the number of commas to know the no# of the extrnal sation
         public static int countCommas (String x) {
             int commas = 0;
             for(int i = 0; i < x.length(); i++) {
