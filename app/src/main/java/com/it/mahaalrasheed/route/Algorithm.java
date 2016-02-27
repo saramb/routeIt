@@ -24,7 +24,7 @@ public class Algorithm {
 
     //capacity of each line
     static public int [] capacity= {531, 245, 245, 262, 242, 200};
-    static public int [] capacity2=   {35,35,35,35,35,35,35,35,35,35,40,40,40,40,40,40,40,40,40,40,35,35};
+    static public int [] capacity2=   {0,35,40,35};
 
     //First station (Source Station)
     static Station newStation;

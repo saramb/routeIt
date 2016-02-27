@@ -60,9 +60,7 @@ public class testroute extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testroute);
         link();
-       /* if(link() == 0)
-        {Log.i("AStar:", "0-----");
-        Log.v("AStar:", Algorithm.Astar("1.1.0.2", "1.1.0.6") + "");}*/
+
 
 
          from = (EditText)findViewById(R.id.editText3);
@@ -306,8 +304,9 @@ public class testroute extends AppCompatActivity {
                             printt(Bline4_1);
                             Log.d("Matrix :", "=================");
                             printt(Bline4_2);
-                            path = Algorithm.Astar("1.1.0.2", "1.2.0.6");
-                            Log.v("AStar:", Algorithm.Astar("1.1.0.2", "1.2.0.6") + "");
+
+                           // path = Algorithm.Astar("1.1.0.2", "1.2.0.6");
+                           // Log.v("AStar:", Algorithm.Astar("1.1.0.2", "1.2.0.6") + "");
 
                         } catch (IOException e) {
                             e.printStackTrace();
