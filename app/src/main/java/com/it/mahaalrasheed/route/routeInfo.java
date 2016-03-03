@@ -26,7 +26,7 @@ public class routeInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_info);
         String path = testroute.path ;
-boolean flag = true;
+        boolean flag = true;
         while (flag){
         if (path.indexOf("|")!=-1){
         ID = path.substring(0, path.indexOf("|"));}

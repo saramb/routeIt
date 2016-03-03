@@ -50,7 +50,7 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-   public static final String ROOT_URL = "http://192.168.1.62/";
+   public static final String ROOT_URL = "http://10.6.202.242/";
 
     GoogleMap googleMap;
     double lng;
@@ -102,7 +102,7 @@ public class map extends AppCompatActivity
             @Override
             public void onClick(View v) {
                // Intent intent = new Intent (map.this, from.class);////////
-                 Intent intent = new Intent (map.this, testroute.class);////////
+                Intent intent = new Intent (map.this, testroute.class);////////
 
                 startActivity(intent);
             }
