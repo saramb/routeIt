@@ -67,7 +67,8 @@
             android:label="@string/title_activity_favorites"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".testroute" />
-        <activity android:name=".routeInfo"></activity>
+        <activity android:name=".routeInfo" />
+        <activity android:name="com.it.mahaa.bottom_sheet_content_view" />
     </application>
 
 </manifest>

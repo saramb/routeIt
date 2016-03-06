@@ -10,18 +10,25 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -66,13 +73,19 @@ public class map extends AppCompatActivity
     Notification notification;
     Menu myMenu;
     private Map<Marker, MetroStation> spots;
-    private static MetroStation[] SPOTS_ARRAY ;
+    private static MetroStation[] SPOTS_ARRAY;
+    private BottomSheetBehavior mBottomSheetBehavior;
+    ListView lv;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        lv = (ListView)findViewById(R.id.list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -111,15 +124,47 @@ public class map extends AppCompatActivity
         to.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Intent intent = new Intent(map.this, to.class);
-               Intent intent = new Intent(map.this, routeInfo.class);
+                // Intent intent = new Intent(map.this, to.class);
+                Intent intent = new Intent(map.this, routeInfo.class);
 
                 startActivity(intent);
             }
         });
 
-    }
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 
+
+
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setAutoMeasureEnabled(true);
+
+        FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) recyclerView.getParent().getParent();
+        mBottomSheetBehavior = BottomSheetBehavior.from(parentThatHasBottomSheetBehavior);
+        if (mBottomSheetBehavior != null) {
+            mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                @Override
+                public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                }
+
+                @Override
+                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+                }
+            });
+        }
+
+        View peakView = findViewById(R.id.drag_me);
+        mBottomSheetBehavior.setPeekHeight(250);
+        peakView.requestLayout();
+
+        String[] array = {"123","5432","7553"};
+        ArrayAdapter addapter = new ArrayAdapter(map.this, android.R.layout.simple_list_item_1,array);
+        lv.setAdapter(addapter);
+
+
+
+
+    }
     public void DisplayMap(){
 
         //!!!!!!!!!!Map part start
