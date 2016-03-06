@@ -21,6 +21,8 @@ public class routeInfo extends AppCompatActivity {
 
     public static String [] stationName = new String[100];
     public static Integer [] linenumber = new Integer[100];
+    public static String [] stationName2;
+    public static Integer [] linenumber2;
     static String ID;
     static int number;
     static int count = 0;
@@ -34,10 +36,16 @@ public class routeInfo extends AppCompatActivity {
             else{
                 ID = path ;
                 flag = false;}
-
+            count++;
             number = Integer.parseInt(ID.charAt(0) + "");
             path = path.substring(path.indexOf("|") + 1);
             stationName();
+        }
+        stationName2 = new String [count];
+        linenumber2 = new Integer[count];
+        for (int i = 0; i < count; i++) {
+            stationName2 [i] = stationName2[i];
+              linenumber2 [i] = linenumber2[i];
         }
     }
 
