@@ -19,11 +19,11 @@ import retrofit.client.Response;
 
 public class testroute extends AppCompatActivity {
 
-    private String ROOT_URL = map.ROOT_URL;
+    private static  String ROOT_URL = map.ROOT_URL;
 
-    EditText from , to;
-    String fromId , toId, withen;
-    String fromCoorX,toCoorX,fromCoorY,toCoorY;
+    static String  fromId , toId, withen;
+    static String fromCoorX,toCoorX,fromCoorY,toCoorY;
+    static  String finalPath="";
     static final String [][] Mline1 = new String [29][29];
     static final String [][] Mline2 = new String [13][13];
     static final String [][] Mline3 = new String [25][25];
@@ -54,33 +54,7 @@ public class testroute extends AppCompatActivity {
     static final String [][] Bline4_2 = new String [10][10];
     static String path;
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_testroute);
-        link();
-
-
-
-
-        from = (EditText)findViewById(R.id.editText3);
-        to = (EditText)findViewById(R.id.editText6);
-        Button button= (Button)findViewById(R.id.button17);
-
-
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                route();
-
-            }
-        });
-
-    }
-
-    private void route(){
+    public static void route(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
 
         //Creating a RestAdapter
@@ -113,7 +87,6 @@ public class testroute extends AppCompatActivity {
 
                             //Reading the output in the string
                             output = reader.readLine();
-                            Toast.makeText(testroute.this, output + "**********", Toast.LENGTH_LONG).show();
 
                             fromId = output.substring(0, output.indexOf("/"));
                             toId = output.substring(output.indexOf("/") + 1);
@@ -128,16 +101,15 @@ public class testroute extends AppCompatActivity {
                     @Override
                     public void failure(RetrofitError error) {
                         //If any error occurred displaying the error as toast
-                        Toast.makeText(testroute.this, error.toString(), Toast.LENGTH_LONG).show();
 
                     }
                 }
         );
-    }
+        }
 
 
 
-    private void link(){
+    public static  void link(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
 
         //Creating a RestAdapter
@@ -168,9 +140,9 @@ public class testroute extends AppCompatActivity {
                             //Reading the output in the string
                             output = reader.readLine();
 
-                           boolean flag = true;
-                          while (flag) {
-                                  fromId = output.substring(0, output.indexOf("/"));
+                            boolean flag = true;
+                            while (flag) {
+                                fromId = output.substring(0, output.indexOf("/"));
 
                                 output = output.substring(output.indexOf("/") + 1);
                                 toId = output.substring(0, output.indexOf("/"));
@@ -182,7 +154,7 @@ public class testroute extends AppCompatActivity {
                                 output = output.substring(output.indexOf("/")+1);
 
 
-                            fromCoorX = output.substring(0, output.indexOf("/"));
+                                fromCoorX = output.substring(0, output.indexOf("/"));
                                 output = output.substring(output.indexOf("/") + 1);
                                 fromCoorY = output.substring(0, output.indexOf("/"));
                                 output = output.substring(output.indexOf("/") + 1);
@@ -190,7 +162,7 @@ public class testroute extends AppCompatActivity {
                                 output = output.substring(output.indexOf("/") + 1);
                                 toCoorY = output.substring(0, output.indexOf(":"));
                                 output = output.substring(output.indexOf(":") + 1);
-                               if (output.length() == 0) {flag = false; }
+                                if (output.length() == 0) {flag = false; }
 
 
                                 String firstType = fromId.charAt(0) + "";
@@ -314,8 +286,12 @@ public class testroute extends AppCompatActivity {
                             Log.d("Matrix :", "=================");
                             printt(Bline4_2);
 
-                           path = Algorithm.Astar("1.1.0.2", "1.2.0.6");
+                            path = Algorithm.Astar("1.1.0.2", "1.2.0.6");
                             Log.v("AStar:", Algorithm.Astar("1.1.0.2", "1.2.0.6") + "");
+
+
+                            routeInfo.startRouteInfo();
+
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -327,41 +303,41 @@ public class testroute extends AppCompatActivity {
                     @Override
                     public void failure(RetrofitError error) {
                         //If any error occurred displaying the error as toast
-                        Toast.makeText(testroute.this, error.toString(), Toast.LENGTH_LONG).show();
 
                     }
                 }
         );
+
     }
 
-    public String getss(){return "hi";}
-    public void MetroLinks(int  firstline,int station1 ,int station2,String fromID,String toID ){
-    if (firstline == 1) {
-        Mline1[station1][station2] = toID;
-        Mline1[station2][station1] = fromID;
-    }
-    if (firstline == 2) {
-        Mline2[station1][station2] = toID;
-        Mline2[station2][station1] = fromID;
-    }
-    if (firstline == 3) {
-        Mline3[station1][station2] = toID;
-        Mline3[station2][station1] = fromID;
-    }
-    if (firstline == 4) {
-        Mline4[station1][station2] = toID;
-        Mline4[station2][station1] =fromID;
-    }
-    if (firstline == 5) {
-        Mline5[station1][station2] = toID;
-        Mline5[station2][station1] = fromID;
-    }
-    if (firstline == 6) {
-        Mline6[station1][station2] = toID;
-        Mline6[station2][station1] = fromID;
-    }}
+    public static String getss(){return "hi";}
+    public static void MetroLinks(int  firstline,int station1 ,int station2,String fromID,String toID ){
+        if (firstline == 1) {
+            Mline1[station1][station2] = toID;
+            Mline1[station2][station1] = fromID;
+        }
+        if (firstline == 2) {
+            Mline2[station1][station2] = toID;
+            Mline2[station2][station1] = fromID;
+        }
+        if (firstline == 3) {
+            Mline3[station1][station2] = toID;
+            Mline3[station2][station1] = fromID;
+        }
+        if (firstline == 4) {
+            Mline4[station1][station2] = toID;
+            Mline4[station2][station1] =fromID;
+        }
+        if (firstline == 5) {
+            Mline5[station1][station2] = toID;
+            Mline5[station2][station1] = fromID;
+        }
+        if (firstline == 6) {
+            Mline6[station1][station2] = toID;
+            Mline6[station2][station1] = fromID;
+        }}
 
-    public void MetroLinkExternal( int line, int station , String id, String coor){
+    public static void MetroLinkExternal( int line, int station , String id, String coor){
 
         if (line == 1) {
             if (Mline1[station][28] == null)
@@ -402,7 +378,7 @@ public class testroute extends AppCompatActivity {
         }
     }
 
-    public void BusExternalLink( int line, String StStationFrom, int station , String id, String coor){
+    public static void BusExternalLink( int line, String StStationFrom, int station , String id, String coor){
         if (line == 2) {
             if (StStationFrom.equals("1")) {
                 if (Bline2_1[station][45] == null)
@@ -495,7 +471,7 @@ public class testroute extends AppCompatActivity {
                     Bline3_4[station][4] = Bline3_4[station][4] + "," + id+"|"+coor;
                 Bline3_4[4][station] = null;
             }
-else
+            else
             if (StStationFrom.equals("5")) {
                 if (Bline3_5[station][9] == null)
                     Bline3_5[station][9] = id+"|"+coor;
@@ -552,7 +528,7 @@ else
         }// bus line ==4
     }
 
-    public void BusLink(int line, String StStationFrom, int station1 , int station2,String fromcoor,String tocoor){
+    public static  void BusLink(int line, String StStationFrom, int station1 , int station2,String fromcoor,String tocoor){
         if (line == 2) {
             if (StStationFrom.equals("1")) {
                 Bline2_1[station1][station2] = tocoor;
@@ -627,17 +603,19 @@ else
             }
         }
     }
-    public  void printt(String[][] matrix){
-String s="";
+
+    public static void printt(String[][] matrix){
+        String s="";
         for(int i = 0 ; i < matrix.length ; i ++)
-            {s="[";
+        {s="[";
             for(int j = 0 ; j < matrix.length;j++)
 
                 s=s+ matrix[i][j]+",";
 
-                Log.d("Matrix :", s+"]");}
+            Log.d("Matrix :", s+"]");}
 
 
 
-            }//print
+    }//print
 }
+

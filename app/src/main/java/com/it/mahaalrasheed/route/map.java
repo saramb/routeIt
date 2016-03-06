@@ -19,13 +19,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -57,7 +55,7 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-   public static final String ROOT_URL = "http://10.6.202.242/";
+   public static final String ROOT_URL = "http://192.168.1.73";
 
     GoogleMap googleMap;
     double lng;
@@ -117,6 +115,7 @@ public class map extends AppCompatActivity
                // Intent intent = new Intent (map.this, from.class);////////
                 Intent intent = new Intent (map.this, testroute.class);////////
 
+
                 startActivity(intent);
             }
         });
@@ -131,14 +130,14 @@ public class map extends AppCompatActivity
             }
         });
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        final ListView recyclerView = (ListView) findViewById(R.id.list);
 
 
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setAutoMeasureEnabled(true);
 
-        FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) recyclerView.getParent().getParent();
+         FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) recyclerView.getParent().getParent();
         mBottomSheetBehavior = BottomSheetBehavior.from(parentThatHasBottomSheetBehavior);
         if (mBottomSheetBehavior != null) {
             mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -153,15 +152,20 @@ public class map extends AppCompatActivity
             });
         }
 
+
+        testroute.link();
+
+        //if ( !from.getText().equals("From") && !to.getText().equals("To")  ){
+
         View peakView = findViewById(R.id.drag_me);
         mBottomSheetBehavior.setPeekHeight(250);
         peakView.requestLayout();
 
-        String[] array = {"123","5432","7553"};
-        ArrayAdapter addapter = new ArrayAdapter(map.this, android.R.layout.simple_list_item_1,array);
-        lv.setAdapter(addapter);
+      //  String[] itemname =n.stationName;
+      //  Integer [] imgid= n.linenumber;
 
-
+        CustomListAdapter adapter=new CustomListAdapter(this, routeInfo.stationName, routeInfo.linenumber);
+        lv.setAdapter(adapter);
 
 
     }
@@ -402,7 +406,10 @@ public class map extends AppCompatActivity
 
         if (id == R.id.nav_camera) { //map
             // Handle the map action
-            Intent intent = new Intent (this, map.class);
+          //  Intent intent = new Intent (this, map.class);
+            //startActivity(intent);
+            Intent intent = new Intent (map.this, MapsActivity.class);////////
+
             startActivity(intent);
 
         } else if (id == R.id.nav_gallery) {  //favorites

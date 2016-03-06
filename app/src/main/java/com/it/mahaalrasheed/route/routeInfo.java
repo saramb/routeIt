@@ -8,46 +8,41 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+
 public class routeInfo extends AppCompatActivity {
 
-    private String ROOT_URL = map.ROOT_URL;
-    ArrayList<String> stationName = new ArrayList<String>() ;
-    String ID;
-    int number;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_route_info);
+    private static String ROOT_URL = map.ROOT_URL;
+
+    public static String [] stationName = new String[100];
+    public static Integer [] linenumber = new Integer[100];
+    static String ID;
+    static int number;
+    static int count = 0;
+
+    public static void startRouteInfo(){
         String path = testroute.path ;
         boolean flag = true;
         while (flag){
-        if (path.indexOf("|")!=-1){
-        ID = path.substring(0, path.indexOf("|"));}
+            if (path.indexOf("|")!=-1){
+                ID = path.substring(0, path.indexOf("|"));}
             else{
-        ID = path ;
-            flag = false;}
+                ID = path ;
+                flag = false;}
 
-        number = Integer.parseInt(ID.charAt(0) + "");
-        path = path.substring(path.indexOf("|") + 1);
+            number = Integer.parseInt(ID.charAt(0) + "");
+            path = path.substring(path.indexOf("|") + 1);
             stationName();
         }
-        int i =0;
-       while ( !stationName.isEmpty()){
-
-       }
-
     }
 
-    private void stationName(){
+   static  public void stationName(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
-
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(ROOT_URL) //Setting the Root URL
@@ -75,6 +70,26 @@ public class routeInfo extends AppCompatActivity {
                             reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
                             //Reading the output in the string
                             output = reader.readLine();
+                            stationName[count]= (output);
+                            linenumber[count]= R.drawable.logo;
+
+                            count ++;
+                            /*int color = Integer.parseInt(ID.charAt(2)+"");
+                            if (color == 1)
+                                linenumber[count++]= R.drawable.logo;
+                                if (color == 2)
+                                    linenumber[count++]= R.drawable.logo;
+                                    if (color == 3)
+                                        linenumber[count++]= R.drawable.logo;
+                                        if (color == 4)
+                                            linenumber[count++]= R.drawable.logo;
+                                            if (color == 5)
+                                                linenumber[count++]= R.drawable.logo;
+                                                if (color == 6)
+                                                    linenumber[count++]= R.drawable.logo;*/
+
+
+                            //  linenumber[count++]= ();
                             Log.d("stationName", output + "");
 
                             //stationName.add(output+"");
@@ -88,11 +103,12 @@ public class routeInfo extends AppCompatActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        //If any error occurred displaying the error as toast
-                        Toast.makeText(routeInfo.this, error.toString(), Toast.LENGTH_LONG).show();
+                        //If any error occurred displaying the error ashow();
 
                     }
                 }
         );
     }
 }
+
+

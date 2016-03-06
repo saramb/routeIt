@@ -45,6 +45,8 @@ public class Algorithm {
 
         double goalX = 24.69812133;
         double goalY = 46.71793858;
+
+
         //Extraction of Source station
         Extraction(from);
 
