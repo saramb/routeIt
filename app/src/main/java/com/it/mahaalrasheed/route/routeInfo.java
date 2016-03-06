@@ -21,12 +21,15 @@ public class routeInfo extends AppCompatActivity {
     ArrayList<String> stationName = new ArrayList<String>() ;
     String ID;
     int number;
+    static ArrayList<Integer>  type = new ArrayList<Integer>() ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_info);
         String path = testroute.path ;
         boolean flag = true;
+
+
         while (flag){
         if (path.indexOf("|")!=-1){
         ID = path.substring(0, path.indexOf("|"));}
@@ -35,6 +38,7 @@ public class routeInfo extends AppCompatActivity {
             flag = false;}
 
         number = Integer.parseInt(ID.charAt(0) + "");
+            type.add(number);
         path = path.substring(path.indexOf("|") + 1);
             stationName();
         }

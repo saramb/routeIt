@@ -45,8 +45,11 @@ public class Algorithm {
 
         double goalX = 24.69812133;
         double goalY = 46.71793858;
+        double startX= 24.83043126;
+        double startY= 46.61616718;
+
         //Extraction of Source station
-        Extraction(from);
+        Extraction(from,startX,startY);
 
 
 
@@ -58,7 +61,7 @@ public class Algorithm {
 
             //if current station is the detination station
             if (newStation.getName().equals(to)) {
-                return path(newStation);
+                return path(newStation)+"%"+coorPath(newStation);
             }
 
             else {
@@ -180,7 +183,7 @@ public class Algorithm {
                         if (!explored.contains (Station.getName())&& !Stringfrontier.contains(Station.getName())){
                             //if current station is the detination station
                             if (Station.getName().equals(to)) {
-                                return path(Station);
+                                return return path(newStation)+"%"+coorPath(newStation);
                                  }
 
                             //add to the  of frontier
@@ -197,7 +200,7 @@ public class Algorithm {
                             else
                                 Station = new Station ( capacity2[newStation.getLine()-1],newStation.getLine(),Integer.parseInt(externals),i+1,newStation);                            if (!explored.contains (Station.getName()) &&  !Stringfrontier.contains(Station.getName())){
                                 if (Station.getName().equals(to)) {
-                                    return path(Station);
+                                    return return path(newStation)+"%"+coorPath(newStation);
 
                                     }
                                 //add to the  of frontier
@@ -225,7 +228,7 @@ public class Algorithm {
                                 if (!explored.contains (Station.getName()) &&  !Stringfrontier.contains(Station.getName())){
                                     //if current station is the detination station
                                     if (Station.getName().equals(to)) {
-                                        return path(Station);
+                                        return return path(newStation)+"%"+coorPath(newStation);
                                          }
                                     //add to the  of frontier
                                     AddToFrontier(Station); }
@@ -302,18 +305,19 @@ public class Algorithm {
 
     //--------------------------Extraction---------------------
 //perform extraction of station
-    public static void Extraction(String from) {
+    public static void Extraction(String from, double startX, double startY) {
 
         int lineFrom = Integer.parseInt (from.charAt(2)+"");
         int stationNumber = Integer.parseInt (from.substring(from.indexOf(".",4)+1));
         int streetNumber = Integer.parseInt(from.charAt(4) + "");
+        String startXY = startX+":"+startY;
         if (from.charAt(5) != '.')
             streetNumber = streetNumber + Integer.parseInt(from.charAt(5) + "");
 
         if(from.charAt(0)=='1')
-            newStation = new Station (capacity[lineFrom-1],lineFrom,stationNumber,null, "13123:3456");
+            newStation = new Station (capacity[lineFrom-1],lineFrom,stationNumber,null, startXY);
         else
-            newStation = new Station (capacity[lineFrom-1],lineFrom,streetNumber,stationNumber,null, "1233:6689");
+            newStation = new Station (capacity[lineFrom-1],lineFrom,streetNumber,stationNumber,null, startXY);
 
         AddToFrontier(newStation);
 
@@ -340,6 +344,16 @@ public class Algorithm {
         return path;
     }
 
+    //--------------------------coordinatepath---------------------
+    // to find the path from source to destination
+    public static String coorPath ( Station goal ){
+        String path = goal.getX()+":"+goal.getY();
+
+        while ( goal.getParent()!=null) {
+            goal = goal.getParent ();
+            path = path +"|"+ goal.getX()+":" + goal.getY(); }
+        return path;
+    }
     //--------------------------assignMatrix---------------------
     //locate the station to its matrix
 
@@ -510,8 +524,10 @@ class Station{
 
     public Station getParent () {
         return parent; }
+
     public double getX () {
         return Double.parseDouble(xCoordinate); }
+
     public double getY () {
         return Double.parseDouble(yCoordinate); }
 
