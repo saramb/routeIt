@@ -1,5 +1,6 @@
 package com.it.mahaalrasheed.route;
 
+
 /**
  * Created by mac on 3/6/16.
  */
@@ -67,12 +68,12 @@ public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<Str
 
 // Adding all the points in the route to LineOptions
             lineOptions.addAll(points);
-            lineOptions.width(2);
+            lineOptions.width(8);
             lineOptions.color(Color.RED);
 
         }
 
 // Drawing polyline in the Google Map for the i-th route
-        MapsActivity.mMap.addPolyline(lineOptions);
+        map.googleMap.addPolyline(lineOptions);
     }
 }

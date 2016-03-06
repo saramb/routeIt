@@ -5,12 +5,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -20,12 +21,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -38,10 +39,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,11 +59,34 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class map extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements  NavigationView.OnNavigationItemSelectedListener{
 
    public static final String ROOT_URL = "http://192.168.1.73";
 
-    GoogleMap googleMap;
+    private static final LatLng MELBOURNE = new LatLng(24.895652,46.603078);
+
+    private static final LatLng SYDNEY = new LatLng(-33.87365, 151.20689);
+
+    private static final LatLng ADELAIDE = new LatLng(24.71347768,46.67521543);
+
+    private static final LatLng PERTH = new LatLng(24.70334148,46.68034365);
+
+    private static final LatLng LHR = new LatLng(51.471547, -0.460052);
+
+    private static final LatLng LAX = new LatLng(33.936524, -118.377686);
+
+    private static final LatLng JFK = new LatLng(40.641051, -73.777485);
+
+    private static final LatLng AKL = new LatLng(-37.006254, 174.783018);
+    private Polyline mMutablePolyline;
+
+    private Polyline mClickablePolyline;
+
+
+
+    public static final String ROOT_URL = "http://192.168.1.76/";
+
+    static GoogleMap googleMap;
     double lng;
     double lat;
     Button from, to;
@@ -106,25 +135,29 @@ public class map extends AppCompatActivity
 
 
 
+
+
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
 
         from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Intent intent = new Intent (map.this, from.class);////////
-                Intent intent = new Intent (map.this, testroute.class);////////
+              Intent intent = new Intent (map.this, from.class);
 
 
                 startActivity(intent);
+
+
+
+
             }
         });
 
         to.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Intent intent = new Intent(map.this, to.class);
-                Intent intent = new Intent(map.this, routeInfo.class);
+                Intent intent = new Intent(map.this, to.class);
 
                 startActivity(intent);
             }
@@ -137,7 +170,7 @@ public class map extends AppCompatActivity
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setAutoMeasureEnabled(true);
 
-         FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) recyclerView.getParent().getParent();
+        FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) recyclerView.getParent().getParent();
         mBottomSheetBehavior = BottomSheetBehavior.from(parentThatHasBottomSheetBehavior);
         if (mBottomSheetBehavior != null) {
             mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -166,6 +199,7 @@ public class map extends AppCompatActivity
 
         CustomListAdapter adapter=new CustomListAdapter(this, routeInfo.stationName, routeInfo.linenumber);
         lv.setAdapter(adapter);
+
 
 
     }
@@ -254,7 +288,10 @@ public class map extends AppCompatActivity
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(lat, lng))
                 .snippet("Lat:" + location.getLatitude() + "Lng:" + location.getLongitude()));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16));
+      // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16));
+        googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng( 24.69812133, 46.71793858), 16.0f) );
+
+
 
     }
 
@@ -294,6 +331,67 @@ public class map extends AppCompatActivity
                             output = output.substring(output.indexOf("/") + 1);
                             SPOTS_ARRAY = new MetroStation[Integer.parseInt(output1)];
 
+                          /*  for(int i = 0 ; i < lineCoor.size()-1; i++) {
+                                LatLng   tempCoor1 = lineCoor.get(i);
+                                LatLng   tempCoor2 = lineCoor.get(i+1);
+                                    mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
+                                            .add(tempCoor1, tempCoor2)
+                                            .width(10)
+                                            .color(Color.BLUE)
+                                            .geodesic(true));
+                                // Getting URL to the Google Directions API
+                                String url = getDirectionsUrl(tempCoor1, tempCoor2);
+                                DownloadTask downloadTask = new DownloadTask();
+
+                                // Start downloading json data from Google Directions API
+                                downloadTask.execute(url);//not metro point
+                            }*/
+                            /*
+if(testroute.lineCoor.size() !=0) {
+    int type1 = routeInfo.type.get(0);
+    int type2 = routeInfo.type.get(1);
+    LatLng tempCoor1 = testroute.lineCoor.get(0);
+    LatLng tempCoor2 = testroute.lineCoor.get(1);
+    Log.e("type", type1 + ":" + type2);
+    Log.e("type", tempCoor1 + ":" + tempCoor2);
+    mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
+            .add(tempCoor1, tempCoor2)
+            .width(10)
+            .color(Color.BLUE)
+            .geodesic(true));
+    // Getting URL to the Google Directions API
+    String url = getDirectionsUrl(tempCoor1, tempCoor2);
+    DownloadTask downloadTask = new DownloadTask();
+
+    // Start downloading json data from Google Directions API
+    downloadTask.execute(url);//not metro point
+}*/
+
+
+                           for(int j = 0 ; j < testroute.lineCoor.size()-1; j++) {
+                            int type1 =  routeInfo.type.get(j);
+                            int type2 = routeInfo.type.get(j+1);
+                            LatLng   tempCoor1 = testroute.lineCoor.get(j);
+                            LatLng   tempCoor2 = testroute.lineCoor.get(j+1);
+                               Log.e("type",type1+":"+type2);
+                            if(type1 ==1 && type2 ==1 ){
+                            mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
+                                    .add(tempCoor1, tempCoor2)
+                                    .width(10)
+                                    .color(Color.BLUE)
+                                    .geodesic(true));}
+                            else{
+
+                                        // Getting URL to the Google Directions API
+                                        String url = getDirectionsUrl(tempCoor1, tempCoor2);
+                                        DownloadTask downloadTask = new DownloadTask();
+
+                                        // Start downloading json data from Google Directions API
+                                        downloadTask.execute(url);//not metro point
+
+                                }
+                        }
+
                             int i = 0;
                             while (!output.equals("")) {
                                 String XCoordinates = output.substring(0, output.indexOf(":"));
@@ -303,8 +401,9 @@ public class map extends AppCompatActivity
                                 lat = Double.parseDouble(XCoordinates);
                                 lng = Double.parseDouble(YCoordinates);
 
-                                SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
+                              //  SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
                             }
+
                             for (int k = 0; k < i; k++) {
                                 Marker marker = googleMap.addMarker(new MarkerOptions()
                                         .position(SPOTS_ARRAY[k].getPosition())
@@ -410,10 +509,18 @@ public class map extends AppCompatActivity
             //startActivity(intent);
             Intent intent = new Intent (map.this, MapsActivity.class);////////
 
+           /* Intent intent = new Intent (this, map.class);
+            startActivity(intent);*/
+            Intent intent = new Intent (map.this, testroute.class);////////
+
             startActivity(intent);
 
+
+
         } else if (id == R.id.nav_gallery) {  //favorites
-            Intent intent = new Intent (this, Favorites.class);
+           // Intent intent = new Intent (this, Favorites.class);
+            Intent intent = new Intent (map.this, routeInfo.class);////////
+
             startActivity(intent);
 
         } else if (id == R.id.nav_slideshow) { //
@@ -421,7 +528,9 @@ public class map extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_manage) {  //about us
-            Intent intent = new Intent (this, aboutusnav.class);
+            //Intent intent = new Intent (this, aboutusnav.class);
+            Intent intent = new Intent (this, map.class);
+
             startActivity(intent);
 
 
@@ -466,13 +575,12 @@ public class map extends AppCompatActivity
                             output = reader.readLine();
 
                             //Check if there is an output from server
-                            if (!output.equals("")&& !output.equals("NULL")) {
+                            if (!output.equals("") && !output.equals("NULL")) {
                                 //myMenu.findItem(R.id.notifi).setEnabled(true);
-                               // myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
+                                // myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
                                 notif = output;
 
-                            }
-                            else if (output.equals("NULL")) {
+                            } else if (output.equals("NULL")) {
 /*                                myMenu.findItem(R.id.notifi).setEnabled(false);
                                 myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);*/
 
@@ -515,4 +623,106 @@ public class map extends AppCompatActivity
 
 
     }
+
+
+
+
+
+    private String getDirectionsUrl(LatLng origin,LatLng dest){
+
+// Origin of route
+        String str_origin = "origin="+origin.latitude+","+origin.longitude;
+
+// Destination of route
+        String str_dest = "destination="+dest.latitude+","+dest.longitude;
+
+// Sensor enabled
+        String sensor = "sensor=false";
+
+// Building the parameters to the web service
+        String parameters = str_origin+"&"+str_dest+"&"+sensor;
+
+// Output format
+        String output = "json";
+
+// Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
+
+        return url;
+    }
+
+    /** A method to download json data from url */
+    public static String downloadUrl(String strUrl) throws IOException{
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try{
+            URL url = new URL(strUrl);
+
+// Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+// Connecting to url
+            urlConnection.connect();
+
+// Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while( ( line = br.readLine()) != null){
+                sb.append(line);
+            }
+
+            data = sb.toString();
+
+            br.close();
+
+        }catch(Exception e){
+            Log.d("Exception while downloading url", e.toString());
+        }finally{
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
 }
+
+class DownloadTask extends AsyncTask<String, Void, String> {
+
+    // Downloading data in non-ui thread
+    @Override
+    protected String doInBackground(String... url) {
+
+// For storing data from web service
+        String data = "";
+
+        try{
+// Fetching the data from web service
+            data = map.downloadUrl(url[0]);
+        }catch(Exception e){
+            Log.d("Background Task",e.toString());
+        }
+        return data;
+    }
+
+    // Executes in UI thread, after the execution of
+// doInBackground()
+    @Override
+    protected void onPostExecute(String result) {
+        super.onPostExecute(result);
+
+        ParserTask parserTask = new ParserTask();
+
+// Invokes the thread for parsing the JSON data
+        parserTask.execute(result);
+
+    }
+}
+
+
+
+

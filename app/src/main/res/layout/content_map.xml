@@ -66,15 +66,15 @@
         android:fitsSystemWindows="true"
         tools:context="samples.despotoski.nikola.com.bottomsheetsample.BottomSheetActivity">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:fitsSystemWindows="true"
-        app:behavior_hideable="false"
-        app:behavior_peekHeight="0dp"
-        app:layout_behavior="@string/bottom_sheet_behavior">
-        <include layout="@layout/activity_bottom_sheet_content_vieww" />
-    </FrameLayout>
+        <!--   <FrameLayout
+             android:layout_width="match_parent"
+             android:layout_height="300dp"
+             android:fitsSystemWindows="true"
+             app:behavior_hideable="false"
+             app:behavior_peekHeight="0dp"
+             app:layout_behavior="@string/bottom_sheet_behavior">
+           <include layout="@layout/activity_bottom_sheet_content_vieww" />
+    </FrameLayout> -->
 
 </android.support.design.widget.CoordinatorLayout>
 

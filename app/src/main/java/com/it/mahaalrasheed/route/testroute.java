@@ -8,9 +8,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -19,7 +22,8 @@ import retrofit.client.Response;
 
 public class testroute extends AppCompatActivity {
 
-    private static  String ROOT_URL = map.ROOT_URL;
+    private String ROOT_URL = map.ROOT_URL;
+    static ArrayList<LatLng> lineCoor = new ArrayList<LatLng>();
 
     static String  fromId , toId, withen;
     static String fromCoorX,toCoorX,fromCoorY,toCoorY;
@@ -53,6 +57,7 @@ public class testroute extends AppCompatActivity {
     static final String [][] Bline4_1 = new String [10][10];
     static final String [][] Bline4_2 = new String [10][10];
     static String path;
+    static String coorPath;
 
     public static void route(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
@@ -286,8 +291,31 @@ public class testroute extends AppCompatActivity {
                             Log.d("Matrix :", "=================");
                             printt(Bline4_2);
 
-                            path = Algorithm.Astar("1.1.0.2", "1.2.0.6");
-                            Log.v("AStar:", Algorithm.Astar("1.1.0.2", "1.2.0.6") + "");
+                            path =Algorithm.Astar("1.1.0.2", "1.2.0.6").substring(0,Algorithm.Astar("1.1.0.2", "1.2.0.6").indexOf('%'));
+                            coorPath = Algorithm.Astar("1.1.0.2", "1.2.0.6").substring(Algorithm.Astar("1.1.0.2", "1.2.0.6").indexOf('%')+1);
+                            Log.v("AStar:", path + "");
+                            Log.v("coor:", coorPath + "");
+
+
+                            String coordeinates = coorPath;
+                            Log.e("corPath",coordeinates+"");
+                            boolean flag1 = true;
+                            String coor="";
+
+                            while (flag1){
+                                if (coordeinates.indexOf("|")!=-1){
+                                    coor = coordeinates.substring(0, coordeinates.indexOf("|"));
+                                    lineCoor.add(new LatLng(Double.parseDouble(coor.substring(0, coor.indexOf(":"))),Double.parseDouble(coor.substring(coor.indexOf(":") + 1))));
+
+                                }
+                                else{
+                                    lineCoor.add(new LatLng(Double.parseDouble(coordeinates.substring(0, coor.indexOf(":"))),Double.parseDouble(coordeinates.substring(coor.indexOf(":") + 1))));
+                                    flag1 = false;}
+                                coordeinates = coordeinates.substring(coordeinates.indexOf("|") + 1);
+                            }
+
+
+
 
 
                             routeInfo.startRouteInfo();
@@ -303,6 +331,7 @@ public class testroute extends AppCompatActivity {
                     @Override
                     public void failure(RetrofitError error) {
                         //If any error occurred displaying the error as toast
+                        Toast.makeText(testroute.this, error.toString(), Toast.LENGTH_LONG).show();
 
                     }
                 }

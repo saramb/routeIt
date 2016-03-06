@@ -8,12 +8,12 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-
 
 public class routeInfo extends AppCompatActivity {
 
@@ -28,8 +28,19 @@ public class routeInfo extends AppCompatActivity {
     static int count = 0;
 
     public static void startRouteInfo(){
+    private String ROOT_URL = map.ROOT_URL;
+    ArrayList<String> stationName = new ArrayList<String>() ;
+    String ID;
+    int number;
+    static ArrayList<Integer>  type = new ArrayList<Integer>() ;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_route_info);
         String path = testroute.path ;
         boolean flag = true;
+
+
         while (flag){
             if (path.indexOf("|")!=-1){
                 ID = path.substring(0, path.indexOf("|"));}
@@ -39,6 +50,12 @@ public class routeInfo extends AppCompatActivity {
             count++;
             number = Integer.parseInt(ID.charAt(0) + "");
             path = path.substring(path.indexOf("|") + 1);
+        ID = path ;
+            flag = false;}
+
+        number = Integer.parseInt(ID.charAt(0) + "");
+            type.add(number);
+        path = path.substring(path.indexOf("|") + 1);
             stationName();
         }
         stationName2 = new String [count];
@@ -78,26 +95,6 @@ public class routeInfo extends AppCompatActivity {
                             reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
                             //Reading the output in the string
                             output = reader.readLine();
-                            stationName[count]= (output);
-                            linenumber[count]= R.drawable.logo;
-
-                            count ++;
-                            /*int color = Integer.parseInt(ID.charAt(2)+"");
-                            if (color == 1)
-                                linenumber[count++]= R.drawable.logo;
-                                if (color == 2)
-                                    linenumber[count++]= R.drawable.logo;
-                                    if (color == 3)
-                                        linenumber[count++]= R.drawable.logo;
-                                        if (color == 4)
-                                            linenumber[count++]= R.drawable.logo;
-                                            if (color == 5)
-                                                linenumber[count++]= R.drawable.logo;
-                                                if (color == 6)
-                                                    linenumber[count++]= R.drawable.logo;*/
-
-
-                            //  linenumber[count++]= ();
                             Log.d("stationName", output + "");
 
                             //stationName.add(output+"");
@@ -111,12 +108,11 @@ public class routeInfo extends AppCompatActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        //If any error occurred displaying the error ashow();
+                        //If any error occurred displaying the error as toast
+                        Toast.makeText(routeInfo.this, error.toString(), Toast.LENGTH_LONG).show();
 
                     }
                 }
         );
     }
 }
-
-

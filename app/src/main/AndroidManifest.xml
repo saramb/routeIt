@@ -66,6 +66,8 @@
             android:name=".Favorites"
             android:label="@string/title_activity_favorites"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".testroute" />
+        <activity android:name=".routeInfo" />
         <activity android:name=".MapsActivity"></activity>
     </application>
 
