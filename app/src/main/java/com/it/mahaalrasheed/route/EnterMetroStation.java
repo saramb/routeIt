@@ -49,6 +49,7 @@ public class EnterMetroStation extends AppCompatActivity {
         coor =(EditText) findViewById(R.id.metroCoordinates);
         coor2 =(EditText) findViewById(R.id.metroCoordinates2);
         final TextView error=(TextView)findViewById(R.id.textView2);
+        final TextView error2=(TextView)findViewById(R.id.textView36);
         Position=(Spinner)findViewById(R.id.spinner7);
 
 
@@ -85,9 +86,9 @@ public class EnterMetroStation extends AppCompatActivity {
 
                     if (Position.getSelectedItem().toString().equals(" ")) {
                         // error2.requestFocus();
-                        error.setError("Please select the position of the station");
+                        error2.setError("Please select the position of the station");
                     }else
-                        error.setError(null);
+                        error2.setError(null);
 
 
 

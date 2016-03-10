@@ -32,7 +32,7 @@
                 android:id="@+id/textView18" />
 
             <Spinner
-                android:layout_width="match_parent"
+                android:layout_width="207dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/MetroLine"
                 android:layout_marginRight="30dp" />
@@ -43,7 +43,8 @@
                 android:id="@+id/textView2"
                 android:layout_marginTop="10dp"
                 android:focusable="true"
-                android:focusableInTouchMode="true"/>
+                android:focusableInTouchMode="true"
+                android:layout_weight="0.15" />
 
         </LinearLayout>
 
@@ -62,7 +63,7 @@
                 android:id="@+id/textView35" />
 
             <Spinner
-                android:layout_width="match_parent"
+                android:layout_width="144dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner7"
                 android:layout_marginRight="30dp" />

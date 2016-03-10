@@ -37,10 +37,10 @@ public class EnterBusStation extends AppCompatActivity {
     List<String> spinPosition = new ArrayList<String>();
     boolean flag1=false;
 
-    TextView error,error2, stationStreet ;
+    TextView error,error2,error3, stationStreet ;
 
-    String s,n,c,c2,d1,d2,d3,street,st;
-    EditText station,coorX ,name,coorY;
+    String s,n,c,c2,d1,d2,d3,st;
+    EditText station,coorX ,name,coorY,street;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,12 +51,14 @@ public class EnterBusStation extends AppCompatActivity {
         name=(EditText)findViewById(R.id.editText5);
         coorX=(EditText)findViewById(R.id.editText15);
         coorY=(EditText)findViewById(R.id.editText);
+        street=(EditText)findViewById(R.id.editText2);
         stationStreet=(TextView)findViewById(R.id.StreettextView);
         dropdown1=(Spinner)findViewById(R.id.spinner4);
         dropdown2=(Spinner)findViewById(R.id.spinner5);
         dropdown3=(Spinner)findViewById(R.id.spinner6);
         error=(TextView)findViewById(R.id.textView13);
         error2=(TextView)findViewById(R.id.textView15);
+        error3=(TextView)findViewById(R.id.textView33);
 
 
         spinPosition.add(" ");
@@ -79,12 +81,14 @@ public class EnterBusStation extends AppCompatActivity {
 
                 s = station.getText().toString();
                 n = name.getText().toString();
-                st= stationStreet.getText().toString();
+                st= street.getText().toString();
                 c = coorX.getText().toString();
                 c2 = coorY.getText().toString();
                 d1=dropdown1.getSelectedItem().toString();
                 d2=dropdown2.getSelectedItem().toString();
                 d3=dropdown3.getSelectedItem().toString();
+
+
 
 
                 if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || d1.equals(" ") || d2.equals(" ")||d3.equals(" ")||st.equals("")) {
@@ -95,8 +99,6 @@ public class EnterBusStation extends AppCompatActivity {
                     }else
                         error.setError(null);
 
-
-
                     if (dropdown2.getSelectedItem().toString().equals(" ")) {
                        // error2.requestFocus();
                         error2.setError("Please select a value");
@@ -105,9 +107,9 @@ public class EnterBusStation extends AppCompatActivity {
 
                     if (dropdown3.getSelectedItem().toString().equals(" ")) {
                         // error2.requestFocus();
-                        error2.setError("Please select the position of the station");
+                        error3.setError("Please select the position of the station");
                     }else
-                        error2.setError(null);
+                        error3.setError(null);
 
 
                     if (station.getText().toString().equals("")) {
@@ -124,8 +126,8 @@ public class EnterBusStation extends AppCompatActivity {
                     if (coorY.getText().toString().equals("")) {
                         coorY.setError("Please fill the Y coordination");
                     }
-                    if (stationStreet.getText().toString().equals("")) {
-                        stationStreet.setError("Please fill the station street");
+                    if (street.getText().toString().equals("")) {
+                        street.setError("Please fill the station street");
                     }
 
 
