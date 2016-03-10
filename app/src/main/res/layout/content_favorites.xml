@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.it.mahaalrasheed.route.Favorites"
-    tools:showIn="@layout/app_bar_favorites">
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+app:layout_behavior="@string/appbar_scrolling_view_behavior"
+tools:context="com.it.mahaalrasheed.route.map"
+tools:showIn="@layout/app_bar_map">
 
+
+<LinearLayout
+    android:id="@+id/map"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:visibility="visible"
+    android:layout_height="match_parent"
+    android:layout_alignParentStart="true"
+    android:weightSum="1"
+    >
     <fragment
         android:id="@+id/place_autocomplete_fragment"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="74dp"
         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
         />
 
@@ -23,5 +29,6 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
+</LinearLayout>
 </RelativeLayout>
+

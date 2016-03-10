@@ -45,6 +45,7 @@ public class Favorites extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -203,6 +204,7 @@ public class Favorites extends AppCompatActivity
         return true;
     }
 
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -220,10 +222,10 @@ public class Favorites extends AppCompatActivity
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent n = new Intent(Favorites.this, map.class);
+                Intent n = new Intent(Favorites.this,map.class);
                 FavoriteClass F = relam.allObjects(FavoriteClass.class).get(position);
                 n.putExtra("lat", F.getLat());
-                n.putExtra("lng", F.getLng());
+                n.putExtra("lng",F.getLng());
                 startActivity(n);
 
 
