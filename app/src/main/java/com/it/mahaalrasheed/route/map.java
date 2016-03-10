@@ -127,10 +127,16 @@ public class map extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        testroute.lineCoor.add(MELBOURNE);
+        testroute.lineCoor.add(ADELAIDE);
+        testroute.lineCoor.add(PERTH);
+
+
         DisplayMap();
-        testroute.link();
-        RetrieveNotifID();
         PlotStation();
+        RetrieveNotifID();
+
 
 
         spots = new HashMap<>();
@@ -168,7 +174,7 @@ public class map extends AppCompatActivity
             }
         });
 
-        final ListView recyclerView = (ListView) findViewById(R.id.list);
+      /*  final ListView recyclerView = (ListView) findViewById(R.id.list);
 
 
 
@@ -202,7 +208,7 @@ public class map extends AppCompatActivity
 
         CustomListAdapter adapter=new CustomListAdapter(this, routeInfo.stationName, routeInfo.linenumber);
        lv.setAdapter(adapter);
-
+*/
 
 
     }
@@ -291,8 +297,8 @@ public class map extends AppCompatActivity
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(lat, lng))
                 .snippet("Lat:" + location.getLatitude() + "Lng:" + location.getLongitude()));
-      // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16));
-        googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng( 24.69812133, 46.71793858), 16.0f) );
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.69812133, 46.71793858), 16.0f));
 
 
 
@@ -334,9 +340,25 @@ public class map extends AppCompatActivity
                             output = output.substring(output.indexOf("/") + 1);
                             SPOTS_ARRAY = new MetroStation[Integer.parseInt(output1)];
 
+                            for(int j = 0 ; j < testroute.lineCoor.size()-1  ; j++) {
 
+                                LatLng   tempCoor1 = testroute.lineCoor.get(j);
+                                LatLng   tempCoor2 = testroute.lineCoor.get(j+1);
 
-                          for(int j = 0 ; j < testroute.lineCoor.size()-1; j++) {
+                                    mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
+                                            .add(tempCoor1, tempCoor2)
+                                            .width(10)
+                                            .color(Color.BLUE)
+                                            .geodesic(true));
+
+                                    // Getting URL to the Google Directions API
+                                    String url = getDirectionsUrl(tempCoor1, tempCoor2);
+                                    DownloadTask downloadTask = new DownloadTask();
+                                    // Start downloading json data from Google Directions API
+                                    downloadTask.execute(url);//not metro point
+                            }//end of for
+/*
+                             for(int j = 0 ; j < testroute.lineCoor.size()-1 && j<routeInfo.type.size()-1 ; j++) {
                             int type1 =  routeInfo.type.get(j);
                             int type2 = routeInfo.type.get(j+1);
                             LatLng   tempCoor1 = testroute.lineCoor.get(j);
@@ -357,7 +379,7 @@ public class map extends AppCompatActivity
                                         downloadTask.execute(url);//not metro point
                                      }//end of else
                         }//end of for
-
+*/
                             int i = 0;
                             while (!output.equals("")) {
                                 String XCoordinates = output.substring(0, output.indexOf(":"));
@@ -367,7 +389,7 @@ public class map extends AppCompatActivity
                                 lat = Double.parseDouble(XCoordinates);
                                 lng = Double.parseDouble(YCoordinates);
 
-                              //  SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
+                                SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
                             }
 
                             for (int k = 0; k < i; k++) {
@@ -375,7 +397,7 @@ public class map extends AppCompatActivity
                                         .position(SPOTS_ARRAY[k].getPosition())
                                         .title("Title")
                                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_metro)));
-                                spots.put(marker, SPOTS_ARRAY[k]);
+                                //spots.put(marker, SPOTS_ARRAY[k]);
                             }
 
                         } catch (IOException e) {
@@ -474,21 +496,18 @@ public class map extends AppCompatActivity
            Intent intent = new Intent (this, map.class);
             startActivity(intent);
 
-
-
         } else if (id == R.id.nav_gallery) {  //favorites
            Intent intent = new Intent (this, Favorites.class);
-
             startActivity(intent);
+            testroute.link();
 
-        } else if (id == R.id.nav_slideshow) { //
+        } else if (id == R.id.nav_slideshow) { //login
             Intent intent = new Intent (this, loginnav.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_manage) {  //about us
-            //Intent intent = new Intent (this, aboutusnav.class);
-            Intent intent = new Intent (this, map.class);
 
+        } else if (id == R.id.nav_manage) {  //about us
+            Intent intent = new Intent (this, aboutusnav.class);
             startActivity(intent);
 
 
@@ -534,13 +553,13 @@ public class map extends AppCompatActivity
 
                             //Check if there is an output from server
                             if (!output.equals("") && !output.equals("NULL")) {
-                                //myMenu.findItem(R.id.notifi).setEnabled(true);
-                                // myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
+//                                myMenu.findItem(R.id.notifi).setEnabled(true);
+  //                              myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
                                 notif = output;
 
                             } else if (output.equals("NULL")) {
-/*                                myMenu.findItem(R.id.notifi).setEnabled(false);
-                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);*/
+                            //   myMenu.findItem(R.id.notifi).setEnabled(false);
+                              //  myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
 
                             }
 

@@ -300,6 +300,8 @@ public class testroute {
                             coorPath = Algorithm.Astar("1.1.0.2", "1.2.0.6").substring(Algorithm.Astar("1.1.0.2", "1.2.0.6").indexOf('%')+1);
                             Log.v("AStar:", path + "");
                             Log.v("coor:", coorPath + "");
+                            routeInfo.startRouteInfo();
+                            Log.v("coor:", routeInfo.type.get(0)+"");
 
 
                             String coordeinates = coorPath;
@@ -321,7 +323,6 @@ public class testroute {
                             }
                             
 
-                            routeInfo.startRouteInfo();
 
 
                         } catch (IOException e) {
