@@ -44,10 +44,8 @@ public class routeInfo {
                 count++;
                 number = Integer.parseInt(ID.charAt(0) + "");
                 path = path.substring(path.indexOf("|") + 1);
-                ID = path ;
                 type.add(number);
-                stationName();
-                flag = false;}
+                stationName();}
 
 
         stationName2 = new String [count];

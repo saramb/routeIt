@@ -128,12 +128,13 @@ public class map extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        testroute.lineCoor.add(MELBOURNE);
+      testroute.lineCoor.add(MELBOURNE);
         testroute.lineCoor.add(ADELAIDE);
         testroute.lineCoor.add(PERTH);
 
 
         DisplayMap();
+        if(testroute.link())
         PlotStation();
         RetrieveNotifID();
 
@@ -357,13 +358,13 @@ public class map extends AppCompatActivity
                                     // Start downloading json data from Google Directions API
                                     downloadTask.execute(url);//not metro point
                             }//end of for
-/*
-                             for(int j = 0 ; j < testroute.lineCoor.size()-1 && j<routeInfo.type.size()-1 ; j++) {
+
+            /*             for(int j = 0 ; j < testroute.lineCoor.size()-1 ; j++) {
                             int type1 =  routeInfo.type.get(j);
                             int type2 = routeInfo.type.get(j+1);
                             LatLng   tempCoor1 = testroute.lineCoor.get(j);
                             LatLng   tempCoor2 = testroute.lineCoor.get(j+1);
-                              Log.e("type",type1+":"+type2);
+                             Log.e("type",type1+":"+type2);
                             if(type1 ==1 && type2 ==1 ){
                             mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
                                     .add(tempCoor1, tempCoor2)
@@ -499,7 +500,6 @@ public class map extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {  //favorites
            Intent intent = new Intent (this, Favorites.class);
             startActivity(intent);
-            testroute.link();
 
         } else if (id == R.id.nav_slideshow) { //login
             Intent intent = new Intent (this, loginnav.class);

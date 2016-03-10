@@ -119,7 +119,7 @@ public class testroute {
 
 
 
-    public static  void link(){
+    public static  boolean link(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
 
         //Creating a RestAdapter
@@ -240,7 +240,7 @@ public class testroute {
                             }//while
 
 
-                            printt(Mline1);
+                           /* printt(Mline1);
                             Log.d("Matrix M2 :", "=================");
                             printt(Mline2);
                             Log.d("Matrix M3:", "=================");
@@ -294,14 +294,12 @@ public class testroute {
                             Log.d("Matrix B4_1:", "=================");
                             printt(Bline4_1);
                             Log.d("Matrix :", "=================");
-                            printt(Bline4_2);
+                            printt(Bline4_2);*/
 
                             path = Algorithm.Astar("1.1.0.2", "1.2.0.6").substring(0,Algorithm.Astar("1.1.0.2", "1.2.0.6").indexOf('%'));
                             coorPath = Algorithm.Astar("1.1.0.2", "1.2.0.6").substring(Algorithm.Astar("1.1.0.2", "1.2.0.6").indexOf('%')+1);
                             Log.v("AStar:", path + "");
                             Log.v("coor:", coorPath + "");
-                            routeInfo.startRouteInfo();
-                            Log.v("coor:", routeInfo.type.get(0)+"");
 
 
                             String coordeinates = coorPath;
@@ -314,14 +312,16 @@ public class testroute {
                                 if (coordeinates.indexOf("|")!=-1){
                                     coor = coordeinates.substring(0, coordeinates.indexOf("|"));
                                     lineCoor.add(new LatLng(Double.parseDouble(coor.substring(0, coor.indexOf(":"))),Double.parseDouble(coor.substring(coor.indexOf(":") + 1))));
-
                                 }
                                 else{
                                     lineCoor.add(new LatLng(Double.parseDouble(coordeinates.substring(0, coor.indexOf(":"))),Double.parseDouble(coordeinates.substring(coor.indexOf(":") + 1))));
                                     flag1 = false;}
                                 coordeinates = coordeinates.substring(coordeinates.indexOf("|") + 1);
                             }
-                            
+
+                            routeInfo.startRouteInfo();
+                            Log.v("coor:", routeInfo.type.get(0) + "");
+                            Log.v("coor:", routeInfo.type.size() + "");
 
 
 
@@ -340,7 +340,7 @@ public class testroute {
                 }
         );
 
-    }
+   return true; }
 
     public static String getss(){return "hi";}
     public static void MetroLinks(int  firstline,int station1 ,int station2,String fromID,String toID ){
