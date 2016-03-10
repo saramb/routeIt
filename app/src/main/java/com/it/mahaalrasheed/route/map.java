@@ -12,6 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -19,6 +20,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +28,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -60,6 +63,9 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements  NavigationView.OnNavigationItemSelectedListener{
 
+    public static final String ROOT_URL = "http://192.168.1.63/";
+    //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
+
 
     private static final LatLng MELBOURNE = new LatLng(24.895652,46.603078);
 
@@ -76,13 +82,13 @@ public class map extends AppCompatActivity
     private static final LatLng JFK = new LatLng(40.641051, -73.777485);
 
     private static final LatLng AKL = new LatLng(-37.006254, 174.783018);
+
     private Polyline mMutablePolyline;
 
     private Polyline mClickablePolyline;
 
 
 
-    public static final String ROOT_URL = "http://10.6.198.252/";
 
     static GoogleMap googleMap;
     double lng;
@@ -122,18 +128,24 @@ public class map extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+      testroute.lineCoor.add(MELBOURNE);
+        testroute.lineCoor.add(ADELAIDE);
+        testroute.lineCoor.add(PERTH);
+
+
         DisplayMap();
+        if(testroute.link())
         PlotStation();
         RetrieveNotifID();
+
+
 
         spots = new HashMap<>();
 
         //lng = getIntent().getDoubleExtra("lng",0);
         //lat = getIntent().getDoubleExtra("lat",0);
 
-        /*lineCoor.add(MELBOURNE);
-        lineCoor.add(ADELAIDE);
-        lineCoor.add(PERTH);*/
 
 
 
@@ -145,6 +157,7 @@ public class map extends AppCompatActivity
             @Override
             public void onClick(View v) {
               Intent intent = new Intent (map.this, from.class);
+
 
                 startActivity(intent);
 
@@ -185,27 +198,21 @@ public class map extends AppCompatActivity
             });
         }
 
-       View peakView = findViewById(R.id.drag_me);
+
+        if ( !from.getText().equals("From") && !to.getText().equals("To")  ){}
+
+        View peakView = findViewById(R.id.drag_me);
         mBottomSheetBehavior.setPeekHeight(250);
         peakView.requestLayout();
 
+       // String[] itemname =n.stationName;
+        //    Integer [] imgid= n.linenumber;
+
+        CustomListAdapter adapter=new CustomListAdapter(this, routeInfo.stationName, routeInfo.linenumber);
+       lv.setAdapter(adapter);
+*/
 
 
-       // String[] array = {"123","5432","7553"};
-        //ArrayAdapter addapter = new ArrayAdapter(map.this, android.R.layout.simple_list_item_1,array);
-        //lv.setAdapter(addapter);
-
-
-
-
-/*
-        // Getting URL to the Google Directions API
-        String url = getDirectionsUrl(PERTH, ADELAIDE);
-
-        DownloadTask downloadTask = new DownloadTask();
-
-        // Start downloading json data from Google Directions API
-        downloadTask.execute(url);*/
     }
     public void DisplayMap(){
 
@@ -292,8 +299,8 @@ public class map extends AppCompatActivity
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(lat, lng))
                 .snippet("Lat:" + location.getLatitude() + "Lng:" + location.getLongitude()));
-      // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16));
-        googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng( 24.69812133, 46.71793858), 16.0f) );
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.69812133, 46.71793858), 16.0f));
 
 
 
@@ -335,67 +342,46 @@ public class map extends AppCompatActivity
                             output = output.substring(output.indexOf("/") + 1);
                             SPOTS_ARRAY = new MetroStation[Integer.parseInt(output1)];
 
-                          /*  for(int i = 0 ; i < lineCoor.size()-1; i++) {
-                                LatLng   tempCoor1 = lineCoor.get(i);
-                                LatLng   tempCoor2 = lineCoor.get(i+1);
+                            for(int j = 0 ; j < testroute.lineCoor.size()-1  ; j++) {
+
+                                LatLng   tempCoor1 = testroute.lineCoor.get(j);
+                                LatLng   tempCoor2 = testroute.lineCoor.get(j+1);
+
                                     mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
                                             .add(tempCoor1, tempCoor2)
                                             .width(10)
                                             .color(Color.BLUE)
                                             .geodesic(true));
-                                // Getting URL to the Google Directions API
-                                String url = getDirectionsUrl(tempCoor1, tempCoor2);
-                                DownloadTask downloadTask = new DownloadTask();
 
-                                // Start downloading json data from Google Directions API
-                                downloadTask.execute(url);//not metro point
-                            }*/
+                                    // Getting URL to the Google Directions API
+                                    String url = getDirectionsUrl(tempCoor1, tempCoor2);
+                                    DownloadTask downloadTask = new DownloadTask();
+                                    // Start downloading json data from Google Directions API
+                                    downloadTask.execute(url);//not metro point
+                            }//end of for
 
-                            /*
-if(testroute.lineCoor.size() !=0) {
-    int type1 = routeInfo.type.get(0);
-    int type2 = routeInfo.type.get(1);
-    LatLng tempCoor1 = testroute.lineCoor.get(0);
-    LatLng tempCoor2 = testroute.lineCoor.get(1);
-    Log.e("type", type1 + ":" + type2);
-    Log.e("type", tempCoor1 + ":" + tempCoor2);
-    mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
-            .add(tempCoor1, tempCoor2)
-            .width(10)
-            .color(Color.BLUE)
-            .geodesic(true));
-    // Getting URL to the Google Directions API
-    String url = getDirectionsUrl(tempCoor1, tempCoor2);
-    DownloadTask downloadTask = new DownloadTask();
-
-    // Start downloading json data from Google Directions API
-    downloadTask.execute(url);//not metro point
-}*/
-
-                           for(int j = 0 ; j < testroute.lineCoor.size()-1; j++) {
+            /*             for(int j = 0 ; j < testroute.lineCoor.size()-1 ; j++) {
                             int type1 =  routeInfo.type.get(j);
                             int type2 = routeInfo.type.get(j+1);
                             LatLng   tempCoor1 = testroute.lineCoor.get(j);
                             LatLng   tempCoor2 = testroute.lineCoor.get(j+1);
-                               Log.e("type",type1+":"+type2);
+                             Log.e("type",type1+":"+type2);
                             if(type1 ==1 && type2 ==1 ){
                             mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
                                     .add(tempCoor1, tempCoor2)
                                     .width(10)
                                     .color(Color.BLUE)
                                     .geodesic(true));}
-                            else{
 
+                            else{
                                         // Getting URL to the Google Directions API
                                         String url = getDirectionsUrl(tempCoor1, tempCoor2);
                                         DownloadTask downloadTask = new DownloadTask();
-
                                         // Start downloading json data from Google Directions API
                                         downloadTask.execute(url);//not metro point
-
-                                }
-                        }
-
+                                     }//end of else
+                        }//end of for
+*/
                             int i = 0;
                             while (!output.equals("")) {
                                 String XCoordinates = output.substring(0, output.indexOf(":"));
@@ -405,7 +391,7 @@ if(testroute.lineCoor.size() !=0) {
                                 lat = Double.parseDouble(XCoordinates);
                                 lng = Double.parseDouble(YCoordinates);
 
-                              //  SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
+                                SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
                             }
 
                             for (int k = 0; k < i; k++) {
@@ -413,7 +399,7 @@ if(testroute.lineCoor.size() !=0) {
                                         .position(SPOTS_ARRAY[k].getPosition())
                                         .title("Title")
                                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_metro)));
-                                spots.put(marker, SPOTS_ARRAY[k]);
+                                //spots.put(marker, SPOTS_ARRAY[k]);
                             }
 
                         } catch (IOException e) {
@@ -509,28 +495,20 @@ if(testroute.lineCoor.size() !=0) {
 
         if (id == R.id.nav_camera) { //map
             // Handle the map action
-           /* Intent intent = new Intent (this, map.class);
-            startActivity(intent);*/
-            Intent intent = new Intent (map.this, testroute.class);////////
-
+           Intent intent = new Intent (this, map.class);
             startActivity(intent);
-
-
 
         } else if (id == R.id.nav_gallery) {  //favorites
-           // Intent intent = new Intent (this, Favorites.class);
-            Intent intent = new Intent (map.this, routeInfo.class);////////
-
+           Intent intent = new Intent (this, Favorites.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) { //
+        } else if (id == R.id.nav_slideshow) { //login
             Intent intent = new Intent (this, loginnav.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_manage) {  //about us
-            //Intent intent = new Intent (this, aboutusnav.class);
-            Intent intent = new Intent (this, map.class);
 
+        } else if (id == R.id.nav_manage) {  //about us
+            Intent intent = new Intent (this, aboutusnav.class);
             startActivity(intent);
 
 
@@ -576,13 +554,13 @@ if(testroute.lineCoor.size() !=0) {
 
                             //Check if there is an output from server
                             if (!output.equals("") && !output.equals("NULL")) {
-                                //myMenu.findItem(R.id.notifi).setEnabled(true);
-                                // myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
+//                                myMenu.findItem(R.id.notifi).setEnabled(true);
+  //                              myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
                                 notif = output;
 
                             } else if (output.equals("NULL")) {
-/*                                myMenu.findItem(R.id.notifi).setEnabled(false);
-                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);*/
+                            //   myMenu.findItem(R.id.notifi).setEnabled(false);
+                              //  myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
 
                             }
 
@@ -691,7 +669,7 @@ if(testroute.lineCoor.size() !=0) {
     }
 }
 
-class DownloadTask extends AsyncTask<String, Void, String> {
+ class DownloadTask extends AsyncTask<String, Void, String> {
 
     // Downloading data in non-ui thread
     @Override
