@@ -39,6 +39,8 @@ public class to extends AppCompatActivity {
                 @Override
                 public void onPlaceSelected(Place place) {
                     Intent n = new Intent(to.this, map.class);
+                    n.putExtra("page","to".toString());
+                    n.putExtra("name", place.getName().toString());
                     n.putExtra("lat", place.getLatLng().latitude );
                     n.putExtra("lng", place.getLatLng().longitude);
                     startActivity(n);
@@ -66,6 +68,8 @@ public class to extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent n = new Intent(to.this, map.class);
                     FavoriteClass F = relam.allObjects(FavoriteClass.class).get(position);
+                    n.putExtra("page","to");
+                    n.putExtra("name", F.getName().toString());
                     n.putExtra("lat", F.getLat());
                     n.putExtra("lng", F.getLng());
                     startActivity(n);
