@@ -15,7 +15,8 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class routeInfo extends AppCompatActivity {
+public class routeInfo {
+
 
     private static String ROOT_URL = map.ROOT_URL;
 
@@ -26,47 +27,38 @@ public class routeInfo extends AppCompatActivity {
     static String ID;
     static int number;
     static int count = 0;
+    static ArrayList<Integer>  type = new ArrayList<Integer>() ;
 
     public static void startRouteInfo(){
-    private String ROOT_URL = map.ROOT_URL;
-    ArrayList<String> stationName = new ArrayList<String>() ;
-    String ID;
-    int number;
-    static ArrayList<Integer>  type = new ArrayList<Integer>() ;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_route_info);
-        String path = testroute.path ;
-        boolean flag = true;
 
 
-        while (flag){
-            if (path.indexOf("|")!=-1){
-                ID = path.substring(0, path.indexOf("|"));}
-            else{
+            String path = testroute.path ;
+            boolean flag = true;
+
+            while (flag){
+                if (path.indexOf("|")!=-1){
+                    ID = path.substring(0, path.indexOf("|"));}
+                else{
+                    ID = path ;
+                    flag = false;}
+                count++;
+                number = Integer.parseInt(ID.charAt(0) + "");
+                path = path.substring(path.indexOf("|") + 1);
                 ID = path ;
+                type.add(number);
+                stationName();
                 flag = false;}
-            count++;
-            number = Integer.parseInt(ID.charAt(0) + "");
-            path = path.substring(path.indexOf("|") + 1);
-        ID = path ;
-            flag = false;}
 
-        number = Integer.parseInt(ID.charAt(0) + "");
-            type.add(number);
-        path = path.substring(path.indexOf("|") + 1);
-            stationName();
-        }
+
         stationName2 = new String [count];
         linenumber2 = new Integer[count];
         for (int i = 0; i < count; i++) {
             stationName2 [i] = stationName2[i];
-              linenumber2 [i] = linenumber2[i];
+            linenumber2 [i] = linenumber2[i];
         }
     }
 
-   static  public void stationName(){
+    static  public void stationName(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
@@ -109,7 +101,6 @@ public class routeInfo extends AppCompatActivity {
                     @Override
                     public void failure(RetrofitError error) {
                         //If any error occurred displaying the error as toast
-                        Toast.makeText(routeInfo.this, error.toString(), Toast.LENGTH_LONG).show();
 
                     }
                 }

@@ -24,6 +24,7 @@ public interface routeAPI {
             @Field("Name") String Name,
             @Field("MetroLineID") int MetroLineID,
             @Field("AdminID") String AdminID,
+            @Field("Position") String Position,
             Callback<Response> callback);
 
     @FormUrlEncoded
@@ -42,6 +43,7 @@ public interface routeAPI {
             @Field("MetroStationName") String MetroStationName,
             @Field("BusLineID") int BusLineID,
             @Field("AdminID") String AdminID,
+            @Field("Position") String Position,
             Callback<Response> callback);
 
     @FormUrlEncoded

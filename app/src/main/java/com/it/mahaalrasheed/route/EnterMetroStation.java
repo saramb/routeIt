@@ -24,11 +24,15 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class EnterMetroStation extends AppCompatActivity {
-    String s,n,c,c2;
+    String s,n,c,c2,c3;
     private String ROOT_URL = map.ROOT_URL;
     EditText station,name,coor,coor2;
     Spinner MetroLine;
     List<String> spin = new ArrayList<String>();
+    List<String> spinPosition = new ArrayList<String>();
+    Spinner Position;
+
+
     String adminId;
 
 
@@ -45,6 +49,17 @@ public class EnterMetroStation extends AppCompatActivity {
         coor =(EditText) findViewById(R.id.metroCoordinates);
         coor2 =(EditText) findViewById(R.id.metroCoordinates2);
         final TextView error=(TextView)findViewById(R.id.textView2);
+        Position=(Spinner)findViewById(R.id.spinner7);
+
+
+        spinPosition.add(" ");
+        spinPosition.add("At the begining");
+        spinPosition.add("At the end");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(EnterMetroStation.this,android.R.layout.simple_dropdown_item_1line, spinPosition);
+
+        Position.setAdapter(adapter);
+
 
         Retrieve();
         //adminId= getIntent().getExtras().getString("AdminID");
@@ -60,11 +75,17 @@ public class EnterMetroStation extends AppCompatActivity {
                 c2=coor2.getText().toString();
 
 
-                if (s.equals("") || n.equals("") || c.equals("") || MetroLine.getSelectedItem().toString().equals(" ")) {
+                if (s.equals("") || n.equals("") || c.equals("")|| Position.getSelectedItem().toString().equals(" ") || MetroLine.getSelectedItem().toString().equals(" ")) {
 
                     if(MetroLine.getSelectedItem().toString().equals(" ")){
                         error.requestFocus();
                         error.setError("Please select line ID");
+                    }else
+                        error.setError(null);
+
+                    if (Position.getSelectedItem().toString().equals(" ")) {
+                        // error2.requestFocus();
+                        error.setError("Please select the position of the station");
                     }else
                         error.setError(null);
 
@@ -123,7 +144,7 @@ public class EnterMetroStation extends AppCompatActivity {
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
 
-        String LocationID = "1."+ MetroLine.getSelectedItemPosition()+"."+station.getText().toString();
+        String LocationID = "1."+ MetroLine.getSelectedItemPosition()+".0."+station.getText().toString();
 
         //Defining the method insertuser of our interface
         api.EnterMetroStation(
@@ -135,6 +156,7 @@ public class EnterMetroStation extends AppCompatActivity {
                 name.getText().toString(),
                 MetroLine.getSelectedItemPosition(),
                 "najat",
+                Position.getSelectedItemPosition()+"",
 
 
                 //Creating an anonymous callback
@@ -208,7 +230,6 @@ public class EnterMetroStation extends AppCompatActivity {
 
                             //Reading the output in the string
                             output = reader.readLine();
-//
 
                             while(!output.equals("")) {
                                 //Toast.makeText(EnterMetroStation.this, output, Toast.LENGTH_LONG).show();

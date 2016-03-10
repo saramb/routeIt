@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,14 +31,16 @@ public class EnterBusStation extends AppCompatActivity {
     private String ROOT_URL = map.ROOT_URL;
     Spinner dropdown1;
     Spinner dropdown2;
+    Spinner dropdown3;
     List<String> spin = new ArrayList<String>();
     List<String> spinMetro = new ArrayList<String>();
+    List<String> spinPosition = new ArrayList<String>();
 
     boolean flag1=false;
 
     TextView error,error2;
 
-    String s,n,c,c2,d1,d2;
+    String s,n,c,c2,d1,d2,d3;
     EditText station,coorX ,name,coorY ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +54,18 @@ public class EnterBusStation extends AppCompatActivity {
         coorY=(EditText)findViewById(R.id.editText);
         dropdown1=(Spinner)findViewById(R.id.spinner4);
         dropdown2=(Spinner)findViewById(R.id.spinner5);
+        dropdown3=(Spinner)findViewById(R.id.spinner6);
         error=(TextView)findViewById(R.id.textView13);
         error2=(TextView)findViewById(R.id.textView15);
+
+        spinPosition.add(" ");
+        spinPosition.add("At the begining");
+        spinPosition.add("At the end");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(EnterBusStation.this,android.R.layout.simple_dropdown_item_1line, spinPosition);
+
+        dropdown3.setAdapter(adapter);
+
 
         Retrieve();
 
@@ -68,9 +81,10 @@ public class EnterBusStation extends AppCompatActivity {
                 c2 = coorY.getText().toString();
                 d1=dropdown1.getSelectedItem().toString();
                 d2=dropdown2.getSelectedItem().toString();
+                d3=dropdown3.getSelectedItem().toString();
 
 
-                if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || d1.equals(" ") || d2.equals(" ")) {
+                if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || d1.equals(" ") || d2.equals(" ")||d3.equals(" ")) {
 
                     if (dropdown1.getSelectedItem().toString().equals(" ")) {
                         //error.requestFocus();
@@ -83,6 +97,12 @@ public class EnterBusStation extends AppCompatActivity {
                     if (dropdown2.getSelectedItem().toString().equals(" ")) {
                        // error2.requestFocus();
                         error2.setError("Please select a value");
+                    }else
+                        error2.setError(null);
+
+                    if (dropdown3.getSelectedItem().toString().equals(" ")) {
+                        // error2.requestFocus();
+                        error2.setError("Please select the position of the station");
                     }else
                         error2.setError(null);
 
@@ -171,6 +191,7 @@ public class EnterBusStation extends AppCompatActivity {
                 dropdown2.getSelectedItem().toString(),
                 dropdown1.getSelectedItemPosition(),
                 "najat",
+                dropdown3.getSelectedItemPosition()+"",
 
 
                 //Creating an anonymous callback

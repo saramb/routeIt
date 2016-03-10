@@ -3,14 +3,13 @@ package com.it.mahaalrasheed.route;
 
 import com.google.android.gms.maps.model.LatLng;
 
-<<<<<<< HEAD
+
 import java.util.ArrayList;
 import java.util.List;
 
 import java.util.HashMap;
 
-=======
->>>>>>> origin/master
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

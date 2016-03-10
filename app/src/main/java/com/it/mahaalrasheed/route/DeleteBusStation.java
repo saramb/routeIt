@@ -112,8 +112,6 @@ public class DeleteBusStation extends AppCompatActivity {
                             //Reading the output in the string
                             output = reader.readLine();
 
-                            Toast.makeText(DeleteBusStation.this, output, Toast.LENGTH_LONG).show();
-
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -166,7 +164,6 @@ public class DeleteBusStation extends AppCompatActivity {
                             output = reader.readLine();
 
                             while (!output.equals("")) {
-                                Toast.makeText(DeleteBusStation.this, output, Toast.LENGTH_LONG).show();
                                 String stationName = output.substring(0, output.indexOf(" "));
                                 output = output.substring(output.indexOf(" ") + 1);
                                 if (!spin.contains(stationName)) {
@@ -177,9 +174,7 @@ public class DeleteBusStation extends AppCompatActivity {
                             ArrayAdapter<String> adapter = new ArrayAdapter<String>(DeleteBusStation.this, android.R.layout.simple_dropdown_item_1line, spin);
 
                             dropdown.setAdapter(adapter);
-
-                            Toast.makeText(DeleteBusStation.this, output, Toast.LENGTH_LONG).show();
-
+                            
 
                         } catch (IOException e) {
                             e.printStackTrace();

@@ -20,9 +20,14 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class testroute extends AppCompatActivity {
 
-    private String ROOT_URL = map.ROOT_URL;
+public class testroute {
+
+
+
+
+
+    static String ROOT_URL = map.ROOT_URL;
     static ArrayList<LatLng> lineCoor = new ArrayList<LatLng>();
 
     static String  fromId , toId, withen;
@@ -110,7 +115,7 @@ public class testroute extends AppCompatActivity {
                     }
                 }
         );
-        }
+    }
 
 
 
@@ -291,7 +296,7 @@ public class testroute extends AppCompatActivity {
                             Log.d("Matrix :", "=================");
                             printt(Bline4_2);
 
-                            path =Algorithm.Astar("1.1.0.2", "1.2.0.6").substring(0,Algorithm.Astar("1.1.0.2", "1.2.0.6").indexOf('%'));
+                            path = Algorithm.Astar("1.1.0.2", "1.2.0.6").substring(0,Algorithm.Astar("1.1.0.2", "1.2.0.6").indexOf('%'));
                             coorPath = Algorithm.Astar("1.1.0.2", "1.2.0.6").substring(Algorithm.Astar("1.1.0.2", "1.2.0.6").indexOf('%')+1);
                             Log.v("AStar:", path + "");
                             Log.v("coor:", coorPath + "");
@@ -299,6 +304,7 @@ public class testroute extends AppCompatActivity {
 
                             String coordeinates = coorPath;
                             Log.e("corPath",coordeinates+"");
+
                             boolean flag1 = true;
                             String coor="";
 
@@ -313,10 +319,7 @@ public class testroute extends AppCompatActivity {
                                     flag1 = false;}
                                 coordeinates = coordeinates.substring(coordeinates.indexOf("|") + 1);
                             }
-
-
-
-
+                            
 
                             routeInfo.startRouteInfo();
 
@@ -331,7 +334,6 @@ public class testroute extends AppCompatActivity {
                     @Override
                     public void failure(RetrofitError error) {
                         //If any error occurred displaying the error as toast
-                        Toast.makeText(testroute.this, error.toString(), Toast.LENGTH_LONG).show();
 
                     }
                 }

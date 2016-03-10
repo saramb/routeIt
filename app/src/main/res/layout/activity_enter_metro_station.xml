@@ -32,7 +32,7 @@
                 android:id="@+id/textView18" />
 
             <Spinner
-                android:layout_width="210dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/MetroLine"
                 android:layout_marginRight="30dp" />
@@ -45,6 +45,35 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"/>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="5dp"
+            android:weightSum="1" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Station Position:"
+                android:id="@+id/textView35" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner7"
+                android:layout_marginRight="30dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView36"
+                android:layout_marginTop="10dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
         </LinearLayout>
 
         <LinearLayout
@@ -146,7 +175,7 @@
                 android:text="Enter"
                 android:id="@+id/button18"
                 android:layout_marginLeft="100dp"
-                android:layout_marginTop="50dp" />
+                android:layout_marginTop="20dp" />
         </LinearLayout>
 
     </LinearLayout>
