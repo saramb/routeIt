@@ -16,6 +16,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -56,6 +57,7 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
 
 public class map extends AppCompatActivity
         implements  NavigationView.OnNavigationItemSelectedListener{
@@ -107,6 +109,10 @@ public class map extends AppCompatActivity
     String Locationname , page="";
     public static String fromname = "From";
 
+    private ViewPager mViewPager;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+
+
 
 
 
@@ -114,6 +120,15 @@ public class map extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.getLayoutParams().height = 0;
+
+
+
 
         lv = (ListView)findViewById(R.id.list);
 
@@ -145,10 +160,11 @@ public class map extends AppCompatActivity
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
 
+
         from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Intent intent = new Intent (map.this, from.class);
+                Intent intent = new Intent(map.this, from.class);
                 startActivity(intent);}
         });
 
@@ -173,9 +189,7 @@ public class map extends AppCompatActivity
                 from.setText(fromname);
             } else if (page.equals("to")) {
                 to.setText(Locationname);
-                Intent intent = new Intent(map.this, info.class);
-                startActivity(intent);
-
+                mViewPager.getLayoutParams().height = 250;
             }
         }
 
@@ -387,7 +401,6 @@ public class map extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
-
     }
 
     @Override
@@ -522,12 +535,12 @@ public class map extends AppCompatActivity
                             //Check if there is an output from server
                             if (!output.equals("") && !output.equals("NULL")) {
 //                                myMenu.findItem(R.id.notifi).setEnabled(true);
-  //                              myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
+                                //                              myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
                                 notif = output;
 
                             } else if (output.equals("NULL")) {
-                            //   myMenu.findItem(R.id.notifi).setEnabled(false);
-                              //  myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
+                                //   myMenu.findItem(R.id.notifi).setEnabled(false);
+                                //  myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
 
                             }
 
@@ -547,7 +560,9 @@ public class map extends AppCompatActivity
     }
 
     @Override
-    protected void onStart() { super.onStart();}
+    protected void onStart() {
+        super.onStart();
+    }
 
     public void RetrieveNotifID(){
         //retrieve realm content
@@ -666,7 +681,7 @@ public class map extends AppCompatActivity
         parserTask.execute(result);
 
     }
-}
+ }
 
 
 
