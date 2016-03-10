@@ -121,20 +121,28 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Station Street"
                 android:id="@+id/StreettextView"
-                android:layout_marginLeft="30dp" />
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText2"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:layout_marginRight="30dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView9" />
         </LinearLayout>
 
         <LinearLayout
