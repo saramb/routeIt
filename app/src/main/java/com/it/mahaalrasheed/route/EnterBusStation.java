@@ -39,7 +39,7 @@ public class EnterBusStation extends AppCompatActivity {
 
     TextView error,error2, stationStreet ;
 
-    String s,n,c,c2,d1,d2,d3,street;
+    String s,n,c,c2,d1,d2,d3,street,st;
     EditText station,coorX ,name,coorY;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +63,7 @@ public class EnterBusStation extends AppCompatActivity {
         spinPosition.add("At the begining");
         spinPosition.add("At the end");
 
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(EnterBusStation.this,android.R.layout.simple_dropdown_item_1line, spinPosition);
 
         dropdown3.setAdapter(adapter);
@@ -78,6 +79,7 @@ public class EnterBusStation extends AppCompatActivity {
 
                 s = station.getText().toString();
                 n = name.getText().toString();
+                st= stationStreet.getText().toString();
                 c = coorX.getText().toString();
                 c2 = coorY.getText().toString();
                 d1=dropdown1.getSelectedItem().toString();
@@ -85,7 +87,7 @@ public class EnterBusStation extends AppCompatActivity {
                 d3=dropdown3.getSelectedItem().toString();
 
 
-                if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || d1.equals(" ") || d2.equals(" ")||d3.equals(" ")||street.equals(" ")) {
+                if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || d1.equals(" ") || d2.equals(" ")||d3.equals(" ")||st.equals("")) {
 
                     if (dropdown1.getSelectedItem().toString().equals(" ")) {
                         //error.requestFocus();
