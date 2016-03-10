@@ -19,8 +19,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -32,7 +31,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA637ROOICCsmPHm9UGzvzv3WIaL4cDloM" />
+            android:value="AIzaSyBgjy88a9GrV7qsW6so2ESAwaZ-eD9xobY" />
 
         <activity
             android:name=".from"
@@ -40,19 +39,6 @@
         <activity
             android:name=".to"
             android:label="To" />
-        <activity
-            android:name=".Splash"
-            android:theme="@style/splashScreenTheme">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
-
-
-
-
         <activity android:name=".Menu" />
         <activity android:name=".EnterMetroStation" />
         <activity android:name=".EnterLandMark" />
@@ -64,6 +50,7 @@
         <activity android:name=".Enter" />
         <activity android:name=".NewPost" />
         <activity android:name=".notif" />
+
         <activity
             android:name=".aboutusnav"
             android:label="@string/title_activity_aboutusnav"
@@ -76,6 +63,16 @@
             android:name=".Favorites"
             android:label="@string/title_activity_favorites"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Splash_test_Activity"
+            android:label="@string/title_activity_splash_test_"
+            android:theme="@style/AppTheme.NoActionBar">
+           <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+
+        </activity>
     </application>
 
 </manifest>

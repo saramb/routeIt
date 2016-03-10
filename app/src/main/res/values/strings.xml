@@ -17,6 +17,7 @@
     <string name="title_activity_loginnav">loginnav</string>
     <string name="title_activity_notefication_nav">notefication_nav</string>
     <string name="title_activity_favorites">Favorites</string>
+    <string name="title_activity_splash_test_">Splash_test_Activity</string>
 
 
 </resources>

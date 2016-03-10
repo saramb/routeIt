@@ -1,24 +1,25 @@
 package com.it.mahaalrasheed.route;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
-
-
-public class Splash extends AppCompatActivity {
-    private final int SPLASH_DISPLAY_LENGTH = 1000;
+public class Splash_test_Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.activity_splash_test_);
 
-        final ImageView iv=(ImageView)findViewById(R.id.splashscreen);
-        final Animation a= AnimationUtils.loadAnimation(getBaseContext(),R.anim.splash_file);
+        final ImageView iv=(ImageView)findViewById(R.id.imageView2);
+        final Animation a= AnimationUtils.loadAnimation(getBaseContext(), R.anim.first);
 
         iv.startAnimation(a);
         a.setAnimationListener(new Animation.AnimationListener() {
@@ -30,7 +31,7 @@ public class Splash extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 finish();
-                Intent i = new Intent(getApplicationContext(), map.class);
+                Intent i = new Intent(getApplicationContext(), aboutusnav.class);
                 startActivity(i);
 
             }

@@ -63,7 +63,7 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements  NavigationView.OnNavigationItemSelectedListener{
 
-    public static final String ROOT_URL = "http://10.6.198.252/";
+    public static final String ROOT_URL = "http://10.12.196.10/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
 
