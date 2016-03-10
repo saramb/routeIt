@@ -19,7 +19,9 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
             </intent-filter>
         </activity>
         <activity
@@ -50,29 +52,28 @@
         <activity android:name=".Enter" />
         <activity android:name=".NewPost" />
         <activity android:name=".notif" />
-
         <activity
             android:name=".aboutusnav"
-            android:label="@string/title_activity_aboutusnav"
+            android:label="About Us"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".loginnav"
-            android:label="@string/title_activity_loginnav"
+            android:label="Login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Favorites"
             android:label="@string/title_activity_favorites"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Splash_test_Activity"
-            android:label="@string/title_activity_splash_test_"
-            android:theme="@style/AppTheme.NoActionBar">
-           <!-- <intent-filter>
+
+        <activity android:name=".Splash"
+            android:theme="@style/Theme.Design.NoActionBar">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
 
+            </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
