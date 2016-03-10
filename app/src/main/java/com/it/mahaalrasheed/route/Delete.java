@@ -15,7 +15,6 @@ public class Delete extends AppCompatActivity {
 
         final Button delete_bus_station=(Button)findViewById(R.id.button10);
         final Button delete_metro_station=(Button)findViewById(R.id.button11);
-        final Button delete_land_mark=(Button)findViewById(R.id.button12);
 
 
         delete_bus_station.setOnClickListener(new View.OnClickListener() {
@@ -34,12 +33,6 @@ public class Delete extends AppCompatActivity {
             }
         });
 
-        delete_land_mark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), DeleteLandMark.class);
-                startActivity(i);
-            }
-        });
+
     }
 }

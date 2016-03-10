@@ -115,6 +115,26 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/textView34"
                 android:layout_marginTop="10dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Station Street"
+                android:id="@+id/StreettextView"
+                android:layout_marginLeft="30dp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText2"
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -180,7 +200,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Coordination X:"
+                android:text="X Coordinate:"
                 android:id="@+id/textView6" />
 
             <EditText
@@ -206,7 +226,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Coordination Y:"
+                android:text="X Coordinate:"
                 android:id="@+id/textView30" />
 
             <EditText
@@ -233,6 +253,7 @@
                 android:layout_below="@+id/linearLayout"
                 android:layout_centerHorizontal="true" />
         </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

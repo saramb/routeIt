@@ -35,13 +35,12 @@ public class EnterBusStation extends AppCompatActivity {
     List<String> spin = new ArrayList<String>();
     List<String> spinMetro = new ArrayList<String>();
     List<String> spinPosition = new ArrayList<String>();
-
     boolean flag1=false;
 
-    TextView error,error2;
+    TextView error,error2, stationStreet ;
 
-    String s,n,c,c2,d1,d2,d3;
-    EditText station,coorX ,name,coorY ;
+    String s,n,c,c2,d1,d2,d3,street;
+    EditText station,coorX ,name,coorY;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,11 +51,13 @@ public class EnterBusStation extends AppCompatActivity {
         name=(EditText)findViewById(R.id.editText5);
         coorX=(EditText)findViewById(R.id.editText15);
         coorY=(EditText)findViewById(R.id.editText);
+        stationStreet=(TextView)findViewById(R.id.StreettextView);
         dropdown1=(Spinner)findViewById(R.id.spinner4);
         dropdown2=(Spinner)findViewById(R.id.spinner5);
         dropdown3=(Spinner)findViewById(R.id.spinner6);
         error=(TextView)findViewById(R.id.textView13);
         error2=(TextView)findViewById(R.id.textView15);
+
 
         spinPosition.add(" ");
         spinPosition.add("At the begining");
@@ -84,7 +85,7 @@ public class EnterBusStation extends AppCompatActivity {
                 d3=dropdown3.getSelectedItem().toString();
 
 
-                if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || d1.equals(" ") || d2.equals(" ")||d3.equals(" ")) {
+                if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || d1.equals(" ") || d2.equals(" ")||d3.equals(" ")||street.equals(" ")) {
 
                     if (dropdown1.getSelectedItem().toString().equals(" ")) {
                         //error.requestFocus();
@@ -121,6 +122,9 @@ public class EnterBusStation extends AppCompatActivity {
                     if (coorY.getText().toString().equals("")) {
                         coorY.setError("Please fill the Y coordination");
                     }
+                    if (stationStreet.getText().toString().equals("")) {
+                        stationStreet.setError("Please fill the station street");
+                    }
 
 
                 } else {
@@ -131,6 +135,7 @@ public class EnterBusStation extends AppCompatActivity {
                     coorY.setError(null);
                     station.setError(null);
                     name.setError(null);
+                    stationStreet.setError(null);
 
 
 
@@ -178,7 +183,7 @@ public class EnterBusStation extends AppCompatActivity {
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
 
-        String LocationID = "2."+ dropdown1.getSelectedItemPosition()+"."+station.getText().toString();
+        String LocationID = "2."+ dropdown1.getSelectedItemPosition()+"."+stationStreet.getText().toString()+"."+station.getText().toString();
 
         //Defining the method insertuser of our interface
         api.EnterBusStation(
@@ -190,7 +195,7 @@ public class EnterBusStation extends AppCompatActivity {
                 name.getText().toString(),
                 dropdown2.getSelectedItem().toString(),
                 dropdown1.getSelectedItemPosition(),
-                "najat",
+                getIntent().getExtras().getString("AdminID"),
                 dropdown3.getSelectedItemPosition()+"",
 
 

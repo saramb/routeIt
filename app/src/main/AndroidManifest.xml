@@ -43,11 +43,9 @@
             android:label="To" />
         <activity android:name=".Menu" />
         <activity android:name=".EnterMetroStation" />
-        <activity android:name=".EnterLandMark" />
         <activity android:name=".EnterBusStation" />
         <activity android:name=".Delete" />
         <activity android:name=".DeleteBusStation" />
-        <activity android:name=".DeleteLandMark" />
         <activity android:name=".DeleteMetroStation" />
         <activity android:name=".Enter" />
         <activity android:name=".NewPost" />

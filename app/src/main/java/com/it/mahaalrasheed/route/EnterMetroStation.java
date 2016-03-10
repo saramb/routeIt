@@ -155,7 +155,7 @@ public class EnterMetroStation extends AppCompatActivity {
                 coor2.getText().toString(),
                 name.getText().toString(),
                 MetroLine.getSelectedItemPosition(),
-                "najat",
+                getIntent().getExtras().getString("AdminID"),
                 Position.getSelectedItemPosition()+"",
 
 

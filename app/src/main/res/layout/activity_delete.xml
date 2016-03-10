@@ -33,13 +33,5 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="35dp" />
 
-        <Button
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            android:text="Delete land mark"
-            android:id="@+id/button12"
-            android:layout_below="@+id/button11"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="35dp" />
     </LinearLayout>
 </RelativeLayout>

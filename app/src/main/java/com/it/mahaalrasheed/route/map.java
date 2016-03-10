@@ -129,7 +129,7 @@ public class map extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-      testroute.lineCoor.add(MELBOURNE);
+        testroute.lineCoor.add(MELBOURNE);
         testroute.lineCoor.add(ADELAIDE);
         testroute.lineCoor.add(PERTH);
 

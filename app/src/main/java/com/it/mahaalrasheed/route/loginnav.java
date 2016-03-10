@@ -33,6 +33,7 @@ public class loginnav extends AppCompatActivity
     EditText username , pass;
     TextView wrong;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,14 +125,12 @@ public class loginnav extends AppCompatActivity
 
                             //Reading the output in the string
                             output = reader.readLine();
-
+                            Toast.makeText(getApplicationContext(),output+"",Toast.LENGTH_SHORT).show();
                             if (output.equals("Successfully logged in")) {
                                 Intent i = new Intent(getApplicationContext(), com.it.mahaalrasheed.route.Menu.class);
                                 i.putExtra("AdminID", username.getText().toString());
                                 startActivity(i);
                             }
-
-                            wrong.setText("Wrong user name or password !");
 
 
                         } catch (IOException e) {

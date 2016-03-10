@@ -15,7 +15,6 @@ public class Enter extends AppCompatActivity {
 
         final Button enter_bus_station=(Button)findViewById(R.id.button6);
         final Button enter_metro_station=(Button)findViewById(R.id.button7);
-        final Button enter_land_mark=(Button)findViewById(R.id.button8);
 
 
         enter_bus_station.setOnClickListener(new View.OnClickListener() {
@@ -34,13 +33,6 @@ public class Enter extends AppCompatActivity {
             }
         });
 
-        enter_land_mark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), EnterLandMark.class);
-                startActivity(i);
-            }
-        });
 
     }
 }

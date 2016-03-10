@@ -131,7 +131,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Coordination X:"
+                android:text="X Coordinate:"
                 android:id="@+id/textView21" />
 
             <EditText
@@ -152,7 +152,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Coordination Y:"
+                android:text="Y Coordinate:"
                 android:id="@+id/Coordinates2" />
 
             <EditText
