@@ -12,15 +12,14 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -28,7 +27,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -59,6 +57,7 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
 
 public class map extends AppCompatActivity
         implements  NavigationView.OnNavigationItemSelectedListener{
@@ -107,6 +106,12 @@ public class map extends AppCompatActivity
     private static MetroStation[] SPOTS_ARRAY;
     private BottomSheetBehavior mBottomSheetBehavior;
     ListView lv;
+    String Locationname , page="";
+    public static String fromname = "From";
+
+    private ViewPager mViewPager;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+
 
 
 
@@ -115,6 +120,15 @@ public class map extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.getLayoutParams().height = 0;
+
+
+
 
         lv = (ListView)findViewById(R.id.list);
 
@@ -127,6 +141,8 @@ public class map extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        page="";
+        lv = (ListView)findViewById(R.id.list);
 
 
         testroute.lineCoor.add(MELBOURNE);
@@ -135,82 +151,47 @@ public class map extends AppCompatActivity
 
 
         DisplayMap();
-        if(testroute.link())
-        PlotStation();
-        RetrieveNotifID();
-
-
+        //if(testroute.link())
+        //PlotStation();
+       // RetrieveNotifID();
 
         spots = new HashMap<>();
-
-        //lng = getIntent().getDoubleExtra("lng",0);
-        //lat = getIntent().getDoubleExtra("lat",0);
-
-
-
-
 
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
 
+
         from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Intent intent = new Intent (map.this, from.class);
-
-
-                startActivity(intent);
-
-
-
-
-            }
+                Intent intent = new Intent(map.this, from.class);
+                startActivity(intent);}
         });
 
         to.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(map.this, to.class);
-
-                startActivity(intent);
-            }
+                startActivity(intent);}
         });
 
-      /*  final ListView recyclerView = (ListView) findViewById(R.id.list);
+        page = getIntent().getStringExtra("page");
+        lng = getIntent().getDoubleExtra("lng", 0);
+        lat = getIntent().getDoubleExtra("lat", 0);
+        Locationname = getIntent().getStringExtra("name");
 
+        Toast.makeText(map.this,page,Toast.LENGTH_LONG).show();
+        from.setText(fromname);
 
-
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setAutoMeasureEnabled(true);
-
-        FrameLayout parentThatHasBottomSheetBehavior = (FrameLayout) recyclerView.getParent().getParent();
-        mBottomSheetBehavior = BottomSheetBehavior.from(parentThatHasBottomSheetBehavior);
-        if (mBottomSheetBehavior != null) {
-            mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-                @Override
-                public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                }
-
-                @Override
-                public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
-                }
-            });
+        if ( page  != null){
+            if (page.equals("from")) {
+                fromname = Locationname;
+                from.setText(fromname);
+            } else if (page.equals("to")) {
+                to.setText(Locationname);
+                mViewPager.getLayoutParams().height = 250;
+            }
         }
-
-
-        if ( !from.getText().equals("From") && !to.getText().equals("To")  ){}
-
-        View peakView = findViewById(R.id.drag_me);
-        mBottomSheetBehavior.setPeekHeight(250);
-        peakView.requestLayout();
-
-       // String[] itemname =n.stationName;
-        //    Integer [] imgid= n.linenumber;
-
-        CustomListAdapter adapter=new CustomListAdapter(this, routeInfo.stationName, routeInfo.linenumber);
-       lv.setAdapter(adapter);
-*/
 
 
     }
@@ -420,7 +401,6 @@ public class map extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
-
     }
 
     @Override
@@ -555,12 +535,12 @@ public class map extends AppCompatActivity
                             //Check if there is an output from server
                             if (!output.equals("") && !output.equals("NULL")) {
 //                                myMenu.findItem(R.id.notifi).setEnabled(true);
-  //                              myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
+                                //                              myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
                                 notif = output;
 
                             } else if (output.equals("NULL")) {
-                            //   myMenu.findItem(R.id.notifi).setEnabled(false);
-                              //  myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
+                                //   myMenu.findItem(R.id.notifi).setEnabled(false);
+                                //  myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
 
                             }
 
@@ -580,7 +560,9 @@ public class map extends AppCompatActivity
     }
 
     @Override
-    protected void onStart() { super.onStart();}
+    protected void onStart() {
+        super.onStart();
+    }
 
     public void RetrieveNotifID(){
         //retrieve realm content
@@ -699,7 +681,7 @@ public class map extends AppCompatActivity
         parserTask.execute(result);
 
     }
-}
+ }
 
 
 
