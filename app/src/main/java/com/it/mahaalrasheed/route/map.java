@@ -145,15 +145,15 @@ public class map extends AppCompatActivity
         lv = (ListView)findViewById(R.id.list);
 
 
-        testroute.lineCoor.add(MELBOURNE);
+       /* testroute.lineCoor.add(MELBOURNE);
         testroute.lineCoor.add(ADELAIDE);
-        testroute.lineCoor.add(PERTH);
+        testroute.lineCoor.add(PERTH);*/
 
 
         DisplayMap();
         testroute.link();
 
-        //PlotStation();
+        PlotStation();
        // RetrieveNotifID();
 
         spots = new HashMap<>();
@@ -191,7 +191,7 @@ public class map extends AppCompatActivity
                 to.setText(Locationname);
                 Intent intent = new Intent(map.this, info.class);
                 startActivity(intent);
-                testroute.route(24.84148388, 46.71737999, 24.786334, 46.66027);
+                testroute.route(24.84148388, 46.71737999, 24.96215255, 46.70097149);
 
 
                 mViewPager.getLayoutParams().height = 250;
@@ -328,7 +328,7 @@ public class map extends AppCompatActivity
                             output = output.substring(output.indexOf("/") + 1);
                             SPOTS_ARRAY = new MetroStation[Integer.parseInt(output1)];
 
-                            for(int j = 0 ; j < testroute.lineCoor.size()-1  ; j++) {
+                          /*  for(int j = 0 ; j < testroute.lineCoor.size()-1  ; j++) {
 
                                 LatLng   tempCoor1 = testroute.lineCoor.get(j);
                                 LatLng   tempCoor2 = testroute.lineCoor.get(j+1);
@@ -345,27 +345,29 @@ public class map extends AppCompatActivity
                                     // Start downloading json data from Google Directions API
                                     downloadTask.execute(url);//not metro point
                             }//end of for
-
-            /*             for(int j = 0 ; j < testroute.lineCoor.size()-1 ; j++) {
+*/
+                   for(int j = 0 ; j < testroute.lineCoor.size()-1 ; j++) {
                             int type1 =  routeInfo.type.get(j);
                             int type2 = routeInfo.type.get(j+1);
                             LatLng   tempCoor1 = testroute.lineCoor.get(j);
                             LatLng   tempCoor2 = testroute.lineCoor.get(j+1);
-                             Log.e("type",type1+":"+type2);
-                            if(type1 ==1 && type2 ==1 ){
+                            Log.e("type",type1+":"+type2);
+                          //  if(type1 ==1 && type2 ==1 ){
                             mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
                                     .add(tempCoor1, tempCoor2)
                                     .width(10)
                                     .color(Color.BLUE)
-                                    .geodesic(true));}
+                                    .geodesic(true));
+                           }
 
-                            else{
+                           /* else{
                                         // Getting URL to the Google Directions API
                                         String url = getDirectionsUrl(tempCoor1, tempCoor2);
                                         DownloadTask downloadTask = new DownloadTask();
                                         // Start downloading json data from Google Directions API
                                         downloadTask.execute(url);//not metro point
                                      }//end of else
+
                         }//end of for
 */
                             int i = 0;
@@ -377,7 +379,7 @@ public class map extends AppCompatActivity
                                 lat = Double.parseDouble(XCoordinates);
                                 lng = Double.parseDouble(YCoordinates);
 
-                                SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
+                              //  SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
                             }
 
                             for (int k = 0; k < i; k++) {
