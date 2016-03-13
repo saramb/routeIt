@@ -27,13 +27,20 @@ public class notif extends AppCompatActivity {
     //    String[] contentArray=new String[100];
          id="0";
 
-        for(int i=0;i<content.length();i++){
+        for(int i=0;i<content.length();i++) {
 
-            id=content.substring(0,content.indexOf("-"));
-            ArrContent.add(content.substring(content.indexOf("-") + 1, content.indexOf("*")));
-            content=content.substring(content.indexOf("*")+1);
+
+            if (content.indexOf("-") != -1) {
+                id = content.substring(0, content.indexOf("-"));
+                if (content.indexOf("*") != -1) {
+                    ArrContent.add(content.substring(content.indexOf("-") + 1, content.indexOf("*")));
+                    content = content.substring(content.indexOf("*") + 1);
+                } else {
+                    ArrContent.add(content.substring(content.indexOf("-") + 1));
+                    content = "";
+                }
+            }
         }
-
 
         ListView listView= (ListView)findViewById(R.id.notifListView);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(notif.this,android.R.layout.simple_list_item_activated_1,ArrContent);

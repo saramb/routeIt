@@ -48,6 +48,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,25 +63,10 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements  NavigationView.OnNavigationItemSelectedListener{
 
-    public static final String ROOT_URL = "http://192.168.1.63/";
+    public static final String ROOT_URL = "http://192.168.100.9/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
 
-    private static final LatLng MELBOURNE = new LatLng(24.895652,46.603078);
-
-    private static final LatLng SYDNEY = new LatLng(-33.87365, 151.20689);
-
-    private static final LatLng ADELAIDE = new LatLng(24.71347768,46.67521543);
-
-    private static final LatLng PERTH = new LatLng(24.70334148,46.68034365);
-
-    private static final LatLng LHR = new LatLng(51.471547, -0.460052);
-
-    private static final LatLng LAX = new LatLng(33.936524, -118.377686);
-
-    private static final LatLng JFK = new LatLng(40.641051, -73.777485);
-
-    private static final LatLng AKL = new LatLng(-37.006254, 174.783018);
 
     private Polyline mMutablePolyline;
 
@@ -114,8 +100,6 @@ public class map extends AppCompatActivity
 
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,12 +127,9 @@ public class map extends AppCompatActivity
         lv = (ListView) findViewById(R.id.list);
 
 
-       /* testroute.lineCoor.add(MELBOURNE);
-        testroute.lineCoor.add(ADELAIDE);
-        testroute.lineCoor.add(PERTH);*/
-
 
         DisplayMap();
+        RetrieveNotifID();
         testroute.link();
 
         PlotStation();
@@ -191,6 +172,9 @@ public class map extends AppCompatActivity
                 to.setText(Locationname);
                 testroute.route(24.84148388, 46.71737999, 24.96215255, 46.70097149);
                 mViewPager.getLayoutParams().height = 300;
+       //         PlotStation(testroute.lineCoorAstar);
+                PlotLine(testroute.lineCoorBFS);
+                testroute.lineCoorBFS= new ArrayList<LatLng>();
 
 
             }
@@ -332,31 +316,6 @@ public class map extends AppCompatActivity
                             output = output.substring(output.indexOf("/") + 1);
                             SPOTS_ARRAY = new MetroStation[Integer.parseInt(output1)];
 
-             for(int j = 0 ; j < testroute.lineCoor.size()-1 ; j++) {
-                            int type1 =  routeInfo.type.get(j);
-                            int type2 = routeInfo.type.get(j+1);
-                            LatLng   tempCoor1 = testroute.lineCoor.get(j);
-                            LatLng   tempCoor2 = testroute.lineCoor.get(j+1);
-                            Log.e("type",type1+":"+type2);
-                 Log.e("type",tempCoor1+":"+tempCoor2);
-                           if(type1 ==1 && type2 ==1 ){
-                            mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
-                                    .add(tempCoor1, tempCoor2)
-                                    .width(10)
-                                    .color(Color.BLUE)
-                                    .geodesic(true));
-                           }
-
-                            else{
-                                        // Getting URL to the Google Directions API
-                                        String url = getDirectionsUrl(tempCoor1, tempCoor2);
-                                        DownloadTask downloadTask = new DownloadTask();
-                                        // Start downloading json data from Google Directions API
-                                        downloadTask.execute(url);//not metro point
-                                     }//end of else
-
-                        }//end of for
-
                             int i = 0;
                             while (!output.equals("")) {
                                 String XCoordinates = output.substring(0, output.indexOf(":"));
@@ -366,7 +325,7 @@ public class map extends AppCompatActivity
                                 lat = Double.parseDouble(XCoordinates);
                                 lng = Double.parseDouble(YCoordinates);
 
-                              //  SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
+                                SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
                             }
 
                             for (int k = 0; k < i; k++) {
@@ -374,7 +333,7 @@ public class map extends AppCompatActivity
                                         .position(SPOTS_ARRAY[k].getPosition())
                                         .title("Title")
                                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_metro)));
-                                //spots.put(marker, SPOTS_ARRAY[k]);
+                                spots.put(marker, SPOTS_ARRAY[k]);
                             }
 
                         } catch (IOException e) {
@@ -392,6 +351,44 @@ public class map extends AppCompatActivity
         );
     }
 
+    private void PlotLine( ArrayList<LatLng> lineCoor) {
+        //Here we will handle the http request to retrieve Metro coordinates from mysql db
+
+
+        Log.v("lineCoorAstar", lineCoor + "");
+        //Creating a RestAdapter
+
+        try {
+
+            for (int j = 0; j < lineCoor.size() - 1; j++) {
+                int type1 = routeInfo.type.get(j);
+                int type2 = routeInfo.type.get(j + 1);
+                LatLng tempCoor1 = lineCoor.get(j);
+                LatLng tempCoor2 = lineCoor.get(j + 1);
+                Log.e("type", type1 + ":" + type2);
+                Log.e("type", tempCoor1 + ":" + tempCoor2);
+                if (type1 == 1 && type2 == 1) {
+                    mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
+                            .add(tempCoor1, tempCoor2)
+                            .width(10)
+                            .color(Color.BLUE)
+                            .geodesic(true));
+                } else {
+                    // Getting URL to the Google Directions API
+                    String url = getDirectionsUrl(tempCoor1, tempCoor2);
+                    DownloadTask downloadTask = new DownloadTask();
+                    // Start downloading json data from Google Directions API
+                    downloadTask.execute(url);//not metro point
+                }//end of else
+
+            }//end of for
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
@@ -528,14 +525,14 @@ public class map extends AppCompatActivity
                             output = reader.readLine();
 
                             //Check if there is an output from server
-                            if (!output.equals("") && !output.equals("NULL")) {
-//                                myMenu.findItem(R.id.notifi).setEnabled(true);
-                                //                              myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
+                            if (!output.equals("") || !output.equals("NULL")) {
+                                myMenu.findItem(R.id.notifi).setEnabled(true);
+                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
                                 notif = output;
 
                             } else if (output.equals("NULL")) {
-                                //   myMenu.findItem(R.id.notifi).setEnabled(false);
-                                //  myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
+                                 myMenu.findItem(R.id.notifi).setEnabled(false);
+                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
 
                             }
 
@@ -676,7 +673,9 @@ public class map extends AppCompatActivity
         parserTask.execute(result);
 
     }
-}
+
+
+ }
 
 
 

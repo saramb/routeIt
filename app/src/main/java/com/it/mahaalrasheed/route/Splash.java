@@ -19,6 +19,7 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        testroute.link();
 
 
         new Handler().postDelayed(new Runnable() {
@@ -30,6 +31,7 @@ public class Splash extends AppCompatActivity {
                 Splash.this.finish();
             }
         }, SPLASH_DISPLAY_LENGTH);
+
 
     }
 }

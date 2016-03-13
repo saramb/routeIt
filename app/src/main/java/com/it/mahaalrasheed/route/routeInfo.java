@@ -26,9 +26,10 @@ public class routeInfo {
     public static int count = 0;
     static ArrayList<Integer>  type = new ArrayList<Integer>() ;
 
-    public static void startRouteInfo(){
+    public static void startRouteInfo(String Path){
 
-        String path = testroute.path ;
+
+        String path = Path ;
         boolean flag = true;
 
         while (flag){
