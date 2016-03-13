@@ -8,6 +8,4 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-
-
 </android.support.v4.widget.DrawerLayout>

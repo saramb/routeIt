@@ -23,10 +23,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".favorite"
-            android:label="Favorites" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -40,7 +36,8 @@
         <activity
             android:name=".to"
             android:label="To" />
-        <activity android:name=".Menu" />
+        <activity android:name=".Menu"
+            android:label="Admin "/>
         <activity android:name=".EnterMetroStation" />
         <activity android:name=".EnterBusStation" />
         <activity android:name=".Delete" />
@@ -51,7 +48,7 @@
         <activity android:name=".notif" />
         <activity
             android:name=".aboutusnav"
-            android:label="About Us"
+            android:label="About us"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".loginnav"
