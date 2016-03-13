@@ -86,6 +86,9 @@ public class EnterBusStation extends AppCompatActivity {
                 d2=dropdown2.getSelectedItem().toString();
                 d3=dropdown3.getSelectedItem().toString();
 
+                if (stationStreet.getText().toString().equals("")) {
+                    stationStreet.setError("Please fill the station street");
+                }
 
                 if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || d1.equals(" ") || d2.equals(" ")||d3.equals(" ")||st.equals("")) {
 

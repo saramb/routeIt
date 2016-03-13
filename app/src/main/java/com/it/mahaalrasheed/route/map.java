@@ -151,7 +151,8 @@ public class map extends AppCompatActivity
 
 
         DisplayMap();
-        //if(testroute.link())
+        testroute.link();
+
         //PlotStation();
        // RetrieveNotifID();
 
@@ -160,11 +161,10 @@ public class map extends AppCompatActivity
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
 
-
         from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(map.this, from.class);
+              Intent intent = new Intent (map.this, from.class);
                 startActivity(intent);}
         });
 
@@ -189,6 +189,11 @@ public class map extends AppCompatActivity
                 from.setText(fromname);
             } else if (page.equals("to")) {
                 to.setText(Locationname);
+                Intent intent = new Intent(map.this, info.class);
+                startActivity(intent);
+                testroute.route(24.84148388, 46.71737999, 24.786334, 46.66027);
+
+
                 mViewPager.getLayoutParams().height = 250;
             }
         }
@@ -401,6 +406,7 @@ public class map extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
+
     }
 
     @Override
@@ -681,7 +687,7 @@ public class map extends AppCompatActivity
         parserTask.execute(result);
 
     }
- }
+}
 
 
 
