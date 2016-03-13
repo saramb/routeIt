@@ -54,7 +54,7 @@ public class testroute {
     static String path;
     static String coorPath;
 
-    public static void route(){
+    public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
 
         //Creating a RestAdapter
@@ -66,10 +66,10 @@ public class testroute {
         routeAPI api = adapter.create(routeAPI.class);
         //Defining the method PlotStation of our interface
         api.route(
-                fromCoorX,
-                fromCoorY,
-                toCoorX,
-                toCoorY,
+                fromCoor1,
+                fromCoor2,
+                toCoor1,
+                toCoor2,
                 //Creating an anonymous callback
                 new Callback<Response>() {
                     @Override
@@ -87,9 +87,54 @@ public class testroute {
 
                             //Reading the output in the string
                             output = reader.readLine();
-
+                            Log.d("output", output + "");
                             fromId = output.substring(0, output.indexOf("/"));
-                            toId = output.substring(output.indexOf("/") + 1);
+                            output = output.substring(output.indexOf("/") + 1);
+                            fromCoorX = output.substring(0, output.indexOf("/"));
+                            output = output.substring(output.indexOf("/") + 1);
+                            fromCoorY = output.substring(0, output.indexOf(":"));
+                            output = output.substring(output.indexOf(":") + 1);
+                            toId = output.substring(0, output.indexOf("/"));
+                            output = output.substring(output.indexOf("/") + 1);
+                            toCoorX = output.substring(0, output.indexOf("/"));
+                            output = output.substring(output.indexOf("/") + 1);
+                            toCoorY = output.substring(0);
+
+                            Log.d("output", fromId + "");
+                            Log.d("output", toId + "");
+                            Log.d("output", fromCoorX + "");
+                            Log.d("output", fromCoorY + "");
+                            Log.d("output", toCoorX + "");
+                            Log.d("output", toCoorY + "");
+
+/*
+
+                            String aStar=Algorithm.Astar(fromId, toId, Double.parseDouble(testroute.fromCoorX),Double.parseDouble(testroute.fromCoorY),Double.parseDouble(testroute.toCoorX),Double.parseDouble(testroute.toCoorY));
+                            path = aStar.substring(0,aStar.indexOf('%'));
+                            coorPath = aStar.substring(aStar.indexOf('%') + 1);
+                            Log.d("AStar:", path + "");
+                            Log.d("coor:", coorPath + "");
+
+                     String coordeinates = coorPath;
+                            Log.e("corPath",coordeinates+"");
+
+                            boolean flag1 = true;
+                            String coor="";
+
+                            while (flag1){
+                                if (coordeinates.indexOf("|")!=-1){
+                                    coor = coordeinates.substring(0, coordeinates.indexOf("|"));
+                                    lineCoor.add(new LatLng(Double.parseDouble(coor.substring(0, coor.indexOf(":"))),Double.parseDouble(coor.substring(coor.indexOf(":") + 1))));
+                                }
+                                else{
+                                    lineCoor.add(new LatLng(Double.parseDouble(coordeinates.substring(0, coor.indexOf(":"))),Double.parseDouble(coordeinates.substring(coor.indexOf(":") + 1))));
+                                    flag1 = false;}
+                                coordeinates = coordeinates.substring(coordeinates.indexOf("|") + 1);
+                            }
+
+                           /* routeInfo.startRouteInfo();
+                            Log.v("coor:", routeInfo.type.get(0) + "66");
+                            Log.v("coor:", routeInfo.type.size() + "88");*/
 
 
                         } catch (IOException e) {
@@ -109,7 +154,7 @@ public class testroute {
 
 
 
-    public static  boolean link(){
+    public static  void link(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
 
         //Creating a RestAdapter
@@ -151,7 +196,7 @@ public class testroute {
                                 output = output.substring(output.indexOf("/") + 1);
                                 withen = output.substring(0, output.indexOf("/"));
 
-                                output = output.substring(output.indexOf("/")+1);
+                                output = output.substring(output.indexOf("/") + 1);
 
 
                                 fromCoorX = output.substring(0, output.indexOf("/"));
@@ -162,7 +207,9 @@ public class testroute {
                                 output = output.substring(output.indexOf("/") + 1);
                                 toCoorY = output.substring(0, output.indexOf(":"));
                                 output = output.substring(output.indexOf(":") + 1);
-                                if (output.length() == 0) {flag = false; }
+                                if (output.length() == 0) {
+                                    flag = false;
+                                }
 
 
                                 String firstType = fromId.charAt(0) + "";
@@ -188,18 +235,17 @@ public class testroute {
                                 String StStationTo = toId.charAt(4) + "";
                                 if (toId.charAt(5) != '.')
                                     StStationTo = StStationTo + toId.charAt(5) + "";
-                                Log.d("TEST : ", firstType + ",,line,," + firstline + "street" + StStationFrom + "station" + s1 + "---" + s2 + "HH");
 
                                 switch (firstType) {
                                     case "1":
                                         // if the two stations are in the same link
                                         if (firstline == secondline) {
-                                            MetroLinks(firstline, station1, station2,fromCoorX+":"+fromCoorY,toCoorX+":"+toCoorY);
+                                            MetroLinks(firstline, station1, station2, fromCoorX + ":" + fromCoorY, toCoorX + ":" + toCoorY);
                                         } else {
                                             // assign from-to external links
-                                            MetroLinkExternal(firstline, station1, toId,toCoorX+":"+toCoorY);
+                                            MetroLinkExternal(firstline, station1, toId, toCoorX + ":" + toCoorY);
                                             //assign to-from external links
-                                            MetroLinkExternal(secondline, station2, fromId, fromCoorX+":"+fromCoorY);
+                                            MetroLinkExternal(secondline, station2, fromId, fromCoorX + ":" + fromCoorY);
                                         }
                                         break;
 
@@ -207,19 +253,19 @@ public class testroute {
                                         // if the link is between metro and bus
                                         if (secondType.equals("1")) {
                                             // bus to metro link
-                                            BusExternalLink(firstline, StStationFrom, station1, toId,toCoorX+":"+toCoorY );
-                                            MetroLinkExternal(secondline, station2, fromId,fromCoorX+":"+fromCoorY);
+                                            BusExternalLink(firstline, StStationFrom, station1, toId, toCoorX + ":" + toCoorY);
+                                            MetroLinkExternal(secondline, station2, fromId, fromCoorX + ":" + fromCoorY);
                                         }
                                         // 2:if the link is between busses
                                         else {
                                             // 2.1:the link is within the same line and on the same street
                                             if (firstline == secondline && StStationFrom.equals(StStationTo)) {
-                                                BusLink(firstline, StStationFrom, station1, station2,fromCoorX+":"+fromCoorY,toCoorX+":"+toCoorY);
+                                                BusLink(firstline, StStationFrom, station1, station2, fromCoorX + ":" + fromCoorY, toCoorX + ":" + toCoorY);
                                             }
                                             //2.2: external bus links
                                             else {
-                                                BusExternalLink(firstline, StStationFrom, station1, toId,toCoorX+":"+toCoorY);
-                                                BusExternalLink(secondline, StStationTo, station2, fromId, fromCoorX+":"+fromCoorY);
+                                                BusExternalLink(firstline, StStationFrom, station1, toId, toCoorX + ":" + toCoorY);
+                                                BusExternalLink(secondline, StStationTo, station2, fromId, fromCoorX + ":" + fromCoorY);
                                             }// else different bus lines
                                         }//else link is not metro
                                         break;
@@ -286,34 +332,6 @@ public class testroute {
                             Log.d("Matrix :", "=================");
                             printt(Bline4_2);*/
 
-                            path = Algorithm.Astar("1.1.0.2", "1.2.0.6").substring(0,Algorithm.Astar("1.1.0.2", "1.2.0.6").indexOf('%'));
-                            coorPath = Algorithm.Astar("1.1.0.2", "1.2.0.6").substring(Algorithm.Astar("1.1.0.2", "1.2.0.6").indexOf('%')+1);
-                            Log.v("AStar:", path + "");
-                            Log.v("coor:", coorPath + "");
-
-
-                            String coordeinates = coorPath;
-                            Log.e("corPath",coordeinates+"");
-
-                            boolean flag1 = true;
-                            String coor="";
-
-                            while (flag1){
-                                if (coordeinates.indexOf("|")!=-1){
-                                    coor = coordeinates.substring(0, coordeinates.indexOf("|"));
-                                    lineCoor.add(new LatLng(Double.parseDouble(coor.substring(0, coor.indexOf(":"))),Double.parseDouble(coor.substring(coor.indexOf(":") + 1))));
-                                }
-                                else{
-                                    lineCoor.add(new LatLng(Double.parseDouble(coordeinates.substring(0, coor.indexOf(":"))),Double.parseDouble(coordeinates.substring(coor.indexOf(":") + 1))));
-                                    flag1 = false;}
-                                coordeinates = coordeinates.substring(coordeinates.indexOf("|") + 1);
-                            }
-
-                            routeInfo.startRouteInfo();
-                            Log.v("coor:", routeInfo.type.get(0) + "");
-                            Log.v("coor:", routeInfo.type.size() + "");
-
-
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -330,9 +348,7 @@ public class testroute {
                 }
         );
 
-        return true; }
-
-    public static String getss(){return "hi";}
+         }
     public static void MetroLinks(int  firstline,int station1 ,int station2,String fromID,String toID ){
         if (firstline == 1) {
             Mline1[station1][station2] = toID;
@@ -634,10 +650,10 @@ public class testroute {
 
                 s=s+ matrix[i][j]+",";
 
-            Log.d("Matrix :", s+"]");}
+            //  Log.d("Matrix :", s+"]");
+        }
 
 
 
     }//print
 }
-

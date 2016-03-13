@@ -97,10 +97,10 @@ public interface routeAPI {
     @FormUrlEncoded
     @POST("/alg.php")
     public void route(
-            @Field("XCoordinates") String XCoordinates,
-            @Field("YCoordinates") String YCoordinates,
-            @Field("XCoordinates2") String XCoordinates2,
-            @Field("YCoordinates2") String YCoordinates2,
+            @Field("XCoordinates") double XCoordinates,
+            @Field("YCoordinates") double YCoordinates,
+            @Field("XCoordinates2") double XCoordinates2,
+            @Field("YCoordinates2") double YCoordinates2,
             Callback<Response> callback);
 
     @FormUrlEncoded

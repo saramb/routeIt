@@ -35,7 +35,7 @@ public class Algorithm {
 
     //--------------------------Astar algorithm---------------------
 //Perform A star algorithm
-    public static String Astar(String from, String to){
+    public static String Astar(String from, String to,  double StartX,double StartY, double GoalX, double GoalY){
 
         // explored arraylist to mark which vertices have been visited while doing the A*
         explored =new ArrayList<String>();
@@ -43,10 +43,11 @@ public class Algorithm {
         frontier =new ArrayList<Station>();
         Stringfrontier = new ArrayList <String>();
 
-        double goalX = 24.69812133;
-        double goalY = 46.71793858;
-        double startX= 24.83043126;
-        double startY= 46.61616718;
+        double goalX = GoalX;
+        double goalY = GoalY;
+        double startX= StartX;
+        double startY= StartY;
+
 
 
 
@@ -239,12 +240,7 @@ public class Algorithm {
         }//end of BFS
 */
 
-    //--------------------------print---------------------
-//to print the array list
-    public static void print (ArrayList <Station> x) {
-        for(Station d:x)
-            System.out.println(d);
-    } //end print
+
 
     //--------------------------sort---------------------
 //sort in ascending order, to make it asc, chane (>) to (<)
@@ -293,7 +289,7 @@ public class Algorithm {
 //add to the  of frontier
     public static void AddToFrontier(Station Station){
         if(Station.getParent()!= null)
-            System.out.println(Station.getParent().getName()+"=>"+Station.getName());
+        //    System.out.println(Station.getParent().getName()+"=>"+Station.getName());
         frontier.add(Station);
         Stringfrontier.add(Station.getName());}
 
