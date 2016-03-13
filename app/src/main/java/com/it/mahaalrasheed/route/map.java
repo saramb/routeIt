@@ -332,31 +332,14 @@ public class map extends AppCompatActivity
                             output = output.substring(output.indexOf("/") + 1);
                             SPOTS_ARRAY = new MetroStation[Integer.parseInt(output1)];
 
-                          /*  for(int j = 0 ; j < testroute.lineCoor.size()-1  ; j++) {
-
-                                LatLng   tempCoor1 = testroute.lineCoor.get(j);
-                                LatLng   tempCoor2 = testroute.lineCoor.get(j+1);
-
-                                    mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
-                                            .add(tempCoor1, tempCoor2)
-                                            .width(10)
-                                            .color(Color.BLUE)
-                                            .geodesic(true));
-
-                                    // Getting URL to the Google Directions API
-                                    String url = getDirectionsUrl(tempCoor1, tempCoor2);
-                                    DownloadTask downloadTask = new DownloadTask();
-                                    // Start downloading json data from Google Directions API
-                                    downloadTask.execute(url);//not metro point
-                            }//end of for
-*/
-                   for(int j = 0 ; j < testroute.lineCoor.size()-1 ; j++) {
+             for(int j = 0 ; j < testroute.lineCoor.size()-1 ; j++) {
                             int type1 =  routeInfo.type.get(j);
                             int type2 = routeInfo.type.get(j+1);
                             LatLng   tempCoor1 = testroute.lineCoor.get(j);
                             LatLng   tempCoor2 = testroute.lineCoor.get(j+1);
                             Log.e("type",type1+":"+type2);
-                          //  if(type1 ==1 && type2 ==1 ){
+                 Log.e("type",tempCoor1+":"+tempCoor2);
+                           if(type1 ==1 && type2 ==1 ){
                             mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
                                     .add(tempCoor1, tempCoor2)
                                     .width(10)
@@ -364,7 +347,7 @@ public class map extends AppCompatActivity
                                     .geodesic(true));
                            }
 
-                           /* else{
+                            else{
                                         // Getting URL to the Google Directions API
                                         String url = getDirectionsUrl(tempCoor1, tempCoor2);
                                         DownloadTask downloadTask = new DownloadTask();
@@ -373,7 +356,7 @@ public class map extends AppCompatActivity
                                      }//end of else
 
                         }//end of for
-*/
+
                             int i = 0;
                             while (!output.equals("")) {
                                 String XCoordinates = output.substring(0, output.indexOf(":"));
