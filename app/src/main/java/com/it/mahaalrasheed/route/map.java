@@ -92,7 +92,7 @@ public class map extends AppCompatActivity
     static GoogleMap googleMap;
     double lng;
     double lat;
-    Button from, to;
+    Button from, to, show;
     Location location;
     MapFragment fm;
     LocationManager locationManager;
@@ -128,21 +128,19 @@ public class map extends AppCompatActivity
         mViewPager.getLayoutParams().height = 0;
 
 
-
-
-        lv = (ListView)findViewById(R.id.list);
+        lv = (ListView) findViewById(R.id.list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        page="";
-        lv = (ListView)findViewById(R.id.list);
+        page = "";
+        lv = (ListView) findViewById(R.id.list);
 
 
        /* testroute.lineCoor.add(MELBOURNE);
@@ -154,7 +152,7 @@ public class map extends AppCompatActivity
         testroute.link();
 
         PlotStation();
-       // RetrieveNotifID();
+        // RetrieveNotifID();
 
         spots = new HashMap<>();
 
@@ -164,15 +162,17 @@ public class map extends AppCompatActivity
         from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Intent intent = new Intent (map.this, from.class);
-                startActivity(intent);}
+                Intent intent = new Intent(map.this, from.class);
+                startActivity(intent);
+            }
         });
 
         to.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(map.this, to.class);
-                startActivity(intent);}
+                startActivity(intent);
+            }
         });
 
         page = getIntent().getStringExtra("page");
@@ -180,26 +180,30 @@ public class map extends AppCompatActivity
         lat = getIntent().getDoubleExtra("lat", 0);
         Locationname = getIntent().getStringExtra("name");
 
-        Toast.makeText(map.this,page,Toast.LENGTH_LONG).show();
+        Toast.makeText(map.this, page, Toast.LENGTH_LONG).show();
         from.setText(fromname);
 
-        if ( page  != null){
+        if (page != null) {
             if (page.equals("from")) {
                 fromname = Locationname;
                 from.setText(fromname);
             } else if (page.equals("to")) {
                 to.setText(Locationname);
-                Intent intent = new Intent(map.this, info.class);
-                startActivity(intent);
                 testroute.route(24.84148388, 46.71737999, 24.96215255, 46.70097149);
+                mViewPager.getLayoutParams().height = 300;
 
 
-                mViewPager.getLayoutParams().height = 250;
             }
         }
-
-
     }
+
+        public void send(){
+
+        Intent n = new Intent(map.this,aboutusnav.class);
+        startActivity(n);
+    }
+
+
     public void DisplayMap(){
 
         //!!!!!!!!!!Map part start

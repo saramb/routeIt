@@ -18,16 +18,15 @@ public class routeInfo {
     private static String ROOT_URL = map.ROOT_URL;
 
     public static String [] stationName = new String[100];
-    public static Integer [] linenumber = new Integer[100];
-    public static String [] stationName2;
-    public static Integer [] linenumber2;
+    public static int [] linenumber = new int[100];
+    public static int [] Number = new int[100];
+
     static String ID;
     static int number;
-    static int count = 0;
+    public static int count = 0;
     static ArrayList<Integer>  type = new ArrayList<Integer>() ;
 
     public static void startRouteInfo(){
-
 
         String path = testroute.path ;
         boolean flag = true;
@@ -38,19 +37,13 @@ public class routeInfo {
             else{
                 ID = path ;
                 flag = false;}
-            count++;
             number = Integer.parseInt(ID.charAt(0) + "");
             path = path.substring(path.indexOf("|") + 1);
             type.add(number);
             stationName();}
 
+        Log.d("path", count+"");
 
-        stationName2 = new String [count];
-        linenumber2 = new Integer[count];
-        for (int i = 0; i < count; i++) {
-            stationName2 [i] = stationName2[i];
-            linenumber2 [i] = linenumber2[i];
-        }
     }
 
     static  public void stationName(){
@@ -82,9 +75,12 @@ public class routeInfo {
                             reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
                             //Reading the output in the string
                             output = reader.readLine();
-                            Log.d("stationName", output + "");
 
-                            //stationName.add(output+"");
+                            Log.d("count", count+"");
+                            stationName[count]=output+"";
+                            Number[count]=number;
+                            Log.d("path", stationName[count]);
+                            linenumber[count++]= Integer.parseInt (ID.charAt(2)+"");
 
 
                         } catch (IOException e) {

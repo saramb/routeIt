@@ -52,36 +52,17 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="0.74" />
         </TableRow>
+
+
         <android.support.v4.view.ViewPager
             android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="67dp"
             android:clickable="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_weight="0.09" />
+
     </LinearLayout>
-
-
-
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
-
-       <!--  <FrameLayout
-             android:layout_width="match_parent"
-             android:layout_height="300dp"
-             android:fitsSystemWindows="true"
-             app:behavior_hideable="false"
-             app:behavior_peekHeight="0dp"
-             app:layout_behavior="@string/bottom_sheet_behavior">
-           <include layout="@layout/activity_bottom_sheet_content_vieww" />
-    </FrameLayout> -->
-
-</android.support.design.widget.CoordinatorLayout>
-
-
 
 
 
