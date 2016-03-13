@@ -107,34 +107,39 @@ public class testroute {
                             Log.d("output", toCoorX + "");
                             Log.d("output", toCoorY + "");
 
-/*
 
-                            String aStar=Algorithm.Astar(fromId, toId, Double.parseDouble(testroute.fromCoorX),Double.parseDouble(testroute.fromCoorY),Double.parseDouble(testroute.toCoorX),Double.parseDouble(testroute.toCoorY));
+
+                            String aStar=Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX),Double.parseDouble(fromCoorY),Double.parseDouble(toCoorX),Double.parseDouble(toCoorY));
                             path = aStar.substring(0,aStar.indexOf('%'));
                             coorPath = aStar.substring(aStar.indexOf('%') + 1);
                             Log.d("AStar:", path + "");
                             Log.d("coor:", coorPath + "");
 
-                     String coordeinates = coorPath;
+                            String coordeinates = coorPath;
                             Log.e("corPath",coordeinates+"");
 
                             boolean flag1 = true;
                             String coor="";
+                            if(coordeinates.length()==0)
+                            flag1=false;
 
                             while (flag1){
                                 if (coordeinates.indexOf("|")!=-1){
                                     coor = coordeinates.substring(0, coordeinates.indexOf("|"));
                                     lineCoor.add(new LatLng(Double.parseDouble(coor.substring(0, coor.indexOf(":"))),Double.parseDouble(coor.substring(coor.indexOf(":") + 1))));
+                                    coordeinates = coordeinates.substring(coordeinates.indexOf("|") + 1);
+
                                 }
                                 else{
-                                    lineCoor.add(new LatLng(Double.parseDouble(coordeinates.substring(0, coor.indexOf(":"))),Double.parseDouble(coordeinates.substring(coor.indexOf(":") + 1))));
-                                    flag1 = false;}
-                                coordeinates = coordeinates.substring(coordeinates.indexOf("|") + 1);
+                                    lineCoor.add(new LatLng(Double.parseDouble(coordeinates.substring(0, coordeinates.indexOf(":"))),Double.parseDouble(coordeinates.substring(coordeinates.indexOf(":") + 1))));
+                                    flag1 = false;
+                                    routeInfo.startRouteInfo();
+                                    Log.v("type:", routeInfo.type.get(0) + "66");
+                                    Log.v("typezise:", routeInfo.type.size() + "88");
+                                }
                             }
 
-                           /* routeInfo.startRouteInfo();
-                            Log.v("coor:", routeInfo.type.get(0) + "66");
-                            Log.v("coor:", routeInfo.type.size() + "88");*/
+
 
 
                         } catch (IOException e) {
@@ -276,7 +281,7 @@ public class testroute {
                             }//while
 
 
-                           /* printt(Mline1);
+                            printt(Mline1);
                             Log.d("Matrix M2 :", "=================");
                             printt(Mline2);
                             Log.d("Matrix M3:", "=================");
@@ -330,7 +335,7 @@ public class testroute {
                             Log.d("Matrix B4_1:", "=================");
                             printt(Bline4_1);
                             Log.d("Matrix :", "=================");
-                            printt(Bline4_2);*/
+                            printt(Bline4_2);
 
 
                         } catch (IOException e) {
@@ -650,7 +655,7 @@ public class testroute {
 
                 s=s+ matrix[i][j]+",";
 
-            //  Log.d("Matrix :", s+"]");
+            Log.d("Matrix :", s+"]");
         }
 
 

@@ -79,9 +79,10 @@ public class Algorithm {
                 for (int i = 0; i < TempMatrix.length ; i++) {
                     //1)if the station is in the same line of the current station
                     if (  TempMatrix[newStation.getStationNumber()-1][i] != null && TempMatrix[newStation.getStationNumber()-1][i].indexOf("|") < 0) {
+                        //if metro station
                         if(newStation.getStreet()==0)
                             Station = new Station(capacity[newStation.getLine()-1],newStation.getLine(),i+1,newStation, TempMatrix[newStation.getStationNumber()-1][i]);
-                        else
+                        else // bus station
                             Station = new Station(capacity2[newStation.getLine()-1],newStation.getLine(),i+1,newStation, TempMatrix[newStation.getStationNumber()-1][i]);
                         if (!explored.contains (Station.getName())&& !Stringfrontier.contains(Station.getName())){
                             //calculate FN
@@ -96,11 +97,11 @@ public class Algorithm {
                         String externals = TempMatrix[newStation.getStationNumber()-1][i];
                         int count = countCommas (externals);
                         //2.1)if the station is in different street of the current station
-                        if( externals.indexOf(".")== -1){
+                        if( externals.indexOf(",")== -1){
                             if(newStation.getStreet()==0)
-                                Station = new Station ( capacity[newStation.getLine()-1],newStation.getLine(),Integer.parseInt(externals),i+1,newStation, externals.substring(externals.indexOf("|")+1));
+                                Station = new Station ( capacity[newStation.getLine()-1],newStation.getLine(),Integer.parseInt(externals.substring(6, externals.indexOf("|"))),newStation, externals.substring(externals.indexOf("|")+1));
                             else
-                                Station = new Station ( capacity2[newStation.getLine()-1],newStation.getLine(),Integer.parseInt(externals),i+1,newStation, externals.substring(externals.indexOf("|")+1));
+                                Station = new Station ( capacity2[newStation.getLine()-1],newStation.getLine(),Integer.parseInt(externals.substring(externals.indexOf(".", 3) + 1, externals.indexOf(".", 4))),Integer.parseInt(externals.substring(externals.indexOf(".",4)+1,externals.indexOf("|"))),newStation, externals.substring(externals.indexOf("|")+1));
                             if (!explored.contains (Station.getName()) &&  !Stringfrontier.contains(Station.getName())){
                                 //calculate FN
                                 double tempFn = heuristic(newStation.getX(), newStation.getY(), Station.getX(), Station.getY());
@@ -110,23 +111,37 @@ public class Algorithm {
                                 AddToFrontier(Station); }}
 
                         //2.2)if the station is in different line of the current station
-                        else{
+                        else {
                             String child="";
                             for ( int j = 0; j < count+1; j++) {
-                                if(externals.indexOf(",")==-1)
-                                {child=externals.substring (0, externals.indexOf("|")); }
-                                else
-                                {
-                                    child = externals.substring (0, externals.indexOf("|"));
-                                    externals = externals.substring (externals.indexOf(",")+1);}
-                                int type=Integer.parseInt (child.substring(0,1));
-                                int l = Integer.parseInt (child.substring(child.indexOf(".")+1, child.indexOf (".", 2)));
+                                child=externals.substring (0, externals.indexOf("|"));
+                                int type=Integer.parseInt (child.charAt(0)+"");
+                                int l = Integer.parseInt (child.charAt(2)+"");
+
+                                if(externals.indexOf(",") == -1)  {
+
+                                   if(type==1)
+                                       Station = new Station ( capacity[l-1],l,Integer.parseInt (child.substring(child.indexOf(".",4)+1)),newStation,externals.substring(externals.indexOf("|")+1) );
+                                   else//if the type of station is bus
+                                   if(type==2)
+                                       Station = new Station ( capacity2[l-1],l,Integer.parseInt(child.substring(child.indexOf(".", 3) + 1, child.indexOf(".", 4))), Integer.parseInt(child.substring(4,child.indexOf(".",4))) ,newStation,externals.substring(externals.indexOf("|")+1));
+
+                               }
+                                else {
+
+                                    externals = externals.substring (externals.indexOf("|")+1);
+
+                                   if(type==1)
+                                       Station = new Station ( capacity[l-1],l,Integer.parseInt (child.substring(child.indexOf(".",4)+1)),newStation,externals.substring(0,externals.indexOf(",")) );
+                                  else //if the type of station is bus
+                                   if(type==2)
+                                       Station = new Station ( capacity2[l-1],l,Integer.parseInt(child.substring(child.indexOf(".", 3) + 1, child.indexOf(".", 4))), Integer.parseInt(child.substring(4,child.indexOf(".",4))) ,newStation,externals.substring(0,externals.indexOf(",")));
+
+                               }
+
                                 //if the type of station is metro
-                                if(type==1)
-                                    Station = new Station ( capacity[l-1],l,Integer.parseInt (child.substring(child.indexOf(".",4)+1)),newStation,externals.substring(externals.indexOf("|")+1) );
-                                //if the type of station is bus
-                                if(type==2)
-                                    Station = new Station ( capacity2[l-1],l,Integer.parseInt (child.substring(child.indexOf(".",4)+1)), Integer.parseInt(child.substring(4,child.indexOf(".",4))) ,newStation,externals.substring(externals.indexOf("|")+1));
+                                if(externals.indexOf(",") != -1)
+                                    externals = externals.substring (externals.indexOf(",")+1);
 
                                 if (!explored.contains (Station.getName()) &&  !Stringfrontier.contains(Station.getName())){
                                     //calculate FN
