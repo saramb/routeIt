@@ -159,10 +159,10 @@ public class map extends AppCompatActivity
 
         DisplayMap();
         RetrieveNotifID();
+
         testroute.link();
 
         PlotStation();
-        // RetrieveNotifID();
 
         spots = new HashMap<>();
 
@@ -201,10 +201,9 @@ public class map extends AppCompatActivity
                 to.setText(Locationname);
                 testroute.route(24.84148388, 46.71737999, 24.96215255, 46.70097149);
                 mViewPager.getLayoutParams().height = 300;
-       //         PlotStation(testroute.lineCoorAstar);
+       //       PlotStation(testroute.lineCoorAstar);
                 PlotLine(testroute.lineCoorBFS);
                 testroute.lineCoorBFS= new ArrayList<LatLng>();
-
 
             }
         }
@@ -450,12 +449,11 @@ public class map extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the notification button
-        int id1=item.getItemId();
-        String s=R.id.notifi+"";
+
         //noinspection SimplifiableIfStatement
         if ( item.getItemId() == R.id.notifi) { //if user press the notification icon on the menu bar, go to  activity
             Intent intent = new Intent (this, notif.class);
-            intent.putExtra("content", notif);
+            intent.putExtra("content", notif+"");
             startActivityForResult(intent, 1);
            return true;
         }
@@ -523,7 +521,7 @@ public class map extends AppCompatActivity
         return true;
     }
 
-    private void RetrieveNotif() {
+    private void RetrieveNotif(int notifID) {
         //Here we will handle the http request to retrieve from mysql db
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
@@ -556,16 +554,16 @@ public class map extends AppCompatActivity
                             //Reading the output in the string
                             output = reader.readLine();
 
-                            //Check if there is an output from server
-                            if (!output.equals("") && !output.equals("NULL")) {
-                              //  myMenu.findItem(R.id.notifi).setEnabled(true);
-                               // myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
-                                //notif = output;
 
-                            } else if (output.equals("NULL")) {
-                                //myMenu.findItem(R.id.notifi).setEnabled(false);
-                                //myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
+                            Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
 
+                            if (!output.equals("NULL")) {
+                                //Check if there is an output from server
+                                notif = output;
+                            }
+                             else if (output.equals("NULL")) {
+                               myMenu.findItem(R.id.notifi).setEnabled(false);
+                               myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
                             }
 
 
@@ -594,16 +592,19 @@ public class map extends AppCompatActivity
         List<Notification> itemNot =realm.allObjects(Notification.class);
 
         //store all returned content from realm
-        int[] titles=new int[itemNot.size()];
+        /*int[] titles=new int[itemNot.size()];
         int l=-1;
         for(int i=0; i<itemNot.size();i++){
             titles[i]=itemNot.get(i).getID();
             l=i;
         }
           if(l!=-1)
-              notifID=titles[l];
+              notifID=titles[l];*/
 
-        RetrieveNotif();
+        if(itemNot.size() != 0)
+            notifID = itemNot.get(0).getID();
+
+        RetrieveNotif(notifID);
 
 
     }

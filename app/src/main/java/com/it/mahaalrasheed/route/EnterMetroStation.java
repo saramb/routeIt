@@ -64,8 +64,7 @@ public class EnterMetroStation extends AppCompatActivity {
 
 
         Retrieve();
-        //adminId= getIntent().getExtras().getString("AdminID");
-        //Toast.makeText(getApplicationContext(), adminId , Toast.LENGTH_LONG).show();
+
 
         enter.setOnClickListener(new View.OnClickListener() {
 
