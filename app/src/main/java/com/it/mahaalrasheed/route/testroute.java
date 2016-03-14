@@ -19,9 +19,13 @@ public class testroute {
 
     static String ROOT_URL = map.ROOT_URL;
     static ArrayList<LatLng> lineCoor = new ArrayList<LatLng>();
+    static ArrayList<LatLng> lineCoorAstar = new ArrayList<LatLng>();
+    static ArrayList<LatLng> lineCoorBFS = new ArrayList<LatLng>();
+    static ArrayList<LatLng> lineCoorDFS = new ArrayList<LatLng>();
+
 
     static String  fromId , toId, withen;
-    static String fromCoorX,toCoorX,fromCoorY,toCoorY;
+    static String fromCoorX,toCoorX,fromCoorY,toCoorY,distanceTo,distanceFrom;
     static  String finalPath="";
     static final String [][] Mline1 = new String [29][29];
     static final String [][] Mline2 = new String [13][13];
@@ -51,12 +55,12 @@ public class testroute {
     static final String [][] Bline3_10 = new String [10][10];
     static final String [][] Bline4_1 = new String [10][10];
     static final String [][] Bline4_2 = new String [10][10];
-    static String path;
-    static String coorPath;
+    static String AstarPath,BFSPath;
+    static String AstarcoorPath, BFScoorPath;
 
     public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
-
+link();
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(ROOT_URL) //Setting the Root URL
@@ -92,13 +96,17 @@ public class testroute {
                             output = output.substring(output.indexOf("/") + 1);
                             fromCoorX = output.substring(0, output.indexOf("/"));
                             output = output.substring(output.indexOf("/") + 1);
-                            fromCoorY = output.substring(0, output.indexOf(":"));
+                            fromCoorY = output.substring(0, output.indexOf("/"));
+                            output = output.substring(output.indexOf("/") + 1);
+                            distanceFrom = output.substring(0, output.indexOf(":"));
                             output = output.substring(output.indexOf(":") + 1);
                             toId = output.substring(0, output.indexOf("/"));
                             output = output.substring(output.indexOf("/") + 1);
                             toCoorX = output.substring(0, output.indexOf("/"));
                             output = output.substring(output.indexOf("/") + 1);
-                            toCoorY = output.substring(0);
+                            toCoorY = output.substring(0, output.indexOf("/"));
+                            output = output.substring(output.indexOf("/") + 1);
+                            distanceTo = output.substring(0);
 
                             Log.d("output", fromId + "");
                             Log.d("output", toId + "");
@@ -107,38 +115,24 @@ public class testroute {
                             Log.d("output", toCoorX + "");
                             Log.d("output", toCoorY + "");
 
-
-
+/*
+                          //AStar Algorithm
                             String aStar=Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX),Double.parseDouble(fromCoorY),Double.parseDouble(toCoorX),Double.parseDouble(toCoorY));
-                            path = aStar.substring(0,aStar.indexOf('%'));
-                            coorPath = aStar.substring(aStar.indexOf('%') + 1);
-                            Log.d("AStar:", path + "");
-                            Log.d("coor:", coorPath + "");
+                            AstarPath = aStar.substring(0,aStar.indexOf('%'));
+                            AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
+                            Log.d("AStar:", AstarPath + "");
+                            Log.d("AStarcoor:", AstarcoorPath + "");
 
-                            String coordeinates = coorPath;
-                            Log.e("corPath",coordeinates+"");
+                            pathCoordinates(1,AstarcoorPath, AstarPath);
+*/
+                            //AStar Algorithm
 
-                            boolean flag1 = true;
-                            String coor="";
-                            if(coordeinates.length()==0)
-                            flag1=false;
-
-                            while (flag1){
-                                if (coordeinates.indexOf("|")!=-1){
-                                    coor = coordeinates.substring(0, coordeinates.indexOf("|"));
-                                    lineCoor.add(new LatLng(Double.parseDouble(coor.substring(0, coor.indexOf(":"))),Double.parseDouble(coor.substring(coor.indexOf(":") + 1))));
-                                    coordeinates = coordeinates.substring(coordeinates.indexOf("|") + 1);
-
-                                }
-                                else{
-                                    lineCoor.add(new LatLng(Double.parseDouble(coordeinates.substring(0, coordeinates.indexOf(":"))),Double.parseDouble(coordeinates.substring(coordeinates.indexOf(":") + 1))));
-                                    flag1 = false;
-                                    routeInfo.startRouteInfo();
-                                    Log.v("type:", routeInfo.type.get(0) + "66");
-                                    Log.v("typezise:", routeInfo.type.size() + "88");
-                                }
-                            }
-
+                            String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                            BFSPath = BFS.substring(0,BFS.indexOf('%'));
+                            BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
+                            Log.d("BFS:", BFSPath + "");
+                            Log.d("BFScoor:", BFScoorPath + "");
+                            pathCoordinates(2,BFScoorPath,BFSPath);
 
 
 
@@ -657,8 +651,46 @@ public class testroute {
 
             Log.d("Matrix :", s+"]");
         }
-
-
-
     }//print
+
+    public static void pathCoordinates(int type ,String coorPath, String Path){
+        Log.v("testroute", testroute.lineCoor.size() + "");
+
+        String coordeinates = coorPath;
+        boolean flag1 = true;
+        String coor="";
+        if(coordeinates.length()==0)
+            flag1=false;
+
+        while (flag1){
+            if (coordeinates.indexOf("|")!=-1){
+                coor = coordeinates.substring(0, coordeinates.indexOf("|"));
+                lineCoor.add(new LatLng(Double.parseDouble(coor.substring(0, coor.indexOf(":"))),Double.parseDouble(coor.substring(coor.indexOf(":") + 1))));
+                coordeinates = coordeinates.substring(coordeinates.indexOf("|") + 1);
+
+            }
+            else{
+                lineCoor.add(new LatLng(Double.parseDouble(coordeinates.substring(0, coordeinates.indexOf(":"))),Double.parseDouble(coordeinates.substring(coordeinates.indexOf(":") + 1))));
+                flag1 = false;
+                routeInfo.startRouteInfo(Path);
+                Log.v("type:", routeInfo.type.get(0) + "66");
+                Log.v("typezise:", routeInfo.type.size() + "88");
+            }
+
+        }
+        if(type == 1)
+            lineCoorAstar=lineCoor;
+        else
+        if(type == 2)
+            lineCoorBFS=lineCoor;
+        else
+        if(type == 3)
+            lineCoorDFS=lineCoor;
+
+        lineCoor= new ArrayList<LatLng>();
+        Log.v("lineCoorAstar", testroute.lineCoorAstar.size() + "");
+        Log.v("BFS", testroute.lineCoorBFS+"");
+
+        Log.v("lineCoorsize:", lineCoor.size() + "");
+    }
 }

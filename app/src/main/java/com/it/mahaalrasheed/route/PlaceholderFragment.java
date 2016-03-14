@@ -1,11 +1,14 @@
 package com.it.mahaalrasheed.route;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import static com.it.mahaalrasheed.route.routeInfo.linenumber;
 
 public class PlaceholderFragment extends Fragment {
          /**
@@ -25,7 +28,8 @@ public class PlaceholderFragment extends Fragment {
          public static PlaceholderFragment newInstance(int sectionNumber) {
              PlaceholderFragment fragment = new PlaceholderFragment();
              Bundle args = new Bundle();
-             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+             args.putInt("Route ", sectionNumber);
+             args.putIntArray("array", linenumber);
              fragment.setArguments(args);
              return fragment;
          }
@@ -33,9 +37,17 @@ public class PlaceholderFragment extends Fragment {
          @Override
          public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                   Bundle savedInstanceState) {
-             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-             return rootView;
-         }
-     }
+             final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+             final TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+             rootView.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                     Intent n = new Intent();
+                     n.setClass(rootView.getContext(), path_Info.class);
+                     startActivity(n);
+                 }
+             });
+
+                return rootView;
+            }
+        }

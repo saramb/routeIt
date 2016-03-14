@@ -48,6 +48,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,29 +59,43 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import android.support.v4.app.FragmentActivity;
+import android.os.Bundle;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.model.Marker;
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
+
+
 
 public class map extends AppCompatActivity
-        implements  NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
-    public static final String ROOT_URL = "http://192.168.1.63/";
+    public static final String ROOT_URL = "http://192.168.1.58/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
+    double latat, longt;
+    public GoogleMap map;
 
-    private static final LatLng MELBOURNE = new LatLng(24.895652,46.603078);
+    private ViewGroup infoWindow;
+    private Button infoButton;
+    private Button infoButton1;
+    private Button infoButton2;
 
-    private static final LatLng SYDNEY = new LatLng(-33.87365, 151.20689);
+    private OnInfoWindowElemTouchListener infoButtonListener;
+    private OnInfoWindowElemTouchListener infoButtonListener1;
+    private OnInfoWindowElemTouchListener infoButtonListener2;
 
-    private static final LatLng ADELAIDE = new LatLng(24.71347768,46.67521543);
-
-    private static final LatLng PERTH = new LatLng(24.70334148,46.68034365);
-
-    private static final LatLng LHR = new LatLng(51.471547, -0.460052);
-
-    private static final LatLng LAX = new LatLng(33.936524, -118.377686);
-
-    private static final LatLng JFK = new LatLng(40.641051, -73.777485);
-
-    private static final LatLng AKL = new LatLng(-37.006254, 174.783018);
 
     private Polyline mMutablePolyline;
 
@@ -92,7 +107,7 @@ public class map extends AppCompatActivity
     static GoogleMap googleMap;
     double lng;
     double lat;
-    Button from, to;
+    Button from, to, show;
     Location location;
     MapFragment fm;
     LocationManager locationManager;
@@ -114,8 +129,6 @@ public class map extends AppCompatActivity
 
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,33 +141,28 @@ public class map extends AppCompatActivity
         mViewPager.getLayoutParams().height = 0;
 
 
-
-
-        lv = (ListView)findViewById(R.id.list);
+        lv = (ListView) findViewById(R.id.list);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        page="";
-        lv = (ListView)findViewById(R.id.list);
+        page = "";
+        lv = (ListView) findViewById(R.id.list);
 
-
-       /* testroute.lineCoor.add(MELBOURNE);
-        testroute.lineCoor.add(ADELAIDE);
-        testroute.lineCoor.add(PERTH);*/
 
 
         DisplayMap();
+        RetrieveNotifID();
         testroute.link();
 
         PlotStation();
-       // RetrieveNotifID();
+        // RetrieveNotifID();
 
         spots = new HashMap<>();
 
@@ -164,15 +172,17 @@ public class map extends AppCompatActivity
         from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Intent intent = new Intent (map.this, from.class);
-                startActivity(intent);}
+                Intent intent = new Intent(map.this, from.class);
+                startActivity(intent);
+            }
         });
 
         to.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(map.this, to.class);
-                startActivity(intent);}
+                startActivity(intent);
+            }
         });
 
         page = getIntent().getStringExtra("page");
@@ -180,26 +190,37 @@ public class map extends AppCompatActivity
         lat = getIntent().getDoubleExtra("lat", 0);
         Locationname = getIntent().getStringExtra("name");
 
-        Toast.makeText(map.this,page,Toast.LENGTH_LONG).show();
+        Toast.makeText(map.this, page, Toast.LENGTH_LONG).show();
         from.setText(fromname);
 
-        if ( page  != null){
+        if (page != null) {
             if (page.equals("from")) {
                 fromname = Locationname;
                 from.setText(fromname);
             } else if (page.equals("to")) {
                 to.setText(Locationname);
-                Intent intent = new Intent(map.this, info.class);
-                startActivity(intent);
                 testroute.route(24.84148388, 46.71737999, 24.96215255, 46.70097149);
+                mViewPager.getLayoutParams().height = 300;
+       //         PlotStation(testroute.lineCoorAstar);
+                PlotLine(testroute.lineCoorBFS);
+                testroute.lineCoorBFS= new ArrayList<LatLng>();
 
 
-                mViewPager.getLayoutParams().height = 250;
             }
         }
-
-
+        onMapReady(googleMap);
     }
+
+
+    public static int getPixelsFromDp(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int)(dp * scale + 0.5f);
+    }
+
+
+
+
+
     public void DisplayMap(){
 
         //!!!!!!!!!!Map part start
@@ -286,7 +307,6 @@ public class map extends AppCompatActivity
                 .position(new LatLng(lat, lng))
                 .snippet("Lat:" + location.getLatitude() + "Lng:" + location.getLongitude()));
         //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.69812133, 46.71793858), 16.0f));
 
 
 
@@ -328,48 +348,6 @@ public class map extends AppCompatActivity
                             output = output.substring(output.indexOf("/") + 1);
                             SPOTS_ARRAY = new MetroStation[Integer.parseInt(output1)];
 
-                          /*  for(int j = 0 ; j < testroute.lineCoor.size()-1  ; j++) {
-
-                                LatLng   tempCoor1 = testroute.lineCoor.get(j);
-                                LatLng   tempCoor2 = testroute.lineCoor.get(j+1);
-
-                                    mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
-                                            .add(tempCoor1, tempCoor2)
-                                            .width(10)
-                                            .color(Color.BLUE)
-                                            .geodesic(true));
-
-                                    // Getting URL to the Google Directions API
-                                    String url = getDirectionsUrl(tempCoor1, tempCoor2);
-                                    DownloadTask downloadTask = new DownloadTask();
-                                    // Start downloading json data from Google Directions API
-                                    downloadTask.execute(url);//not metro point
-                            }//end of for
-*/
-                   for(int j = 0 ; j < testroute.lineCoor.size()-1 ; j++) {
-                            int type1 =  routeInfo.type.get(j);
-                            int type2 = routeInfo.type.get(j+1);
-                            LatLng   tempCoor1 = testroute.lineCoor.get(j);
-                            LatLng   tempCoor2 = testroute.lineCoor.get(j+1);
-                            Log.e("type",type1+":"+type2);
-                          //  if(type1 ==1 && type2 ==1 ){
-                            mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
-                                    .add(tempCoor1, tempCoor2)
-                                    .width(10)
-                                    .color(Color.BLUE)
-                                    .geodesic(true));
-                           }
-
-                           /* else{
-                                        // Getting URL to the Google Directions API
-                                        String url = getDirectionsUrl(tempCoor1, tempCoor2);
-                                        DownloadTask downloadTask = new DownloadTask();
-                                        // Start downloading json data from Google Directions API
-                                        downloadTask.execute(url);//not metro point
-                                     }//end of else
-
-                        }//end of for
-*/
                             int i = 0;
                             while (!output.equals("")) {
                                 String XCoordinates = output.substring(0, output.indexOf(":"));
@@ -379,7 +357,7 @@ public class map extends AppCompatActivity
                                 lat = Double.parseDouble(XCoordinates);
                                 lng = Double.parseDouble(YCoordinates);
 
-                              //  SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
+                                SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
                             }
 
                             for (int k = 0; k < i; k++) {
@@ -387,7 +365,7 @@ public class map extends AppCompatActivity
                                         .position(SPOTS_ARRAY[k].getPosition())
                                         .title("Title")
                                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_metro)));
-                                //spots.put(marker, SPOTS_ARRAY[k]);
+                                spots.put(marker, SPOTS_ARRAY[k]);
                             }
 
                         } catch (IOException e) {
@@ -405,6 +383,44 @@ public class map extends AppCompatActivity
         );
     }
 
+    private void PlotLine( ArrayList<LatLng> lineCoor) {
+        //Here we will handle the http request to retrieve Metro coordinates from mysql db
+
+
+        Log.v("lineCoorAstar", lineCoor + "");
+        //Creating a RestAdapter
+
+        try {
+
+            for (int j = 0; j < lineCoor.size() - 1; j++) {
+                int type1 = routeInfo.type.get(j);
+                int type2 = routeInfo.type.get(j + 1);
+                LatLng tempCoor1 = lineCoor.get(j);
+                LatLng tempCoor2 = lineCoor.get(j + 1);
+                Log.e("type", type1 + ":" + type2);
+                Log.e("type", tempCoor1 + ":" + tempCoor2);
+                if (type1 == 1 && type2 == 1) {
+                    mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
+                            .add(tempCoor1, tempCoor2)
+                            .width(10)
+                            .color(Color.BLUE)
+                            .geodesic(true));
+                } else {
+                    // Getting URL to the Google Directions API
+                    String url = getDirectionsUrl(tempCoor1, tempCoor2);
+                    DownloadTask downloadTask = new DownloadTask();
+                    // Start downloading json data from Google Directions API
+                    downloadTask.execute(url);//not metro point
+                }//end of else
+
+            }//end of for
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
@@ -542,13 +558,13 @@ public class map extends AppCompatActivity
 
                             //Check if there is an output from server
                             if (!output.equals("") && !output.equals("NULL")) {
-//                                myMenu.findItem(R.id.notifi).setEnabled(true);
-                                //                              myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
-                                notif = output;
+                              //  myMenu.findItem(R.id.notifi).setEnabled(true);
+                               // myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
+                                //notif = output;
 
                             } else if (output.equals("NULL")) {
-                                //   myMenu.findItem(R.id.notifi).setEnabled(false);
-                                //  myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
+                                //myMenu.findItem(R.id.notifi).setEnabled(false);
+                                //myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
 
                             }
 
@@ -657,7 +673,116 @@ public class map extends AppCompatActivity
         }
         return data;
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(24.96215255,46.70097149);
+
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10));
+
+
+
+        final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout)findViewById(R.id.map_relative_layout);
+
+        // MapWrapperLayout initialization
+        // 39 - default marker height
+        // 20 - offset between the default InfoWindow bottom edge and it's content bottom edge
+        mapWrapperLayout.init(map, getPixelsFromDp(this, 39 + 20));
+
+        // We want to reuse the info window for all the markers,
+        // so let's create only one class member instance
+        this.infoWindow = (ViewGroup)getLayoutInflater().inflate(R.layout.activity_map_wrapper_layout, null);
+        this.infoButton = (Button)infoWindow.findViewById(R.id.button);
+        this.infoButton1 = (Button)infoWindow.findViewById(R.id.button2);
+        this.infoButton2 = (Button)infoWindow.findViewById(R.id.button3);
+
+        // Setting custom OnTouchListener which deals with the pressed state
+        // so it shows up
+        this.infoButtonListener = new OnInfoWindowElemTouchListener(infoButton,
+                getResources().getDrawable(R.drawable.cast_ic_notification_1),
+                getResources().getDrawable(R.drawable.cast_ic_notification_2))
+        {
+            @Override
+            protected void onClickConfirmed(View v, Marker marker) {
+                // Here we can perform some action triggered after clicking the button
+                Toast.makeText(getApplicationContext(), "from", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        this.infoButtonListener1 = new OnInfoWindowElemTouchListener(infoButton1,
+                getResources().getDrawable(R.drawable.cast_ic_notification_1),
+                getResources().getDrawable(R.drawable.cast_ic_notification_2))
+        {
+            @Override
+            protected void onClickConfirmed(View v, Marker marker) {
+                // Here we can perform some action triggered after clicking the button
+                Toast.makeText(getApplicationContext(),"to", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        this.infoButtonListener2 = new OnInfoWindowElemTouchListener(infoButton2,
+                getResources().getDrawable(R.drawable.cast_ic_notification_1),
+                getResources().getDrawable(R.drawable.cast_ic_notification_2))
+        {
+            @Override
+            protected void onClickConfirmed(View v, Marker marker) {
+                // Here we can perform some action triggered after clicking the button
+                Toast.makeText(getApplicationContext(),"fav.", Toast.LENGTH_SHORT).show();
+            }
+        };
+        this.infoButton.setOnTouchListener(infoButtonListener);
+        this.infoButton1.setOnTouchListener(infoButtonListener1);
+        this.infoButton2.setOnTouchListener(infoButtonListener2);
+
+
+        map.setInfoWindowAdapter(new InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                // Setting up the infoWindow with current's marker info
+
+                infoButtonListener.setMarker(marker);
+                infoButtonListener1.setMarker(marker);
+                infoButtonListener2.setMarker(marker);
+                //infoButtonListener1.setMarker(marker);
+
+                // We must call this to set the current marker and infoWindow references
+                // to the MapWrapperLayout
+                mapWrapperLayout.setMarkerWithInfoWindow(marker, infoWindow);
+                return infoWindow;
+            }
+        });
+
+
+
+        googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                map.clear(); //to clear all markers before
+                map.addMarker(new MarkerOptions().position(latLng));
+                latat = latLng.latitude;
+                longt = latLng.longitude;
+
+                Toast.makeText(getApplicationContext(),latat+"  and "+longt, Toast.LENGTH_SHORT).show();
+
+
+            }
+        });  //end on click
+
+
+
+    }
+
+
 }
+
 
  class DownloadTask extends AsyncTask<String, Void, String> {
 
@@ -689,7 +814,9 @@ public class map extends AppCompatActivity
         parserTask.execute(result);
 
     }
-}
+
+
+ }
 
 
 

@@ -8,7 +8,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -125,12 +124,23 @@ public class loginnav extends AppCompatActivity
 
                             //Reading the output in the string
                             output = reader.readLine();
-                            Toast.makeText(getApplicationContext(),output+"",Toast.LENGTH_SHORT).show();
-                            if (output.equals("Successfully logged in")) {
-                                Intent i = new Intent(getApplicationContext(), com.it.mahaalrasheed.route.Menu.class);
-                                i.putExtra("AdminID", username.getText().toString());
-                                startActivity(i);
+
+                            if(output!= null){
+                                Toast.makeText(getApplicationContext(),output+"",Toast.LENGTH_SHORT).show();
+                                if (output.equals("Successfully logged in")) {
+                                    Intent i = new Intent(getApplicationContext(),com.it.mahaalrasheed.route.Menu.class);
+                                    i.putExtra("AdminID", username.getText().toString());
+                                    startActivity(i);
+                                }
                             }
+                            else
+                            if (output.equals("Successfully logged in")) {
+                                Intent i = new Intent(getApplicationContext(),com.it.mahaalrasheed.route.Menu.class);
+                                i.putExtra("AdminID", username.getText().toString());
+                                startActivity(i);}
+                            else
+                                Toast.makeText(getApplicationContext(),"Incorrect username or password",Toast.LENGTH_SHORT).show();
+
 
 
                         } catch (IOException e) {
@@ -159,12 +169,7 @@ public class loginnav extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.loginnav, menu);
-        return true;
-    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

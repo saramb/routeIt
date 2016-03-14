@@ -10,36 +10,46 @@
     tools:context="com.it.mahaalrasheed.route.Menu">
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        >
 
         <Button
-            android:layout_width="190dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Enter"
             android:id="@+id/button2"
-            android:layout_marginTop="130dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:textSize="14dp"
+            android:layout_marginTop="80dp"
+            android:background="@color/purple"
+            android:textColor="#FFFF"
+            android:layout_centerHorizontal="true"
+            />
 
         <Button
-            android:layout_width="190dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Delete"
             android:id="@+id/button3"
             android:layout_below="@+id/button2"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="35dp" />
+            android:textSize="14dp"
+            android:layout_marginTop="50dp"
+            android:background="@color/purple"
+            android:textColor="#FFFF" />
 
         <Button
-            android:layout_width="190dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="New post"
             android:id="@+id/button4"
             android:layout_below="@+id/button3"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="35dp" />
+            android:textSize="14dp"
+            android:layout_marginTop="50dp"
+            android:background="@color/purple"
+            android:textColor="#FFFF"/>
     </LinearLayout>
 </RelativeLayout>
