@@ -45,7 +45,7 @@ public class NewPost extends AppCompatActivity {
                     // error.requestFocus();
                     error.setText("The field is empty, Please enter yout notification ");
                     error.setError("");
-
+//tt
                 } else {
                     error.setError(null);
                     error.setText("");
