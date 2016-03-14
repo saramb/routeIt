@@ -111,9 +111,9 @@ link();
                             Log.d("output", toCoorX + "");
                             Log.d("output", toCoorY + "");
 
-
+/*
                           //AStar Algorithm
-                        /*    String aStar=Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX),Double.parseDouble(fromCoorY),Double.parseDouble(toCoorX),Double.parseDouble(toCoorY));
+                            String aStar=Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX),Double.parseDouble(fromCoorY),Double.parseDouble(toCoorX),Double.parseDouble(toCoorY));
                             AstarPath = aStar.substring(0,aStar.indexOf('%'));
                             AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
                             Log.d("AStar:", AstarPath + "");
@@ -123,15 +123,12 @@ link();
 */
                             //AStar Algorithm
 
-                           String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                            String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                             BFSPath = BFS.substring(0,BFS.indexOf('%'));
                             BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
                             Log.d("BFS:", BFSPath + "");
                             Log.d("BFScoor:", BFScoorPath + "");
-
                             pathCoordinates(2,BFScoorPath,BFSPath);
-
-
 
 
 

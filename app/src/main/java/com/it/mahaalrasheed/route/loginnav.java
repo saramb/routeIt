@@ -124,14 +124,22 @@ public class loginnav extends AppCompatActivity
 
                             //Reading the output in the string
                             output = reader.readLine();
-                            if (output.equals("Successfully logged in")) {
+
+                            if(output!= null){
                                 Toast.makeText(getApplicationContext(),output+"",Toast.LENGTH_SHORT).show();
-                                Intent i = new Intent(getApplicationContext(), com.it.mahaalrasheed.route.Menu.class);
-                                i.putExtra("AdminID", username.getText().toString());
-                                startActivity(i);
+                                if (output.equals("Successfully logged in")) {
+                                    Intent i = new Intent(getApplicationContext(),com.it.mahaalrasheed.route.Menu.class);
+                                    i.putExtra("AdminID", username.getText().toString());
+                                    startActivity(i);
+                                }
                             }
                             else
-                                Toast.makeText(getApplicationContext(),output+"",Toast.LENGTH_SHORT).show();
+                            if (output.equals("Successfully logged in")) {
+                                Intent i = new Intent(getApplicationContext(),com.it.mahaalrasheed.route.Menu.class);
+                                i.putExtra("AdminID", username.getText().toString());
+                                startActivity(i);}
+                            else
+                                Toast.makeText(getApplicationContext(),"Incorrect username or password",Toast.LENGTH_SHORT).show();
 
 
 

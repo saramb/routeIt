@@ -24,23 +24,19 @@ public class notif extends AppCompatActivity {
 
         String content=getIntent().getExtras().getString("content");
         List<String> ArrContent=new ArrayList<String>();
-    //    String[] contentArray=new String[100];
          id="0";
 
-        for(int i=0;i<content.length();i++) {
+        while(!content.equals("")) {
 
-
-            if (content.indexOf("-") != -1) {
+            if (content.indexOf("-") != -1 && content.indexOf("*") != -1 ) {
                 id = content.substring(0, content.indexOf("-"));
-                if (content.indexOf("*") != -1) {
-                    ArrContent.add(content.substring(content.indexOf("-") + 1, content.indexOf("*")));
-                    content = content.substring(content.indexOf("*") + 1);
-                } else {
-                    ArrContent.add(content.substring(content.indexOf("-") + 1));
-                    content = "";
-                }
-            }
-        }
+                ArrContent.add(content.substring(content.indexOf("-") + 1, content.indexOf("*")));
+
+                if( content.indexOf("*")+1!=-1)content = content.substring(content.indexOf("*") + 1);
+            else
+                content = "";
+
+        }}
 
         ListView listView= (ListView)findViewById(R.id.notifListView);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(notif.this,android.R.layout.simple_list_item_activated_1,ArrContent);

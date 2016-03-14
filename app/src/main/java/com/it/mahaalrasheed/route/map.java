@@ -59,13 +59,42 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import android.support.v4.app.FragmentActivity;
+import android.os.Bundle;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.model.Marker;
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
+
+
 
 public class map extends AppCompatActivity
-        implements  NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
-    public static final String ROOT_URL = "http://192.168.100.9/";
+    public static final String ROOT_URL = "http://192.168.1.58/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
+    double latat, longt;
+    public GoogleMap map;
+
+    private ViewGroup infoWindow;
+    private Button infoButton;
+    private Button infoButton1;
+    private Button infoButton2;
+
+    private OnInfoWindowElemTouchListener infoButtonListener;
+    private OnInfoWindowElemTouchListener infoButtonListener1;
+    private OnInfoWindowElemTouchListener infoButtonListener2;
 
 
     private Polyline mMutablePolyline;
@@ -179,9 +208,17 @@ public class map extends AppCompatActivity
 
             }
         }
+        onMapReady(googleMap);
     }
 
-        public void send(){
+
+    public static int getPixelsFromDp(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int)(dp * scale + 0.5f);
+    }
+
+
+    public void send(){
 
         Intent n = new Intent(map.this,aboutusnav.class);
         startActivity(n);
@@ -274,7 +311,6 @@ public class map extends AppCompatActivity
                 .position(new LatLng(lat, lng))
                 .snippet("Lat:" + location.getLatitude() + "Lng:" + location.getLongitude()));
         //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.69812133, 46.71793858), 16.0f));
 
 
 
@@ -525,14 +561,14 @@ public class map extends AppCompatActivity
                             output = reader.readLine();
 
                             //Check if there is an output from server
-                            if (!output.equals("") || !output.equals("NULL")) {
-                                myMenu.findItem(R.id.notifi).setEnabled(true);
-                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
-                                notif = output;
+                            if (!output.equals("") && !output.equals("NULL")) {
+                              //  myMenu.findItem(R.id.notifi).setEnabled(true);
+                               // myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification);
+                                //notif = output;
 
                             } else if (output.equals("NULL")) {
-                                 myMenu.findItem(R.id.notifi).setEnabled(false);
-                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
+                                //myMenu.findItem(R.id.notifi).setEnabled(false);
+                                //myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
 
                             }
 
@@ -641,7 +677,116 @@ public class map extends AppCompatActivity
         }
         return data;
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(24.96215255,46.70097149);
+
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10));
+
+
+
+        final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout)findViewById(R.id.map_relative_layout);
+
+        // MapWrapperLayout initialization
+        // 39 - default marker height
+        // 20 - offset between the default InfoWindow bottom edge and it's content bottom edge
+        mapWrapperLayout.init(map, getPixelsFromDp(this, 39 + 20));
+
+        // We want to reuse the info window for all the markers,
+        // so let's create only one class member instance
+        this.infoWindow = (ViewGroup)getLayoutInflater().inflate(R.layout.activity_map_wrapper_layout, null);
+        this.infoButton = (Button)infoWindow.findViewById(R.id.button);
+        this.infoButton1 = (Button)infoWindow.findViewById(R.id.button2);
+        this.infoButton2 = (Button)infoWindow.findViewById(R.id.button3);
+
+        // Setting custom OnTouchListener which deals with the pressed state
+        // so it shows up
+        this.infoButtonListener = new OnInfoWindowElemTouchListener(infoButton,
+                getResources().getDrawable(R.drawable.cast_ic_notification_1),
+                getResources().getDrawable(R.drawable.cast_ic_notification_2))
+        {
+            @Override
+            protected void onClickConfirmed(View v, Marker marker) {
+                // Here we can perform some action triggered after clicking the button
+                Toast.makeText(getApplicationContext(), "from", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        this.infoButtonListener1 = new OnInfoWindowElemTouchListener(infoButton1,
+                getResources().getDrawable(R.drawable.cast_ic_notification_1),
+                getResources().getDrawable(R.drawable.cast_ic_notification_2))
+        {
+            @Override
+            protected void onClickConfirmed(View v, Marker marker) {
+                // Here we can perform some action triggered after clicking the button
+                Toast.makeText(getApplicationContext(),"to", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        this.infoButtonListener2 = new OnInfoWindowElemTouchListener(infoButton2,
+                getResources().getDrawable(R.drawable.cast_ic_notification_1),
+                getResources().getDrawable(R.drawable.cast_ic_notification_2))
+        {
+            @Override
+            protected void onClickConfirmed(View v, Marker marker) {
+                // Here we can perform some action triggered after clicking the button
+                Toast.makeText(getApplicationContext(),"fav.", Toast.LENGTH_SHORT).show();
+            }
+        };
+        this.infoButton.setOnTouchListener(infoButtonListener);
+        this.infoButton1.setOnTouchListener(infoButtonListener1);
+        this.infoButton2.setOnTouchListener(infoButtonListener2);
+
+
+        map.setInfoWindowAdapter(new InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                // Setting up the infoWindow with current's marker info
+
+                infoButtonListener.setMarker(marker);
+                infoButtonListener1.setMarker(marker);
+                infoButtonListener2.setMarker(marker);
+                //infoButtonListener1.setMarker(marker);
+
+                // We must call this to set the current marker and infoWindow references
+                // to the MapWrapperLayout
+                mapWrapperLayout.setMarkerWithInfoWindow(marker, infoWindow);
+                return infoWindow;
+            }
+        });
+
+
+
+        googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                map.clear(); //to clear all markers before
+                map.addMarker(new MarkerOptions().position(latLng));
+                latat = latLng.latitude;
+                longt = latLng.longitude;
+
+                Toast.makeText(getApplicationContext(),latat+"  and "+longt, Toast.LENGTH_SHORT).show();
+
+
+            }
+        });  //end on click
+
+
+
+    }
+
+
 }
+
 
  class DownloadTask extends AsyncTask<String, Void, String> {
 
