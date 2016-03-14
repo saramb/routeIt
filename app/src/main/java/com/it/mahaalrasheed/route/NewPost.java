@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +26,7 @@ import retrofit.client.Response;
 
 public class NewPost extends AppCompatActivity {
     private String ROOT_URL = map.ROOT_URL;
-     EditText message;
+      LineEditText message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class NewPost extends AppCompatActivity {
         setContentView(R.layout.activity_new_post);
 
         Button enter=(Button)findViewById(R.id.button13);
-         message=(EditText)findViewById(R.id.editText7);
+         message=(LineEditText)findViewById(R.id.message);
          final TextView error=(TextView)findViewById(R.id.textView16);
 
 
@@ -42,11 +43,14 @@ public class NewPost extends AppCompatActivity {
             public void onClick(View v) {
                 if (message.getText().toString().equals("")) {
                     // error.requestFocus();
-                    error.setText("The field is empty, Please enter a value");
+                    error.setText("The field is empty, Please enter yout notification ");
                     error.setError("");
 
                 } else {
                     error.setError(null);
+                    error.setText("");
+
+
                     new AlertDialog.Builder(NewPost.this)
                             .setMessage("are you sure you want to continue post process ?")
                             .setPositiveButton("Post", new DialogInterface.OnClickListener() {

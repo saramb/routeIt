@@ -32,7 +32,7 @@ public class DeleteBusStation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_bus_station);
-        spin.add(" ");
+        spin.add("Please Select metro station ..");
 
         Button delete=(Button)findViewById(R.id.button5);
         dropdown=(Spinner)findViewById(R.id.spinner);
@@ -45,7 +45,7 @@ public class DeleteBusStation extends AppCompatActivity {
             public void onClick(View v) {
                 String selected = dropdown.getSelectedItem().toString();
 
-                if (selected.equals(" ")) {
+                if (selected.equals("Please Select metro station ..")) {
                     error.requestFocus();
                     error.setError("The field is empty, Please select a value !");
                 } else {
