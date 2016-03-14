@@ -58,17 +58,8 @@ public class NewPost extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     String n, c, coo;
                                     n = message.getText().toString();
-
                                     Intent intent = new Intent();
                                     PendingIntent pIntent = PendingIntent.getActivity(NewPost.this, 0, intent, 0);
-                                   /* Notification noti = new Notification.Builder(NewPost.this)
-                                            .setTicker("Ticker Title")
-                                            .setContentTitle("Content Title")
-                                            .setContentText("Notification content.")
-                                            .setContentIntent(pIntent).getNotification();
-                                    noti.flags=Notification.FLAG_AUTO_CANCEL;
-                                    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                                    notificationManager.notify(0, noti);*/
                                     AddNotif();
                                     finish();
                                     Toast.makeText(getApplicationContext(), "your notification posted successfully", Toast.LENGTH_LONG).show();
