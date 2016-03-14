@@ -25,7 +25,7 @@ public class testroute {
 
 
     static String  fromId , toId, withen;
-    static String fromCoorX,toCoorX,fromCoorY,toCoorY;
+    static String fromCoorX,toCoorX,fromCoorY,toCoorY,distanceTo,distanceFrom;
     static  String finalPath="";
     static final String [][] Mline1 = new String [29][29];
     static final String [][] Mline2 = new String [13][13];
@@ -96,13 +96,17 @@ link();
                             output = output.substring(output.indexOf("/") + 1);
                             fromCoorX = output.substring(0, output.indexOf("/"));
                             output = output.substring(output.indexOf("/") + 1);
-                            fromCoorY = output.substring(0, output.indexOf(":"));
+                            fromCoorY = output.substring(0, output.indexOf("/"));
+                            output = output.substring(output.indexOf("/") + 1);
+                            distanceFrom = output.substring(0, output.indexOf(":"));
                             output = output.substring(output.indexOf(":") + 1);
                             toId = output.substring(0, output.indexOf("/"));
                             output = output.substring(output.indexOf("/") + 1);
                             toCoorX = output.substring(0, output.indexOf("/"));
                             output = output.substring(output.indexOf("/") + 1);
-                            toCoorY = output.substring(0);
+                            toCoorY = output.substring(0, output.indexOf("/"));
+                            output = output.substring(output.indexOf("/") + 1);
+                            distanceTo = output.substring(0);
 
                             Log.d("output", fromId + "");
                             Log.d("output", toId + "");

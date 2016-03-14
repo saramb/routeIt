@@ -218,11 +218,7 @@ public class map extends AppCompatActivity
     }
 
 
-    public void send(){
 
-        Intent n = new Intent(map.this,aboutusnav.class);
-        startActivity(n);
-    }
 
 
     public void DisplayMap(){
