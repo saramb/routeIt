@@ -107,6 +107,7 @@ link();
                             toCoorY = output.substring(0, output.indexOf("/"));
                             output = output.substring(output.indexOf("/") + 1);
                             distanceTo = output.substring(0);
+                            //
 
                             Log.d("output", fromId + "");
                             Log.d("output", toId + "");
