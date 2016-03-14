@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-//SARA TEST
 
 public class aboutusnav extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
