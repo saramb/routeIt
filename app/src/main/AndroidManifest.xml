@@ -40,13 +40,28 @@
         <activity
             android:name=".Menu"
             android:label="Admin " />
-        <activity android:name=".EnterMetroStation" />
-        <activity android:name=".EnterBusStation" />
-        <activity android:name=".Delete" />
-        <activity android:name=".DeleteBusStation" />
-        <activity android:name=".DeleteMetroStation" />
-        <activity android:name=".Enter" />
-        <activity android:name=".NewPost" />
+        <activity android:name=".EnterMetroStation"
+            android:label="Enter Metro Station"
+            />
+        <activity android:name=".EnterBusStation"
+            android:label="Enter Bus Station"
+            />
+        <activity android:name=".Delete"
+            android:label="Delete"
+
+            />
+        <activity android:name=".DeleteBusStation"
+            android:label="Delete Bus Station"
+            />
+        <activity android:name=".DeleteMetroStation"
+            android:label="Delete Metro Station"
+            />
+        <activity android:name=".Enter"
+            android:label="Enter"
+            />
+        <activity android:name=".NewPost"
+            android:label="New Post"
+            />
         <activity android:name=".notif" />
         <activity
             android:name=".aboutusnav"

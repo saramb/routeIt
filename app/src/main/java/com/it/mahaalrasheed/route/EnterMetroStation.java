@@ -24,9 +24,9 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class EnterMetroStation extends AppCompatActivity {
-    String s,n,c,c2,c3;
+    String s,n,c,c2,c3,st;
     private String ROOT_URL = map.ROOT_URL;
-    EditText station,name,coor,coor2;
+    EditText station,name,coor,coor2,street;
     Spinner MetroLine;
     List<String> spin = new ArrayList<String>();
     List<String> spinPosition = new ArrayList<String>();
@@ -48,6 +48,7 @@ public class EnterMetroStation extends AppCompatActivity {
         name =(EditText) findViewById(R.id.metroName);
         coor =(EditText) findViewById(R.id.metroCoordinates);
         coor2 =(EditText) findViewById(R.id.metroCoordinates2);
+        street =(EditText) findViewById(R.id.editText2);
         final TextView error=(TextView)findViewById(R.id.textView2);
         final TextView error2=(TextView)findViewById(R.id.textView36);
         Position=(Spinner)findViewById(R.id.spinner7);
@@ -74,9 +75,10 @@ public class EnterMetroStation extends AppCompatActivity {
                 n = name.getText().toString();
                 c = coor.getText().toString();
                 c2=coor2.getText().toString();
+                st=street.getText().toString();
 
 
-                if (s.equals("") || n.equals("") || c.equals("")|| Position.getSelectedItem().toString().equals(" ") || MetroLine.getSelectedItem().toString().equals(" ")) {
+                if (s.equals("") ||st.equals("") || n.equals("") || c.equals("")|| Position.getSelectedItem().toString().equals(" ") || MetroLine.getSelectedItem().toString().equals(" ")) {
 
                     if(MetroLine.getSelectedItem().toString().equals(" ")){
                         error.requestFocus();
@@ -94,6 +96,10 @@ public class EnterMetroStation extends AppCompatActivity {
 
                     if (station.getText().toString().equals("")) {
                         station.setError("Please fill station ID");
+                    }
+
+                    if (street.getText().toString().equals("")) {
+                        street.setError("Please fill  Street Name");
                     }
                     if (name.getText().toString().equals("")) {
                         name.setError("Please fill the name");
@@ -135,7 +141,7 @@ public class EnterMetroStation extends AppCompatActivity {
 
     }
 
-   private void EnterMetroStation(){
+    private void EnterMetroStation(){
         //Here we will handle the http request to insert user to mysql db
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
