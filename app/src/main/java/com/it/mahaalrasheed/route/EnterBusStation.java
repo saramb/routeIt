@@ -2,12 +2,9 @@ package com.it.mahaalrasheed.route;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,24 +26,22 @@ import retrofit.client.Response;
 public class EnterBusStation extends AppCompatActivity {
 
     private String ROOT_URL = map.ROOT_URL;
-    Spinner dropdown1;
-    Spinner dropdown2;
-    Spinner dropdown3;
+    Spinner dropdown1 , dropdown2 , dropdown3;
     List<String> spin = new ArrayList<String>();
     List<String> spinMetro = new ArrayList<String>();
     List<String> spinPosition = new ArrayList<String>();
-    boolean flag1=false;
-
     TextView error,error2,error3, stationStreet ;
-
     String s,n,c,c2,d1,d2,d3,st;
     EditText station,coorX ,name,coorY,street;
+    Button enter;
+    ArrayAdapter<String> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_bus_station);
 
-        Button enter=(Button)findViewById(R.id.button9);
+        enter=(Button)findViewById(R.id.button9);
         station=(EditText)findViewById(R.id.editText4);
         name=(EditText)findViewById(R.id.editText5);
         coorX=(EditText)findViewById(R.id.editText15);
@@ -60,24 +55,17 @@ public class EnterBusStation extends AppCompatActivity {
         error2=(TextView)findViewById(R.id.textView15);
         error3=(TextView)findViewById(R.id.textView33);
 
-
         spinPosition.add(" ");
         spinPosition.add("At the begining");
         spinPosition.add("At the end");
-
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(EnterBusStation.this,android.R.layout.simple_dropdown_item_1line, spinPosition);
-
+        adapter = new ArrayAdapter<String>(EnterBusStation.this,android.R.layout.simple_dropdown_item_1line, spinPosition);
         dropdown3.setAdapter(adapter);
-
 
         Retrieve();
 
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                spinMetro.add(" ");
 
                 s = station.getText().toString();
                 n = name.getText().toString();
@@ -88,12 +76,6 @@ public class EnterBusStation extends AppCompatActivity {
                 d2=dropdown2.getSelectedItem().toString();
                 d3=dropdown3.getSelectedItem().toString();
 
-                if (stationStreet.getText().toString().equals("")) {
-                    stationStreet.setError("Please fill the station street");
-                }
-
-
-
                 if (s.equals("") || n.equals("") || c.equals("") || c2.equals("") || d1.equals(" ") || d2.equals(" ")||d3.equals(" ")||st.equals("")) {
 
                     if (dropdown1.getSelectedItem().toString().equals(" ")) {
@@ -103,7 +85,7 @@ public class EnterBusStation extends AppCompatActivity {
                         error.setError(null);
 
                     if (dropdown2.getSelectedItem().toString().equals(" ")) {
-                       // error2.requestFocus();
+                        // error2.requestFocus();
                         error2.setError("Please select a value");
                     }else
                         error2.setError(null);
@@ -114,12 +96,9 @@ public class EnterBusStation extends AppCompatActivity {
                     }else
                         error3.setError(null);
 
-
                     if (station.getText().toString().equals("")) {
                         station.setError("Please fill station ID");
                     }
-
-
                     if (name.getText().toString().equals("")) {
                         name.setError("Please fill the name");
                     }
@@ -133,7 +112,6 @@ public class EnterBusStation extends AppCompatActivity {
                         street.setError("Please fill the station street");
                     }
 
-
                 } else {
 
                     error.setError(null);
@@ -144,22 +122,15 @@ public class EnterBusStation extends AppCompatActivity {
                     name.setError(null);
                     stationStreet.setError(null);
 
-
-
                     new AlertDialog.Builder(EnterBusStation.this)
-                            .setMessage("are you sure you want to continue the  entering process ?")
+                            .setMessage("Are you sure you want to continue the  entering process ?")
                             .setPositiveButton("Enter", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-
                                     EnterBusStation();
                                     finish();
-                                    Toast.makeText(getApplicationContext(), "your bus station Entered successfully", Toast.LENGTH_LONG).show();
-
-
                                 }
                             })
-
                             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -167,8 +138,6 @@ public class EnterBusStation extends AppCompatActivity {
                             })
                             .show();
                 }
-
-                flag1 = true;
             }
         });
 
@@ -226,7 +195,6 @@ public class EnterBusStation extends AppCompatActivity {
 
                             Toast.makeText(EnterBusStation.this, output, Toast.LENGTH_LONG).show();
 
-
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -244,9 +212,6 @@ public class EnterBusStation extends AppCompatActivity {
     }
 
 
-
-
-
     private void Retrieve(){
         //Here we will handle the http request to insert user to mysql db
         //Creating a RestAdapter
@@ -261,9 +226,6 @@ public class EnterBusStation extends AppCompatActivity {
 
                 //Passing the values by getting it from editTexts
                 "4",
-
-
-
                 //Creating an anonymous callback
                 new Callback<Response>() {
                     @Override
@@ -281,11 +243,11 @@ public class EnterBusStation extends AppCompatActivity {
 
                             //Reading the output in the string
                             output = reader.readLine();
-//
+
                             spin.add(" ");
 
                             while(!output.equals("")) {
-                               // Toast.makeText(EnterBusStation.this, output, Toast.LENGTH_LONG).show();
+                                // Toast.makeText(EnterBusStation.this, output, Toast.LENGTH_LONG).show();
                                 String color = output.substring(0, output.indexOf(" "));
                                 output = output.substring(output.indexOf(" ") + 1);
                                 if (!spin.contains(color)) {
@@ -316,24 +278,18 @@ public class EnterBusStation extends AppCompatActivity {
         );
 
 
-
-
-
-
-
-        RestAdapter adapter2 = new RestAdapter.Builder()
+       /* RestAdapter adapter2 = new RestAdapter.Builder()
                 .setEndpoint(ROOT_URL) //Setting the Root URL
                 .build(); //Finally building the adapter
 
         //Creating object for our interface
-        routeAPI api2 = adapter.create(routeAPI.class);
+        routeAPI api2 = adapter.create(routeAPI.class);*////تعديلمهم نشوفه
+
         //Defining the method insertuser of our interface
         api.Retrieve(
 
                 //Passing the values by getting it from editTexts
                 "2",
-
-
                 //Creating an anonymous callback
                 new Callback<Response>() {
                     @Override
@@ -351,7 +307,7 @@ public class EnterBusStation extends AppCompatActivity {
 
                             //Reading the output in the string
                             output2 = reader2.readLine();
-//
+
                             spinMetro.add(" ");
 
                             while (!output2.equals("")) {
@@ -373,8 +329,6 @@ public class EnterBusStation extends AppCompatActivity {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
-                        //Displaying the output as a toast
                     }
 
                     @Override
@@ -384,12 +338,5 @@ public class EnterBusStation extends AppCompatActivity {
                     }
                 }
         );
-
-
-
-
     }
-
-
-
 }

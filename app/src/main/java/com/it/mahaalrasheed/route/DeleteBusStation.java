@@ -27,42 +27,39 @@ public class DeleteBusStation extends AppCompatActivity {
     private String ROOT_URL = map.ROOT_URL;
     Spinner dropdown;
     List<String> spin = new ArrayList<String>();
+    Button delete;
+    TextView error;
+    String selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_bus_station);
-        spin.add("Please Select metro station ..");
 
-        Button delete=(Button)findViewById(R.id.button5);
+        delete=(Button)findViewById(R.id.button5);
         dropdown=(Spinner)findViewById(R.id.spinner);
-        final TextView error=(TextView)findViewById(R.id.textView23);
+        error=(TextView)findViewById(R.id.textView23);
 
+        spin.add("Please Select Bus station ..");
         Retrieve();
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selected = dropdown.getSelectedItem().toString();
+                selected = dropdown.getSelectedItem().toString();
 
-                if (selected.equals("Please Select metro station ..")) {
+                if (selected.equals("Please Select Bus station ..")) {
                     error.requestFocus();
                     error.setError("The field is empty, Please select a value !");
                 } else {
-
                     error.setError(null);
                     new AlertDialog.Builder(DeleteBusStation.this)
-                            .setMessage("are you sure you want to continue the deletion process ?")
+                            .setMessage("Are you sure you want to continue the deletion process ?")
                             .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     DeleteBusStation();
-
-
                                     finish();
-                                    Toast.makeText(getApplicationContext(), "your bus station deleted successfully", Toast.LENGTH_LONG).show();
-
-
                                 }
                             })
 
@@ -92,7 +89,7 @@ public class DeleteBusStation extends AppCompatActivity {
         api.DeleteBusStation(
 
                 //Passing the values by getting it from editTexts
-                dropdown.getSelectedItem().toString(),
+                selected,
 
                 //Creating an anonymous callback
                 new Callback<Response>() {
@@ -112,6 +109,7 @@ public class DeleteBusStation extends AppCompatActivity {
                             //Reading the output in the string
                             output = reader.readLine();
 
+                            Toast.makeText(getApplicationContext(),output, Toast.LENGTH_LONG).show();
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -172,7 +170,6 @@ public class DeleteBusStation extends AppCompatActivity {
                             }
 
                             ArrayAdapter<String> adapter = new ArrayAdapter<String>(DeleteBusStation.this, android.R.layout.simple_dropdown_item_1line, spin);
-
                             dropdown.setAdapter(adapter);
                             
 

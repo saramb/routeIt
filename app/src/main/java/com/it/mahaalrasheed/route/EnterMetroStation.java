@@ -24,58 +24,51 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class EnterMetroStation extends AppCompatActivity {
-    String s,n,c,c2,c3,st;
+    String s,n,c,c2,st;
     private String ROOT_URL = map.ROOT_URL;
     EditText station,name,coor,coor2,street;
     Spinner MetroLine;
     List<String> spin = new ArrayList<String>();
     List<String> spinPosition = new ArrayList<String>();
     Spinner Position;
-
-
-    String adminId;
+    Button enter;
+    TextView error , error2;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_metro_station);
-        spin.add(" ");
 
-        Button enter=(Button)findViewById(R.id.button18);
+        enter=(Button)findViewById(R.id.button18);
         MetroLine=(Spinner)findViewById(R.id.MetroLine);
         station =(EditText) findViewById(R.id.metroId);
         name =(EditText) findViewById(R.id.metroName);
         coor =(EditText) findViewById(R.id.metroCoordinates);
         coor2 =(EditText) findViewById(R.id.metroCoordinates2);
         street =(EditText) findViewById(R.id.editText2);
-        final TextView error=(TextView)findViewById(R.id.textView2);
-        final TextView error2=(TextView)findViewById(R.id.textView36);
+        error=(TextView)findViewById(R.id.textView2);
+        error2=(TextView)findViewById(R.id.textView36);
         Position=(Spinner)findViewById(R.id.spinner7);
-
 
         spinPosition.add(" ");
         spinPosition.add("At the begining");
         spinPosition.add("At the end");
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(EnterMetroStation.this,android.R.layout.simple_dropdown_item_1line, spinPosition);
-
         Position.setAdapter(adapter);
 
-
         Retrieve();
-
 
         enter.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+
                 s = station.getText().toString();
                 n = name.getText().toString();
                 c = coor.getText().toString();
                 c2=coor2.getText().toString();
                 st=street.getText().toString();
-
 
                 if (s.equals("") ||st.equals("") || n.equals("") || c.equals("")|| Position.getSelectedItem().toString().equals(" ") || MetroLine.getSelectedItem().toString().equals(" ")) {
 
@@ -90,8 +83,6 @@ public class EnterMetroStation extends AppCompatActivity {
                         error2.setError("Please select the position of the station");
                     }else
                         error2.setError(null);
-
-
 
                     if (station.getText().toString().equals("")) {
                         station.setError("Please fill station ID");
@@ -182,7 +173,6 @@ public class EnterMetroStation extends AppCompatActivity {
 
                             //Reading the output in the string
                             output = reader.readLine();
-
                             Toast.makeText(EnterMetroStation.this, output, Toast.LENGTH_LONG).show();
 
 
@@ -216,9 +206,6 @@ public class EnterMetroStation extends AppCompatActivity {
 
                 //Passing the values by getting it from editTexts
                 "1",
-
-
-
                 //Creating an anonymous callback
                 new Callback<Response>() {
                     @Override
@@ -236,6 +223,8 @@ public class EnterMetroStation extends AppCompatActivity {
 
                             //Reading the output in the string
                             output = reader.readLine();
+
+                            spin.add(" ");
 
                             while(!output.equals("")) {
                                 //Toast.makeText(EnterMetroStation.this, output, Toast.LENGTH_LONG).show();

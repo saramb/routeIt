@@ -24,6 +24,8 @@ public class from extends AppCompatActivity {
     List<FavoriteClass> item;
     ListView lv;
     int id;
+    String[] array;
+    ArrayAdapter addapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +59,11 @@ public class from extends AppCompatActivity {
     public void update(){
         relam = Realm.getInstance(getApplicationContext());
         item = relam.allObjects(FavoriteClass.class);
-        String[] array = new String[item.size()];
+        array = new String[item.size()];
         for (int i = 0; i < item.size(); i++) {
             array[i] = item.get(i).getName();}
 
-        ArrayAdapter addapter = new ArrayAdapter(from.this, android.R.layout.simple_list_item_1,array);
+        addapter = new ArrayAdapter(from.this, android.R.layout.simple_list_item_1,array);
         lv.setAdapter(addapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

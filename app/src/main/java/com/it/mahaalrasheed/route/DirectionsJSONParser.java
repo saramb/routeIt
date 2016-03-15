@@ -3,13 +3,6 @@ package com.it.mahaalrasheed.route;
 
 import com.google.android.gms.maps.model.LatLng;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.HashMap;
-
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,9 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by Sara on 2/25/2016.
- */
 public class DirectionsJSONParser {
 
     /** Receives a JSONObject and returns a list of lists containing latitude and longitude */

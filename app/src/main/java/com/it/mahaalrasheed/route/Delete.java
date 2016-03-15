@@ -8,19 +8,21 @@ import android.widget.Button;
 
 public class Delete extends AppCompatActivity {
 
+    Button delete_bus_station ,delete_metro_station;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete);
 
-        final Button delete_bus_station=(Button)findViewById(R.id.button10);
-        final Button delete_metro_station=(Button)findViewById(R.id.button11);
+        delete_bus_station=(Button)findViewById(R.id.button10);
+        delete_metro_station=(Button)findViewById(R.id.button11);
 
 
         delete_bus_station.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(getApplicationContext(),DeleteBusStation.class);
+                Intent i=new Intent(Delete.this,DeleteBusStation.class);
                 startActivity(i);
             }
         });
@@ -28,7 +30,7 @@ public class Delete extends AppCompatActivity {
         delete_metro_station.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), DeleteMetroStation.class);
+                Intent i = new Intent(Delete.this, DeleteMetroStation.class);
                 startActivity(i);
             }
         });

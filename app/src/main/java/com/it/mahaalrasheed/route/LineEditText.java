@@ -8,10 +8,6 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
-/**
- * @author Phat ( Phillip ) H . VU <vuhongphat@hotmail.com>
- *
- */
 public class LineEditText extends EditText {
     private Rect mRect;
     private Paint mPaint;
@@ -50,7 +46,6 @@ public class LineEditText extends EditText {
             baseline += getLineHeight();
         }
         super.onDraw(canvas);
-        //
     }
 }
 
