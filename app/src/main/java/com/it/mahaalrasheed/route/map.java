@@ -29,7 +29,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -41,7 +40,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,29 +50,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import io.realm.Realm;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
-import com.google.android.gms.maps.model.Marker;
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
+
 
 
 
@@ -98,7 +83,6 @@ public class map extends AppCompatActivity
 
 
     private Polyline mMutablePolyline;
-
     private Polyline mClickablePolyline;
 
 
@@ -159,9 +143,7 @@ public class map extends AppCompatActivity
 
         DisplayMap();
         RetrieveNotifID();
-
         testroute.link();
-
         PlotStation();
 
         spots = new HashMap<>();
@@ -201,7 +183,6 @@ public class map extends AppCompatActivity
                 to.setText(Locationname);
                 testroute.route(24.84148388, 46.71737999, 24.96215255, 46.70097149);
                 mViewPager.getLayoutParams().height = 300;
-       //       PlotStation(testroute.lineCoorAstar);
                 PlotLine(testroute.lineCoorBFS);
                 testroute.lineCoorBFS= new ArrayList<LatLng>();
 
@@ -305,8 +286,6 @@ public class map extends AppCompatActivity
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(lat, lng))
                 .snippet("Lat:" + location.getLatitude() + "Lng:" + location.getLongitude()));
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16));
-
 
 
     }
@@ -482,11 +461,8 @@ public class map extends AppCompatActivity
                 realm.commitTransaction();
                 myMenu.findItem(R.id.notifi).setEnabled(false);
                 myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
-
             }
-
         }
-
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -592,21 +568,9 @@ public class map extends AppCompatActivity
         List<Notification> itemNot =realm.allObjects(Notification.class);
 
         //store all returned content from realm
-        /*int[] titles=new int[itemNot.size()];
-        int l=-1;
-        for(int i=0; i<itemNot.size();i++){
-            titles[i]=itemNot.get(i).getID();
-            l=i;
-        }
-          if(l!=-1)
-              notifID=titles[l];*/
-
         if(itemNot.size() != 0)
             notifID = itemNot.get(0).getID();
-
-        RetrieveNotif(notifID);
-
-
+            RetrieveNotif(notifID);
     }
 
 
@@ -760,8 +724,6 @@ public class map extends AppCompatActivity
             }
         });
 
-
-
         googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
@@ -772,15 +734,9 @@ public class map extends AppCompatActivity
 
                 Toast.makeText(getApplicationContext(),latat+"  and "+longt, Toast.LENGTH_SHORT).show();
 
-
             }
         });  //end on click
-
-
-
     }
-
-
 }
 
 
