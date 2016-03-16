@@ -78,7 +78,7 @@ public class map extends AppCompatActivity
 
     double latat=0, longt=0;
     public GoogleMap map;
-
+//
     private ViewGroup infoWindow;
     private Button infoButton;
     private Button infoButton1;
