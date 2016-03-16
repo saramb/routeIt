@@ -5,7 +5,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.LevelListDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -36,6 +39,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -84,7 +88,7 @@ public class map extends AppCompatActivity
     public static final String ROOT_URL = "http://192.168.1.58/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
-    double latat, longt;
+    double latat=0, longt=0;
     public GoogleMap map;
 
     private ViewGroup infoWindow;
@@ -162,7 +166,7 @@ public class map extends AppCompatActivity
 
         testroute.link();
 
-        PlotStation();
+        //PlotStation();
 
         spots = new HashMap<>();
 
@@ -190,7 +194,7 @@ public class map extends AppCompatActivity
         lat = getIntent().getDoubleExtra("lat", 0);
         Locationname = getIntent().getStringExtra("name");
 
-        Toast.makeText(map.this, page, Toast.LENGTH_LONG).show();
+       Toast.makeText(map.this, page, Toast.LENGTH_LONG).show();
         from.setText(fromname);
 
         if (page != null) {
@@ -312,9 +316,15 @@ public class map extends AppCompatActivity
     }
 
 
-    private void PlotStation(){
+    private void PlotStation(CameraPosition arg0){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
+        map.clear(); //to clear all markers before
+        if(latat !=0 && longt !=0){
+        LatLng update = new LatLng(latat,longt);
+        map.addMarker(new MarkerOptions().position(update));}
 
+
+if(arg0.zoom>=14){
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(ROOT_URL) //Setting the Root URL
@@ -365,6 +375,7 @@ public class map extends AppCompatActivity
                                         .title("Title")
                                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_metro)));
                                 spots.put(marker, SPOTS_ARRAY[k]);
+
                             }
 
                         } catch (IOException e) {
@@ -377,9 +388,10 @@ public class map extends AppCompatActivity
                     public void failure(RetrofitError error) {
                         //If any error occurred displaying the error as toast
                         Toast.makeText(map.this, error.toString(), Toast.LENGTH_LONG).show();
+
                     }
                 }
-        );
+        );}//end if
     }
 
     private void PlotLine( ArrayList<LatLng> lineCoor) {
@@ -555,7 +567,7 @@ public class map extends AppCompatActivity
                             output = reader.readLine();
 
 
-                            Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
+                         //   Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
 
                             if (!output.equals("NULL")) {
                                 //Check if there is an output from server
@@ -679,9 +691,9 @@ public class map extends AppCompatActivity
         map = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(24.96215255,46.70097149);
+       // LatLng sydney = new LatLng(24.96215255,46.70097149);
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10));
+        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10));
 
 
 
@@ -770,14 +782,25 @@ public class map extends AppCompatActivity
                 latat = latLng.latitude;
                 longt = latLng.longitude;
 
-                Toast.makeText(getApplicationContext(),latat+"  and "+longt, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), latat + "  and " + longt, Toast.LENGTH_SHORT).show();
 
 
             }
         });  //end on click
 
 
+        final CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(24.96215255,46.70097149)).zoom(15).build();
 
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+
+            @Override
+            public void onCameraChange(CameraPosition arg0) {
+
+                PlotStation(arg0);
+            }
+        });
     }
 
 
