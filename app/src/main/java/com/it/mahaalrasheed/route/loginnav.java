@@ -31,6 +31,7 @@ public class loginnav extends AppCompatActivity
     private String ROOT_URL = map.ROOT_URL;
     EditText username , pass;
     TextView wrong;
+    Button login;
 
 
     @Override
@@ -39,7 +40,7 @@ public class loginnav extends AppCompatActivity
         setContentView(R.layout.activity_loginnav);
         username =(EditText) findViewById(R.id.username);
         pass =(EditText) findViewById(R.id.pass);
-        Button login = (Button) findViewById(R.id.button);
+        login = (Button) findViewById(R.id.button);
         wrong=(TextView)findViewById(R.id.textView31);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -53,7 +54,6 @@ public class loginnav extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,14 +74,10 @@ public class loginnav extends AppCompatActivity
                     else
                         pass.setError(null);
                 }
-
                 else{
-
                     username.setError(null);
                     pass.setError(null);
-
                 }
-
                 if(!(username.getText().toString().equals("")||pass.getText().toString().equals("")))
                     login();
 
@@ -105,7 +101,6 @@ public class loginnav extends AppCompatActivity
                 //Passing the values by getting it from editTexts
                 username.getText().toString(),
                 pass.getText().toString(),
-
 
                 //Creating an anonymous callback
                 new Callback<Response>() {

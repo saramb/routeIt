@@ -1,7 +1,5 @@
 package com.it.mahaalrasheed.route;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
@@ -22,11 +20,8 @@ public class testroute {
     static ArrayList<LatLng> lineCoorAstar = new ArrayList<LatLng>();
     static ArrayList<LatLng> lineCoorBFS = new ArrayList<LatLng>();
     static ArrayList<LatLng> lineCoorDFS = new ArrayList<LatLng>();
-
-
     static String  fromId , toId, withen;
     static String fromCoorX,toCoorX,fromCoorY,toCoorY,distanceTo,distanceFrom;
-    static  String finalPath="";
     static final String [][] Mline1 = new String [29][29];
     static final String [][] Mline2 = new String [13][13];
     static final String [][] Mline3 = new String [25][25];
@@ -41,11 +36,11 @@ public class testroute {
     static final String [][] Bline2_6 = new String [32][32];
     static final String [][] Bline2_7 = new String [70][70];
     static final String [][] Bline2_8 = new String [35][35];
-    static final  String [][] Bline2_9= new String [73][73];
+    static final String [][] Bline2_9= new String [73][73];
     static final String [][] Bline2_10 = new String [69][69];
-    static final  String [][] Bline3_1 = new String [7][7];
+    static final String [][] Bline3_1 = new String [7][7];
     static final String [][] Bline3_2 = new String [10][10];
-    static final  String [][] Bline3_3 = new String [4][4];
+    static final String [][] Bline3_3 = new String [4][4];
     static final String [][] Bline3_4 = new String [5][5];
     static final String [][] Bline3_5 = new String [10][10];
     static final String [][] Bline3_6 = new String [12][12];
@@ -59,13 +54,10 @@ public class testroute {
     static String AstarcoorPath, BFScoorPath;
 
     public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2){
-        //Here we will handle the http request to retrieve Metro coordinates from mysql db
-link();
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(ROOT_URL) //Setting the Root URL
                 .build(); //Finally building the adapter
-
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
         //Defining the method PlotStation of our interface
@@ -91,7 +83,7 @@ link();
 
                             //Reading the output in the string
                             output = reader.readLine();
-                            Log.d("output", output + "");
+
                             fromId = output.substring(0, output.indexOf("/"));
                             output = output.substring(output.indexOf("/") + 1);
                             fromCoorX = output.substring(0, output.indexOf("/"));
@@ -107,14 +99,6 @@ link();
                             toCoorY = output.substring(0, output.indexOf("/"));
                             output = output.substring(output.indexOf("/") + 1);
                             distanceTo = output.substring(0);
-                            //
-
-                            Log.d("output", fromId + "");
-                            Log.d("output", toId + "");
-                            Log.d("output", fromCoorX + "");
-                            Log.d("output", fromCoorY + "");
-                            Log.d("output", toCoorX + "");
-                            Log.d("output", toCoorY + "");
 
 /*
                           //AStar Algorithm
@@ -126,27 +110,23 @@ link();
 
                             pathCoordinates(1,AstarcoorPath, AstarPath);
 */
-                            //AStar Algorithm
+                            //bfs Algorithm
 
                             String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                             BFSPath = BFS.substring(0,BFS.indexOf('%'));
                             BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
-                            Log.d("BFS:", BFSPath + "");
-                            Log.d("BFScoor:", BFScoorPath + "");
-                            pathCoordinates(2,BFScoorPath,BFSPath);
-
-
+                            pathCoordinates(2, BFScoorPath, BFSPath);
+                            PlaceholderFragment.calcTime(BFSPath);
+                            PlaceholderFragment.newInstance(1);
 
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
                         //If any error occurred displaying the error as toast
-
                     }
                 }
         );
@@ -187,18 +167,13 @@ link();
 
                             boolean flag = true;
                             while (flag) {
-                                fromId = output.substring(0, output.indexOf("/"));
 
+                                fromId = output.substring(0, output.indexOf("/"));
                                 output = output.substring(output.indexOf("/") + 1);
                                 toId = output.substring(0, output.indexOf("/"));
-
-
                                 output = output.substring(output.indexOf("/") + 1);
                                 withen = output.substring(0, output.indexOf("/"));
-
                                 output = output.substring(output.indexOf("/") + 1);
-
-
                                 fromCoorX = output.substring(0, output.indexOf("/"));
                                 output = output.substring(output.indexOf("/") + 1);
                                 fromCoorY = output.substring(0, output.indexOf("/"));
@@ -210,7 +185,6 @@ link();
                                 if (output.length() == 0) {
                                     flag = false;
                                 }
-
 
                                 String firstType = fromId.charAt(0) + "";
                                 String secondType = toId.charAt(0) + "";
@@ -224,9 +198,6 @@ link();
                                 int station2 = Integer.parseInt(s2);
                                 station2 = station2 - 1;
 
-
-                                //  String StStationFrom = fromId.substring(fromId.indexOf(".", 2) + 1, fromId.indexOf(".", 3));
-                                //  String StStationTo = toId.substring(toId.indexOf(".", 2) + 1, toId.indexOf(".", 3));
                                 String StStationFrom = fromId.charAt(4) + "";
 
                                 if (fromId.charAt(5) != '.')
@@ -275,80 +246,19 @@ link();
 
                             }//while
 
-
-                            printt(Mline1);
-                            Log.d("Matrix M2 :", "=================");
-                            printt(Mline2);
-                            Log.d("Matrix M3:", "=================");
-                            printt(Mline3);
-                            Log.d("Matrix M4:", "=================");
-                            printt(Mline4);
-                            Log.d("Matrix M5:", "=================");
-                            printt(Mline5);
-                            Log.d("Matrix M6:", "=================");
-                            printt(Mline6);
-                            Log.d("Matrix B2_1:", "=================");
-                            printt(Bline2_1);
-                            Log.d("Matrix B2_2:", "=================");
-                            printt(Bline2_2);
-                            Log.d("Matrix B2_3:", "=================");
-                            printt(Bline2_3);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline2_4);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline2_5);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline2_6);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline2_7);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline2_8);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline2_9);
-                            Log.d("Matrix B2_10:", "=================");
-                            printt(Bline2_10);
-                            Log.d("Matrix B3_1:", "=================");
-                            printt(Bline3_1);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline3_2);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline3_3);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline3_4);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline3_5);
-                            Log.d("Matrix :", "Bline3_6=================");
-                            printt(Bline3_6);
-                            Log.d("Matrix :", "Bline3_7=================");
-                            printt(Bline3_7);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline3_8);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline3_9);
-                            Log.d("Matrix B3_10:", "=================");
-                            printt(Bline3_10);
-                            Log.d("Matrix B4_1:", "=================");
-                            printt(Bline4_1);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline4_2);
-
-
                         } catch (IOException e) {
                             e.printStackTrace();
-
                         }
-
                     }
-
                     @Override
                     public void failure(RetrofitError error) {
                         //If any error occurred displaying the error as toast
-
                     }
                 }
         );
 
-         }
+    }
+
     public static void MetroLinks(int  firstline,int station1 ,int station2,String fromID,String toID ){
         if (firstline == 1) {
             Mline1[station1][station2] = toID;
@@ -642,20 +552,7 @@ link();
         }
     }
 
-    public static void printt(String[][] matrix){
-        String s="";
-        for(int i = 0 ; i < matrix.length ; i ++)
-        {s="[";
-            for(int j = 0 ; j < matrix.length;j++)
-
-                s=s+ matrix[i][j]+",";
-
-            Log.d("Matrix :", s+"]");
-        }
-    }//print
-
     public static void pathCoordinates(int type ,String coorPath, String Path){
-        Log.v("testroute", testroute.lineCoor.size() + "");
 
         String coordeinates = coorPath;
         boolean flag1 = true;
@@ -668,16 +565,12 @@ link();
                 coor = coordeinates.substring(0, coordeinates.indexOf("|"));
                 lineCoor.add(new LatLng(Double.parseDouble(coor.substring(0, coor.indexOf(":"))),Double.parseDouble(coor.substring(coor.indexOf(":") + 1))));
                 coordeinates = coordeinates.substring(coordeinates.indexOf("|") + 1);
-
             }
             else{
                 lineCoor.add(new LatLng(Double.parseDouble(coordeinates.substring(0, coordeinates.indexOf(":"))),Double.parseDouble(coordeinates.substring(coordeinates.indexOf(":") + 1))));
                 flag1 = false;
                 routeInfo.startRouteInfo(Path);
-                Log.v("type:", routeInfo.type.get(0) + "66");
-                Log.v("typezise:", routeInfo.type.size() + "88");
             }
-
         }
         if(type == 1)
             lineCoorAstar=lineCoor;
@@ -689,9 +582,5 @@ link();
             lineCoorDFS=lineCoor;
 
         lineCoor= new ArrayList<LatLng>();
-        Log.v("lineCoorAstar", testroute.lineCoorAstar.size() + "");
-        Log.v("BFS", testroute.lineCoorBFS+"");
-
-        Log.v("lineCoorsize:", lineCoor.size() + "");
     }
 }

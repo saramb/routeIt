@@ -3,13 +3,10 @@ package com.it.mahaalrasheed.route;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-/**
- * Created by shahadaziz on 26 ينا، 2016 م.
- */
+
 public class FavoriteClass extends RealmObject {
     @PrimaryKey
     private int id ;
-
     private double lng;
     private double lat;
     private String name;

@@ -1,15 +1,15 @@
 package com.it.mahaalrasheed.route;
 
 
-        import com.google.android.gms.maps.GoogleMap;
-        import com.google.android.gms.maps.model.Marker;
+import android.content.Context;
+import android.graphics.Point;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.RelativeLayout;
 
-        import android.content.Context;
-        import android.graphics.Point;
-        import android.util.AttributeSet;
-        import android.view.MotionEvent;
-        import android.view.View;
-        import android.widget.RelativeLayout;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
 
 public class MapWrapperLayout extends RelativeLayout {
     /**

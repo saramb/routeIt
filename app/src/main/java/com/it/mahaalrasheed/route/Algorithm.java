@@ -281,9 +281,6 @@ System.out.println(newStation.getName());
 
         }//end of BFS
 
-
-
-
     //--------------------------sort---------------------
 //sort in ascending order, to make it asc, chane (>) to (<)
     public static void sort (ArrayList <Station> x) {

@@ -31,18 +31,16 @@ public class EnterMetroStation extends AppCompatActivity {
     List<String> spin = new ArrayList<String>();
     List<String> spinPosition = new ArrayList<String>();
     Spinner Position;
-
-
-    String adminId;
+    Button enter;
+    TextView error , error2;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_metro_station);
-        spin.add(" ");
 
-        Button enter=(Button)findViewById(R.id.button18);
+        enter=(Button)findViewById(R.id.button18);
         MetroLine=(Spinner)findViewById(R.id.MetroLine);
         station =(EditText) findViewById(R.id.metroId);
         name =(EditText) findViewById(R.id.metroName);
@@ -52,23 +50,19 @@ public class EnterMetroStation extends AppCompatActivity {
         final TextView error2=(TextView)findViewById(R.id.textView36);
         Position=(Spinner)findViewById(R.id.spinner7);
 
-
         spinPosition.add(" ");
         spinPosition.add("At the begining");
         spinPosition.add("At the end");
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(EnterMetroStation.this,android.R.layout.simple_dropdown_item_1line, spinPosition);
-
         Position.setAdapter(adapter);
 
-
         Retrieve();
-
 
         enter.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+
                 s = station.getText().toString();
                 n = name.getText().toString();
                 c = coor.getText().toString();
@@ -88,8 +82,6 @@ public class EnterMetroStation extends AppCompatActivity {
                         error2.setError("Please select the position of the station");
                     }else
                         error2.setError(null);
-
-
 
                     if (station.getText().toString().equals("")) {
                         station.setError("Please fill station ID");
@@ -177,7 +169,6 @@ public class EnterMetroStation extends AppCompatActivity {
 
                             //Reading the output in the string
                             output = reader.readLine();
-
                             Toast.makeText(EnterMetroStation.this, output, Toast.LENGTH_LONG).show();
 
 
@@ -211,9 +202,6 @@ public class EnterMetroStation extends AppCompatActivity {
 
                 //Passing the values by getting it from editTexts
                 "1",
-
-
-
                 //Creating an anonymous callback
                 new Callback<Response>() {
                     @Override
@@ -231,6 +219,8 @@ public class EnterMetroStation extends AppCompatActivity {
 
                             //Reading the output in the string
                             output = reader.readLine();
+
+                            spin.add(" ");
 
                             while(!output.equals("")) {
                                 //Toast.makeText(EnterMetroStation.this, output, Toast.LENGTH_LONG).show();

@@ -1,17 +1,11 @@
 package com.it.mahaalrasheed.route;
 
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,18 +19,20 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class NewPost extends AppCompatActivity {
+
     private String ROOT_URL = map.ROOT_URL;
-      LineEditText message;
+    LineEditText message;
+    Button enter;
+    TextView error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
-        Button enter=(Button)findViewById(R.id.button13);
+         enter=(Button)findViewById(R.id.button13);
          message=(LineEditText)findViewById(R.id.message);
-         final TextView error=(TextView)findViewById(R.id.textView16);
-
+         error=(TextView)findViewById(R.id.textView16);
 
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,26 +41,20 @@ public class NewPost extends AppCompatActivity {
                     // error.requestFocus();
                     error.setText("The field is empty, Please enter yout notification ");
                     error.setError("");
-//tt
+
                 } else {
                     error.setError(null);
                     error.setText("");
-
 
                     new AlertDialog.Builder(NewPost.this)
                             .setMessage("are you sure you want to continue post process ?")
                             .setPositiveButton("Post", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    String n, c, coo;
-                                    n = message.getText().toString();
-                                    Intent intent = new Intent();
-                                    PendingIntent pIntent = PendingIntent.getActivity(NewPost.this, 0, intent, 0);
+                                    /*Intent intent = new Intent();
+                                    PendingIntent pIntent = PendingIntent.getActivity(NewPost.this, 0, intent, 0);*///مهم نشوفها
                                     AddNotif();
                                     finish();
-                                    Toast.makeText(getApplicationContext(), "your notification posted successfully", Toast.LENGTH_LONG).show();
-
-
                                 }
                             })
 
@@ -92,12 +82,7 @@ public class NewPost extends AppCompatActivity {
 
         //Defining the method insertuser of our interface
         api.AddNotif(
-
-
                 message.getText().toString(),
-
-
-
                 //Creating an anonymous callback
                 new Callback<Response>() {
                     @Override

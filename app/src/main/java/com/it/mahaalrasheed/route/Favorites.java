@@ -25,7 +25,6 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 import java.util.List;
-
 import io.realm.Realm;
 
 
@@ -37,8 +36,10 @@ public class Favorites extends AppCompatActivity
     FavoriteClass F;
     List<FavoriteClass> item;
     SwipeMenuListView lv;
-    int id;
+    public static int id;
     int iddelete;
+    ArrayAdapter addapter;
+    String[] array;
 
 
     @Override
@@ -195,8 +196,6 @@ public class Favorites extends AppCompatActivity
         } else if (id == R.id.nav_manage) {  //about us
             Intent intent = new Intent (this, aboutusnav.class);
             startActivity(intent);
-
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -213,11 +212,11 @@ public class Favorites extends AppCompatActivity
     public void update(){
         relam = Realm.getInstance(getApplicationContext());
         item = relam.allObjects(FavoriteClass.class);
-        String[] array = new String[item.size()];
+        array = new String[item.size()];
         for (int i = 0; i < item.size(); i++) {
             array[i] = item.get(i).getName();}
 
-        ArrayAdapter addapter = new ArrayAdapter(Favorites.this, android.R.layout.simple_list_item_1,array);
+        addapter = new ArrayAdapter(Favorites.this, android.R.layout.simple_list_item_1,array);
         lv.setAdapter(addapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -227,8 +226,6 @@ public class Favorites extends AppCompatActivity
                 n.putExtra("lat", F.getLat());
                 n.putExtra("lng",F.getLng());
                 startActivity(n);
-
-
             }
         });
 

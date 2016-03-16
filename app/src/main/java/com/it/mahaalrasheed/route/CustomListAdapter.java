@@ -18,7 +18,6 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     public CustomListAdapter(Activity context, String[] itemname, Integer[] imgid) {
         super(context, R.layout.mylist, itemname);
         // TODO Auto-generated constructor stub
-
         this.context=context;
         this.itemname=itemname;
         this.imgid=imgid;
@@ -63,7 +62,6 @@ public class CustomListAdapter extends ArrayAdapter<String> {
             extratxt.setText("You have reached your destination");
         else
         extratxt.setText("Go from " + itemname[position] + " station and then to " + itemname[position + 1]);
-
 
         return rowView;
 

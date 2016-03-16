@@ -3,6 +3,7 @@ package com.it.mahaalrasheed.route;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -29,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -37,7 +39,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -63,22 +67,6 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
-import com.google.android.gms.maps.model.Marker;
-import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 
 
@@ -100,17 +88,13 @@ public class map extends AppCompatActivity
     private OnInfoWindowElemTouchListener infoButtonListener1;
     private OnInfoWindowElemTouchListener infoButtonListener2;
 
-
     private Polyline mMutablePolyline;
-
-    private Polyline mClickablePolyline;
-
-
-
+    private static Polyline mClickablePolyline;
+    
 
     static GoogleMap googleMap;
-    double lng;
-    double lat;
+    static double  Tolng,Fromlng,lng;
+    static double Tolat, Fromlat,lat;
     Button from, to, show;
     Location location;
     MapFragment fm;
@@ -130,6 +114,12 @@ public class map extends AppCompatActivity
 
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    public static String walk = "";
+
+    Realm relam;
+    FavoriteClass F;
+    int id;
 
 
 
@@ -163,7 +153,6 @@ public class map extends AppCompatActivity
 
         DisplayMap();
         RetrieveNotifID();
-
         testroute.link();
 
         //PlotStation();
@@ -190,9 +179,8 @@ public class map extends AppCompatActivity
         });
 
         page = getIntent().getStringExtra("page");
-        lng = getIntent().getDoubleExtra("lng", 0);
-        lat = getIntent().getDoubleExtra("lat", 0);
         Locationname = getIntent().getStringExtra("name");
+        Toast.makeText(map.this, page, Toast.LENGTH_LONG).show();
 
        Toast.makeText(map.this, page, Toast.LENGTH_LONG).show();
         from.setText(fromname);
@@ -200,17 +188,34 @@ public class map extends AppCompatActivity
         if (page != null) {
             if (page.equals("from")) {
                 fromname = Locationname;
+                Fromlng = getIntent().getDoubleExtra("lng", 0);
+                Fromlat = getIntent().getDoubleExtra("lat", 0);
                 from.setText(fromname);
             } else if (page.equals("to")) {
+                from.setText(fromname);
                 to.setText(Locationname);
-                testroute.route(24.84148388, 46.71737999, 24.96215255, 46.70097149);
-                mViewPager.getLayoutParams().height = 300;
-       //       PlotStation(testroute.lineCoorAstar);
-                PlotLine(testroute.lineCoorBFS);
-                testroute.lineCoorBFS= new ArrayList<LatLng>();
+                Tolng = getIntent().getDoubleExtra("lng", 0);
+                Tolat = getIntent().getDoubleExtra("lat", 0);
+                if (Fromlat == 0 || Fromlng == 0) {
+                    from.setText("Current Location");
+                    Fromlng = lng;
+                    Fromlat = lat;}
+                Log.d("test", Fromlat + "|" + Fromlng + "|" + Tolat + "|" + Tolng + "|");
+                testroute.route(Fromlat, Fromlng, Tolat, Tolng);
+                /*double sum = Double.parseDouble(testroute.distanceFrom) + Double.parseDouble(testroute.distanceTo);
+                double time = 15*(sum/15);
+                if (time > 30 )
+                    walk = "You need a car to reach the first station";
+                else
+                    walk = "You need to walk "+time+" minutes to reach the first station";*/
 
+
+
+                mViewPager.getLayoutParams().height = 300;
+                //         PlotStation(testroute.lineCoorAstar);
+               // PlotLine(testroute.lineCoorBFS);
+                }
             }
-        }
         onMapReady(googleMap);
     }
 
@@ -274,6 +279,8 @@ public class map extends AppCompatActivity
             LocationListener locationListener = new LocationListener() {
                 public void onLocationChanged(Location location) {
                     // redraw the marker when get location update.
+                    lat = location.getLatitude();
+                    lng = location.getLongitude();
                     //drawMarker(location);
                 }
 
@@ -309,8 +316,6 @@ public class map extends AppCompatActivity
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(lat, lng))
                 .snippet("Lat:" + location.getLatitude() + "Lng:" + location.getLongitude()));
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16));
-
 
 
     }
@@ -388,13 +393,12 @@ if(arg0.zoom>=14){
                     public void failure(RetrofitError error) {
                         //If any error occurred displaying the error as toast
                         Toast.makeText(map.this, error.toString(), Toast.LENGTH_LONG).show();
-
                     }
                 }
         );}//end if
     }
 
-    private void PlotLine( ArrayList<LatLng> lineCoor) {
+    public static void PlotLine(ArrayList<LatLng> lineCoor) {
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
 
 
@@ -494,11 +498,8 @@ if(arg0.zoom>=14){
                 realm.commitTransaction();
                 myMenu.findItem(R.id.notifi).setEnabled(false);
                 myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
-
             }
-
         }
-
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -604,28 +605,14 @@ if(arg0.zoom>=14){
         List<Notification> itemNot =realm.allObjects(Notification.class);
 
         //store all returned content from realm
-        /*int[] titles=new int[itemNot.size()];
-        int l=-1;
-        for(int i=0; i<itemNot.size();i++){
-            titles[i]=itemNot.get(i).getID();
-            l=i;
-        }
-          if(l!=-1)
-              notifID=titles[l];*/
-
         if(itemNot.size() != 0)
             notifID = itemNot.get(0).getID();
-
-        RetrieveNotif(notifID);
-
-
+            RetrieveNotif(notifID);
     }
 
 
 
-
-
-    private String getDirectionsUrl(LatLng origin,LatLng dest){
+    private static String getDirectionsUrl(LatLng origin, LatLng dest){
 
 // Origin of route
         String str_origin = "origin="+origin.latitude+","+origin.longitude;
@@ -691,9 +678,9 @@ if(arg0.zoom>=14){
         map = googleMap;
 
         // Add a marker in Sydney and move the camera
-       // LatLng sydney = new LatLng(24.96215255,46.70097149);
+        LatLng sydney = new LatLng(24.96215255,46.70097149);
 
-        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10));
 
 
 
@@ -720,6 +707,9 @@ if(arg0.zoom>=14){
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
                 // Here we can perform some action triggered after clicking the button
+                Fromlat= latat;
+                Fromlng = longt;
+                from.setText(latat + "," + longt);
                 Toast.makeText(getApplicationContext(), "from", Toast.LENGTH_SHORT).show();
             }
         };
@@ -731,6 +721,11 @@ if(arg0.zoom>=14){
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
                 // Here we can perform some action triggered after clicking the button
+                Tolat= latat;
+                Tolng = longt;
+                to.setText(latat + "," + longt);
+                mViewPager.getLayoutParams().height = 300;
+                testroute.route(Fromlat, Fromlng, Tolat, Tolng);
                 Toast.makeText(getApplicationContext(),"to", Toast.LENGTH_SHORT).show();
             }
         };
@@ -741,6 +736,17 @@ if(arg0.zoom>=14){
         {
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
+
+                F = new FavoriteClass();
+                F.setId((Favorites.id)++);
+                F.setLat(latat);
+                F.setLng(longt);
+                F.setName(latat+","+longt);
+
+                relam = Realm.getInstance(getApplicationContext());
+                relam.beginTransaction();
+                relam.copyToRealmOrUpdate(F);
+                relam.commitTransaction();
                 // Here we can perform some action triggered after clicking the button
                 Toast.makeText(getApplicationContext(),"fav.", Toast.LENGTH_SHORT).show();
             }
@@ -772,8 +778,6 @@ if(arg0.zoom>=14){
             }
         });
 
-
-
         googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
@@ -783,7 +787,6 @@ if(arg0.zoom>=14){
                 longt = latLng.longitude;
 
                 Toast.makeText(getApplicationContext(), latat + "  and " + longt, Toast.LENGTH_SHORT).show();
-
 
             }
         });  //end on click
@@ -802,8 +805,6 @@ if(arg0.zoom>=14){
             }
         });
     }
-
-
 }
 
 
@@ -840,7 +841,3 @@ if(arg0.zoom>=14){
 
 
  }
-
-
-
-

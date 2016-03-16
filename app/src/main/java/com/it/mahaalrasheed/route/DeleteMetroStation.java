@@ -27,24 +27,28 @@ public class DeleteMetroStation extends AppCompatActivity {
     private String ROOT_URL = map.ROOT_URL;
     Spinner dropdown;
     List<String> spin = new ArrayList<String>();
+    Button delete;
+    TextView error;
+    String selected;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_metro_station);
-        spin.add("Please Select metro station ..");
 
-        Button delete=(Button)findViewById(R.id.button15);
+        delete=(Button)findViewById(R.id.button15);
         dropdown=(Spinner)findViewById(R.id.spinner3);
-        final TextView error=(TextView)findViewById(R.id.textView24);
+        error=(TextView)findViewById(R.id.textView24);
+
+        spin.add("Please Select metro station ..");
 
         Retrieve();
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selected = dropdown.getSelectedItem().toString();
+                selected = dropdown.getSelectedItem().toString();
 
                 if (selected.equals("Please Select metro station ..")) {
                     error.setError("Please select a value !");
@@ -58,9 +62,6 @@ public class DeleteMetroStation extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     DeleteMetroStation();
                                     finish();
-                                    Toast.makeText(getApplicationContext(), "your metro station deleted successfully", Toast.LENGTH_LONG).show();
-
-
                                 }
                             })
 
@@ -90,7 +91,7 @@ public class DeleteMetroStation extends AppCompatActivity {
         api.DeleteMetroStation(
 
                 //Passing the values by getting it from editTexts
-                dropdown.getSelectedItem().toString(),
+                selected,
 
                 //Creating an anonymous callback
                 new Callback<Response>() {
@@ -109,6 +110,7 @@ public class DeleteMetroStation extends AppCompatActivity {
 
                             //Reading the output in the string
                             output = reader.readLine();
+                            Toast.makeText(getApplicationContext(),output, Toast.LENGTH_LONG).show();
 
 
                         } catch (IOException e) {

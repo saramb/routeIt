@@ -11,10 +11,6 @@ public class Notification extends RealmObject {
     private int pk;
     private int ID;
 
-    public int getPk() {
-        return pk;
-    }
-
     public void setPk(int pk) {
         this.pk = pk;
     }

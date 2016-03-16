@@ -2,34 +2,35 @@ package com.it.mahaalrasheed.route;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-
 public class notif extends AppCompatActivity {
-    String id;
+    String id , content;
+    List<String> ArrContent;
+    int length;
+    ListView listView;
+    ArrayAdapter<String> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notif);
 
-
-
-        String content=getIntent().getExtras().getString("content");
-        List<String> ArrContent=new ArrayList<String>();
-         id="0";
-        int length  = content.length();
+        content=getIntent().getExtras().getString("content");
+        ArrContent=new ArrayList<String>();
+        id="0";
+        length = content.length();
 
         for(int i=0;i<length;i++) {
 
             if (content.indexOf("-") != -1 && content.indexOf("*") != -1 ) {
+
                 id = content.substring(0, content.indexOf("-"));
                 ArrContent.add(content.substring(content.indexOf("-") + 1, content.indexOf("*")));
 
@@ -41,26 +42,12 @@ public class notif extends AppCompatActivity {
 
         }
 
-        ListView listView= (ListView)findViewById(R.id.notifListView);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(notif.this,android.R.layout.simple_list_item_activated_1,ArrContent);
+        listView= (ListView)findViewById(R.id.notifListView);
+        adapter = new ArrayAdapter<String>(notif.this,android.R.layout.simple_list_item_activated_1,ArrContent);
         listView.setAdapter(adapter);
 
-
-       // int iid=Integer.parseInt(id);
         Intent intent=new Intent();
         intent.putExtra("id", id);
         setResult(Activity.RESULT_OK,intent);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-       /* Realm realm=Realm.getInstance(getApplicationContext());
-        Notification n=new Notification();
-        n.setID(Integer.parseInt(id));n.setPk(0);
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(n);
-        realm.commitTransaction();*/
-
     }
 }

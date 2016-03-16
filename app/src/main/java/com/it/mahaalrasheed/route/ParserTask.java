@@ -1,9 +1,7 @@
 package com.it.mahaalrasheed.route;
 
 
-/**
- * Created by mac on 3/6/16.
- */
+
 import android.graphics.Color;
 import android.os.AsyncTask;
 
@@ -17,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-//////////////////////////////////
 public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> > {
 
     // Parsing the data in non-ui thread

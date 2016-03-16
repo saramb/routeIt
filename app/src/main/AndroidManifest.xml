@@ -85,7 +85,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".path_Info" />
-        <activity android:name=".MapWrapperLayout"></activity>
     </application>
 
 </manifest>
