@@ -182,7 +182,7 @@ public class DeleteMetroStation extends AppCompatActivity {
 
                         //Displaying the output as a toast
                     }
-
+//
                     @Override
                     public void failure(RetrofitError error) {
                         //If any error occured displaying the error as toast
