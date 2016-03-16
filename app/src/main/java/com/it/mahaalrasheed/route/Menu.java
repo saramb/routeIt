@@ -24,7 +24,7 @@ public class Menu extends AppCompatActivity {
             public void onClick(View v) {
                 adminId= getIntent().getExtras().getString("AdminID");
                 Intent i =new Intent(getApplicationContext(),Enter.class);
-                i.putExtra("ID", adminId);
+                i.putExtra("AdminID", adminId);
                 startActivity(i);
             }
         });

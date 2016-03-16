@@ -11,6 +11,10 @@ public class Notification extends RealmObject {
     private int pk;
     private int ID;
 
+    public int getPk() {
+        return pk;
+    }
+
     public void setPk(int pk) {
         this.pk = pk;
     }
@@ -22,7 +26,6 @@ public class Notification extends RealmObject {
     public void setID(int ID) {
         this.ID = ID;
     }
-
 
 
 }

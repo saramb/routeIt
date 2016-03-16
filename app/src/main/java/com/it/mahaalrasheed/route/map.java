@@ -86,12 +86,11 @@ public class map extends AppCompatActivity
 
     private Polyline mMutablePolyline;
     private static Polyline mClickablePolyline;
-    
 
     static GoogleMap googleMap;
     static double  Tolng,Fromlng,lng;
     static double Tolat, Fromlat,lat;
-    Button from, to, show;
+    Button from, to;
     Location location;
     MapFragment fm;
     LocationManager locationManager;
@@ -99,9 +98,8 @@ public class map extends AppCompatActivity
     static int notifID;
     String notif="";
     Realm realm;
-    Notification notification;
     Menu myMenu;
-    private Map<Marker, MetroStation> spots;
+    private Map<Marker, MetroStation> spots = new HashMap<>();;
     private static MetroStation[] SPOTS_ARRAY;
     private BottomSheetBehavior mBottomSheetBehavior;
     ListView lv;
@@ -124,15 +122,6 @@ public class map extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.getLayoutParams().height = 0;
-
-
-        lv = (ListView) findViewById(R.id.list);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -142,20 +131,20 @@ public class map extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        page = "";
+
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.getLayoutParams().height = 0;
+
         lv = (ListView) findViewById(R.id.list);
-
-
+        from = (Button) findViewById(R.id.frombutton);
+        to = (Button) findViewById(R.id.tobutton);
 
         DisplayMap();
         RetrieveNotifID();
-        testroute.link();
         PlotStation();
-
-        spots = new HashMap<>();
-
-        from = (Button) findViewById(R.id.frombutton);
-        to = (Button) findViewById(R.id.tobutton);
 
         from.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,7 +164,6 @@ public class map extends AppCompatActivity
 
         page = getIntent().getStringExtra("page");
         Locationname = getIntent().getStringExtra("name");
-        Toast.makeText(map.this, page, Toast.LENGTH_LONG).show();
 
         if (page != null) {
             if (page.equals("from")) {
@@ -192,8 +180,7 @@ public class map extends AppCompatActivity
                     from.setText("Current Location");
                     Fromlng = lng;
                     Fromlat = lat;}
-                Log.d("test", Fromlat + "|" + Fromlng + "|" + Tolat + "|" + Tolng + "|");
-                testroute.route(Fromlat, Fromlng, Tolat, Tolng);
+                testroute.route(24.895652, 46.603078,24.63184062 ,46.72096451);
                 /*double sum = Double.parseDouble(testroute.distanceFrom) + Double.parseDouble(testroute.distanceTo);
                 double time = 15*(sum/15);
                 if (time > 30 )
@@ -201,11 +188,8 @@ public class map extends AppCompatActivity
                 else
                     walk = "You need to walk "+time+" minutes to reach the first station";*/
 
-
-
                 mViewPager.getLayoutParams().height = 300;
-                //         PlotStation(testroute.lineCoorAstar);
-               // PlotLine(testroute.lineCoorBFS);
+                //PlotLine(testroute.lineCoorBFS);
                 }
             }
         onMapReady(googleMap);
@@ -229,7 +213,6 @@ public class map extends AppCompatActivity
 
         // Showing status
         if (status != ConnectionResult.SUCCESS) { // Google Play Services are not available
-
             int requestCode = 10;
             Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, this, requestCode);
             dialog.show();
@@ -254,7 +237,6 @@ public class map extends AppCompatActivity
             // Getiting the name of the best provider
             provider = locationManager.getBestProvider(criteria, true);
 
-
             // Getting Current Location
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -273,7 +255,7 @@ public class map extends AppCompatActivity
                     // redraw the marker when get location update.
                     lat = location.getLatitude();
                     lng = location.getLongitude();
-                    //drawMarker(location);
+                    drawMarker(lat,lng);
                 }
 
                 @Override
@@ -291,11 +273,6 @@ public class map extends AppCompatActivity
 
                 }
             };
-
-            if (location != null) {
-                //PLACE THE INITIAL MARKER
-                drawMarker(location.getLatitude(),location.getLongitude());
-            }
             locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
 
         } //!!!!!!!!!!Map part end
@@ -303,13 +280,9 @@ public class map extends AppCompatActivity
 
     private void drawMarker(double latitude, double longitude) {
         googleMap.clear();
-        lat= location.getLatitude();
-        lng= location.getLongitude();
         googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(lat, lng))
+                .position(new LatLng(latitude, longitude))
                 .snippet("Lat:" + location.getLatitude() + "Lng:" + location.getLongitude()));
-
-
     }
 
 
@@ -353,10 +326,8 @@ public class map extends AppCompatActivity
                                 String XCoordinates = output.substring(0, output.indexOf(":"));
                                 String YCoordinates = output.substring(output.indexOf(":") + 1, output.indexOf("%"));
                                 output = output.substring(output.indexOf("%") + 1);
-
-                                lat = Double.parseDouble(XCoordinates);
-                                lng = Double.parseDouble(YCoordinates);
-
+                                double lat = Double.parseDouble(XCoordinates);
+                                double lng = Double.parseDouble(YCoordinates);
                                 SPOTS_ARRAY[i++] = new MetroStation(new LatLng(lat, lng));
                             }
 
@@ -707,7 +678,7 @@ public class map extends AppCompatActivity
                 Tolng = longt;
                 to.setText(latat + "," + longt);
                 mViewPager.getLayoutParams().height = 300;
-                testroute.route(Fromlat, Fromlng, Tolat, Tolng);
+              //  testroute.route(Fromlat, Fromlng, Tolat, Tolng);
                 Toast.makeText(getApplicationContext(),"to", Toast.LENGTH_SHORT).show();
             }
         };
