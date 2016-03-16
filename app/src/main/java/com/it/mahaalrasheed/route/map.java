@@ -6,7 +6,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.LevelListDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -40,6 +43,7 @@ import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -72,9 +76,9 @@ public class map extends AppCompatActivity
     public static final String ROOT_URL = "http://192.168.1.58/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
-    double latat, longt;
+    double latat=0, longt=0;
     public GoogleMap map;
-
+//
     private ViewGroup infoWindow;
     private Button infoButton;
     private Button infoButton1;
@@ -144,7 +148,13 @@ public class map extends AppCompatActivity
 
         DisplayMap();
         RetrieveNotifID();
+        testroute.link();
         PlotStation();
+
+        spots = new HashMap<>();
+
+        from = (Button) findViewById(R.id.frombutton);
+        to = (Button) findViewById(R.id.tobutton);
 
         from.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,7 +199,8 @@ public class map extends AppCompatActivity
                     walk = "You need to walk "+time+" minutes to reach the first station";*/
 
                 mViewPager.getLayoutParams().height = 300;
-                //PlotLine(testroute.lineCoorBFS);
+                //         PlotStation(testroute.lineCoorAstar);
+               // PlotLine(testroute.lineCoorBFS);
                 }
             }
         onMapReady(googleMap);
@@ -286,9 +297,15 @@ public class map extends AppCompatActivity
     }
 
 
-    private void PlotStation(){
+    private void PlotStation(CameraPosition arg0){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
+        map.clear(); //to clear all markers before
+        if(latat !=0 && longt !=0){
+        LatLng update = new LatLng(latat,longt);
+        map.addMarker(new MarkerOptions().position(update));}
 
+
+if(arg0.zoom>=14){
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(ROOT_URL) //Setting the Root URL
@@ -337,6 +354,7 @@ public class map extends AppCompatActivity
                                         .title("Title")
                                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_metro)));
                                 spots.put(marker, SPOTS_ARRAY[k]);
+
                             }
 
                         } catch (IOException e) {
@@ -351,7 +369,7 @@ public class map extends AppCompatActivity
                         Toast.makeText(map.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
                 }
-        );
+        );}//end if
     }
 
     public static void PlotLine(ArrayList<LatLng> lineCoor) {
@@ -522,6 +540,9 @@ public class map extends AppCompatActivity
 
                             //Reading the output in the string
                             output = reader.readLine();
+
+
+                         //   Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
 
                             if (!output.equals("NULL")) {
                                 //Check if there is an output from server
@@ -739,10 +760,24 @@ public class map extends AppCompatActivity
                 latat = latLng.latitude;
                 longt = latLng.longitude;
 
-                Toast.makeText(getApplicationContext(),latat+"  and "+longt, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), latat + "  and " + longt, Toast.LENGTH_SHORT).show();
 
             }
         });  //end on click
+
+
+        final CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(24.96215255,46.70097149)).zoom(15).build();
+
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+
+            @Override
+            public void onCameraChange(CameraPosition arg0) {
+
+                PlotStation(arg0);
+            }
+        });
     }
 }
 

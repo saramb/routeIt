@@ -230,7 +230,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="X Coordinate:"
+                android:text="Y Coordinate:"
                 android:id="@+id/textView30" />
 
             <EditText

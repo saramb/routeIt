@@ -23,6 +23,8 @@ public class Notification extends RealmObject {
         return ID;
     }
 
+    public int getPk() {return pk;}
+
     public void setID(int ID) {
         this.ID = ID;
     }
