@@ -298,7 +298,7 @@ public class testroute {
                             printt(Bline3_1);
                             Log.d("Matrix :", "=================");
                             printt(Bline3_2);
-                            Log.d("Matrix :", "=================");
+                            Log.d("Matrix :", "=====================");
                             printt(Bline3_3);
                             Log.d("Matrix :", "=================");
                             printt(Bline3_4);
