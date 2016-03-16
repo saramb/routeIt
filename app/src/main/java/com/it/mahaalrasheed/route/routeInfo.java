@@ -1,7 +1,5 @@
 package com.it.mahaalrasheed.route;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,7 +26,6 @@ public class routeInfo {
 
     public static void startRouteInfo(String Path){
 
-
         String path = Path ;
         boolean flag = true;
 
@@ -42,9 +39,6 @@ public class routeInfo {
             path = path.substring(path.indexOf("|") + 1);
             type.add(number);
             stationName();}
-
-        Log.d("path", count+"");
-
     }
 
     static  public void stationName(){
@@ -77,10 +71,8 @@ public class routeInfo {
                             //Reading the output in the string
                             output = reader.readLine();
 
-                            Log.d("count", count+"");
                             stationName[count]=output+"";
                             Number[count]=number;
-                            Log.d("path", stationName[count]);
                             linenumber[count++]= Integer.parseInt (ID.charAt(2)+"");
 
 

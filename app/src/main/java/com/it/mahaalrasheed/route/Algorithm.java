@@ -1,13 +1,10 @@
 package com.it.mahaalrasheed.route;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
-/**
- * Created by RawanTurki on 21-Feb-16.
- */
 public class Algorithm {
-
-
 
 //***  Decalring variables  ***
 
@@ -26,13 +23,6 @@ public class Algorithm {
     static Station newStation;
 
 
-    public static void main (String[] args)
-    {
-
-    }
-
-
-
     //--------------------------Astar algorithm---------------------
 //Perform A star algorithm
     public static String Astar(String from, String to,  double StartX,double StartY, double GoalX, double GoalY){
@@ -48,13 +38,8 @@ public class Algorithm {
         double startX= StartX;
         double startY= StartY;
 
-
-
-
         //Extraction of Source station
         Extraction(from,startX,startY);
-
-
 
         while (true) {
 
@@ -64,6 +49,7 @@ public class Algorithm {
 
             //if current station is the detination station
             if (newStation.getName().equals(to)) {
+                Log.d("BFSpath",path(newStation)+"%"+coorPath(newStation));
                 return path(newStation)+"%"+coorPath(newStation);
             }
 
@@ -98,7 +84,7 @@ public class Algorithm {
                         String externals = TempMatrix[newStation.getStationNumber()-1][i];
                         int count = countCommas (externals);
                         //2.1)if the station is in different street of the current station
-                        if( externals.indexOf(",")== -1){
+                        if( externals.indexOf(",") < 0){
                             if(newStation.getStreet()==0)
                                 Station = new Station ( capacity[newStation.getLine()-1],newStation.getLine(),Integer.parseInt(externals.substring(6, externals.indexOf("|"))),newStation, externals.substring(externals.indexOf("|")+1));
                             else
@@ -119,7 +105,7 @@ public class Algorithm {
                                 int type=Integer.parseInt (child.charAt(0)+"");
                                 int l = Integer.parseInt (child.charAt(2)+"");
 
-                                if(externals.indexOf(",") == -1)  {
+                                if(externals.indexOf(",") < 0)  {
 
                                    if(type==1)
                                        Station = new Station ( capacity[l-1],l,Integer.parseInt (child.substring(child.indexOf(".",4)+1)),newStation,externals.substring(externals.indexOf("|")+1) );
@@ -163,7 +149,6 @@ public class Algorithm {
 
         public static String BFS(String from, String to,  double StartX,double StartY, double GoalX, double GoalY){
 
-
             // explored arraylist to mark which vertices have been visited while doing the A*
             explored =new ArrayList<String>();
             // frontier arraylist to mark which vertices have been visited while doing the A*
@@ -182,15 +167,13 @@ public class Algorithm {
             //Extraction of Source station
             Extraction(from,startX,startY);
 
-
             while (true) {
                 //remove from the head of the frontier
                 removeFromFrontier();
 
-
                 //add to the explored
                 explored.add(newStation.getName());
-System.out.println(newStation.getName());
+
                 //locate the station to its matrix
                 assignMatrix(newStation.getName().charAt(0) + "", newStation.getLine(), newStation.getStreet ());
 
@@ -207,6 +190,7 @@ System.out.println(newStation.getName());
                         if (!explored.contains (Station.getName()) &&  !Stringfrontier.contains(Station.getName())){
                             //if current station is the detination station
                             if (Station.getName().equals(to)) {
+                                Log.d("BFSpath",path(newStation)+"%"+coorPath(newStation));
                                 return Station.getName()+"|"+path(newStation)+"%"+Station.getX()+":"+Station.getY()+"|"+coorPath(newStation);
                                  }
                             //add to the  of frontier
@@ -215,7 +199,6 @@ System.out.println(newStation.getName());
                     //2)if the station is in different line or street of the current station
                     else if ( TempMatrix[newStation.getStationNumber()-1][i] != null && TempMatrix[newStation.getStationNumber()-1][i].indexOf("|") >= 0 ) {
                         String externals = TempMatrix[newStation.getStationNumber()-1][i];
-                        System.out.println("exter"+externals);
 
                         int count = countCommas (externals);
 
@@ -241,8 +224,6 @@ System.out.println(newStation.getName());
                                 child=externals.substring (0, externals.indexOf("|"));
                                 int type=Integer.parseInt (child.charAt(0)+"");
                                 int l = Integer.parseInt (child.charAt(2)+"");
-                                System.out.println("l: "+l);
-                                System.out.println("child: "+child);
 
 
                                 if(externals.indexOf(",") == -1)  {
@@ -393,7 +374,6 @@ System.out.println(newStation.getName());
     }
     //--------------------------assignMatrix---------------------
     //locate the station to its matrix
-
 
     public static void assignMatrix(String line,int link, int street){
 

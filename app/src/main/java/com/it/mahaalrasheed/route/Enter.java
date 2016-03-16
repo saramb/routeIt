@@ -9,6 +9,8 @@ import android.widget.Button;
 public class Enter extends AppCompatActivity {
 
      Button enter_bus_station , enter_metro_station;
+    String adminId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +23,9 @@ public class Enter extends AppCompatActivity {
         enter_bus_station.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(getApplicationContext(),EnterBusStation.class);
+                adminId= getIntent().getExtras().getString("AdminID");
+                Intent i =new Intent(getApplicationContext(),EnterBusStation.class);
+                i.putExtra("AdminID", adminId);
                 startActivity(i);
             }
         });
@@ -29,7 +33,9 @@ public class Enter extends AppCompatActivity {
         enter_metro_station.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), EnterMetroStation.class);
+                adminId= getIntent().getExtras().getString("AdminID");
+                Intent i =new Intent(getApplicationContext(),EnterMetroStation.class);
+                i.putExtra("AdminID", adminId);
                 startActivity(i);
             }
         });

@@ -2,18 +2,12 @@ package com.it.mahaalrasheed.route;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 
 public class path_Info extends AppCompatActivity {
 
     ListView list;
-
-
     String[] itemname = new String[routeInfo.count];
     Integer[] imgid = new Integer[routeInfo.count];
 
@@ -29,7 +23,7 @@ public class path_Info extends AppCompatActivity {
                  imgid[i]= R.mipmap.metro;
              }
              else
-                 imgid[i]= R.mipmap.metro;
+                 imgid[i]= R.mipmap.metro;// لازم نغير الصورة
 
          }
 
@@ -37,7 +31,7 @@ public class path_Info extends AppCompatActivity {
         list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
 
-        list.setOnItemClickListener(new OnItemClickListener() {
+        /*list.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -47,6 +41,6 @@ public class path_Info extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
 
             }
-        });
+        });*/
     }
 }
