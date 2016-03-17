@@ -42,6 +42,7 @@ public class Favorites extends AppCompatActivity
     String[] array;
     static double latFav=0.0;
     static double lngFav=0.0;
+    static String nameFav = "";
 
 
 
@@ -229,6 +230,7 @@ public class Favorites extends AppCompatActivity
                 FavoriteClass F = relam.allObjects(FavoriteClass.class).get(position);
                 latFav= F.getLat();
                 lngFav = F.getLng();
+                nameFav= F.getName();
                 startActivity(n);
             }
         });

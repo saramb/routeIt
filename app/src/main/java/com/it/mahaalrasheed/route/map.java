@@ -669,7 +669,11 @@ if(arg0.zoom>=14){
                 // Here we can perform some action triggered after clicking the button
                 Fromlat= latat;
                 Fromlng = longt;
+                if(Favorites.nameFav.equals(""))
                 from.setText(latat + "," + longt);
+                else
+                    from.setText(Favorites.nameFav+"");
+
                 Toast.makeText(getApplicationContext(), "from", Toast.LENGTH_SHORT).show();
             }
         };
@@ -683,8 +687,10 @@ if(arg0.zoom>=14){
                 // Here we can perform some action triggered after clicking the button
                 Tolat= latat;
                 Tolng = longt;
-                to.setText(latat + "," + longt);
-                mViewPager.getLayoutParams().height = 300;
+                if(Favorites.nameFav.equals(""))
+                    to.setText(latat + "," + longt);
+                else
+                    to.setText(Favorites.nameFav+"");                mViewPager.getLayoutParams().height = 300;
               //  testroute.route(Fromlat, Fromlng, Tolat, Tolng);
                 Toast.makeText(getApplicationContext(),"to", Toast.LENGTH_SHORT).show();
             }
@@ -745,8 +751,6 @@ if(arg0.zoom>=14){
                 map.addMarker(new MarkerOptions().position(latLng));
                 latat = latLng.latitude;
                 longt = latLng.longitude;
-
-                Toast.makeText(getApplicationContext(), latat + "  and " + longt, Toast.LENGTH_SHORT).show();
 
             }
         });  //end on click
