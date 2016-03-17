@@ -40,6 +40,10 @@ public class Favorites extends AppCompatActivity
     int iddelete;
     ArrayAdapter addapter;
     String[] array;
+    static double latFav=0.0;
+    static double lngFav=0.0;
+
+
 
 
     @Override
@@ -223,8 +227,8 @@ public class Favorites extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent n = new Intent(Favorites.this,map.class);
                 FavoriteClass F = relam.allObjects(FavoriteClass.class).get(position);
-                n.putExtra("lat", F.getLat());
-                n.putExtra("lng",F.getLng());
+                latFav= F.getLat();
+                lngFav = F.getLng();
                 startActivity(n);
             }
         });

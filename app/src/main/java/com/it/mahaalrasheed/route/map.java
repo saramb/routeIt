@@ -188,6 +188,11 @@ public class map extends AppCompatActivity
                // PlotLine(testroute.lineCoorAstar);
                 }
             }
+
+        // draw marker when clicked on specific favorite location
+if(Favorites.latFav != 0){
+  googleMap.addMarker(new MarkerOptions().position(new LatLng(Favorites.latFav,Favorites.lngFav)));}
+
         onMapReady(googleMap);
     }
 
