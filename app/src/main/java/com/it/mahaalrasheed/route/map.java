@@ -191,6 +191,8 @@ public class map extends AppCompatActivity
 
         // draw marker when clicked on specific favorite location
 if(Favorites.latFav != 0){
+    latat=Favorites.latFav;
+    longt= Favorites.lngFav;
   googleMap.addMarker(new MarkerOptions().position(new LatLng(Favorites.latFav,Favorites.lngFav)));}
 
         onMapReady(googleMap);
