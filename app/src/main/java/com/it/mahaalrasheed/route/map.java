@@ -6,10 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.LevelListDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -37,7 +34,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.MapFragment;
@@ -78,7 +74,7 @@ public class map extends AppCompatActivity
 
     double latat=0, longt=0;
     public GoogleMap map;
-//
+
     private ViewGroup infoWindow;
     private Button infoButton;
     private Button infoButton1;
@@ -110,10 +106,8 @@ public class map extends AppCompatActivity
     String Locationname , page="";
     public static String fromname = "From";
 
-    private ViewPager mViewPager;
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    public static String walk = "";
+   static public ViewPager mViewPager;
+   static  public SectionsPagerAdapter mSectionsPagerAdapter;
 
     Realm relam;
     FavoriteClass F;
@@ -136,22 +130,20 @@ public class map extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+       mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.getLayoutParams().height = 0;
+
+
 
         lv = (ListView) findViewById(R.id.list);
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
 
         DisplayMap();
-        RetrieveNotifID();
-        testroute.link();
-        PlotStation();
-
-        spots = new HashMap<>();
+        //RetrieveNotifID();
 
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
@@ -190,17 +182,10 @@ public class map extends AppCompatActivity
                     from.setText("Current Location");
                     Fromlng = lng;
                     Fromlat = lat;}
-                testroute.route(24.895652, 46.603078,24.63184062 ,46.72096451);
-                /*double sum = Double.parseDouble(testroute.distanceFrom) + Double.parseDouble(testroute.distanceTo);
-                double time = 15*(sum/15);
-                if (time > 30 )
-                    walk = "You need a car to reach the first station";
-                else
-                    walk = "You need to walk "+time+" minutes to reach the first station";*/
-
+               testroute.route(Fromlat, Fromlng,Tolat ,Tolng);
                 mViewPager.getLayoutParams().height = 300;
-                //         PlotStation(testroute.lineCoorAstar);
-               // PlotLine(testroute.lineCoorBFS);
+
+               // PlotLine(testroute.lineCoorAstar);
                 }
             }
         onMapReady(googleMap);
@@ -211,10 +196,6 @@ public class map extends AppCompatActivity
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int)(dp * scale + 0.5f);
     }
-
-
-
-
 
     public void DisplayMap(){
 
@@ -654,7 +635,7 @@ if(arg0.zoom>=14){
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(24.96215255,46.70097149);
 
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10));
+       // map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10));
 
 
 
@@ -766,16 +747,15 @@ if(arg0.zoom>=14){
         });  //end on click
 
 
-        final CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(24.96215255,46.70097149)).zoom(15).build();
+        //final CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(24.96215255,46.70097149)).zoom(15).build();
 
-        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        //map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
             @Override
             public void onCameraChange(CameraPosition arg0) {
-
-                PlotStation(arg0);
+               // PlotStation(arg0);
             }
         });
     }

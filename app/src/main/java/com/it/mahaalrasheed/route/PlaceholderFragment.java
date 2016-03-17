@@ -9,14 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Calendar;
-
 public class PlaceholderFragment extends Fragment {
     /**
      * The fragment argument representing the section number for this
      * fragment.
      */
-    public static String walk = "";
     public static int[] peakM = {180, 180, 180, 220, 180, 220};
     public static int offpeakM = 420;
     public static int peakB = 420;
@@ -24,26 +21,26 @@ public class PlaceholderFragment extends Fragment {
     static String IDcurrent, IDnext;
     static int MBcurrent, MBnext, Linecurrent, Linenext;
     static int total = 0;
-
+    static TextView textView;
     private static final String ARG_SECTION_NUMBER = "section_number";
+    static String s ;
 
-    public PlaceholderFragment() {
-    }
+    static String walk ="s";
 
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
+    public PlaceholderFragment(){}
 
     public static PlaceholderFragment newInstance(int sectionNumber) { //position o call either A* of bfs
         PlaceholderFragment fragment = new PlaceholderFragment();
 
         if (sectionNumber == 1 ) {
+          Log.d("maha", "maaha");
+
         } else if (sectionNumber == 2) {
-            //calcTime(testroute.BFSPath);
-            Log.d("calcTime", total + "");
-           // map.PlotLine(testroute.lineCoorBFS);
-            //testroute.lineCoorBFS= new ArrayList<LatLng>();
+        Log.d("sha", "shahad");
         }
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -55,9 +52,8 @@ public class PlaceholderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        final TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        //textView.setText(getString(R.string.section_format,getArguments().getInt(ARG_SECTION_NUMBER)));
-        textView.setText(map.walk + total);
+        textView = (TextView) rootView.findViewById(R.id.section_label);
+       //textView.setText(s+"shahad");
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +66,14 @@ public class PlaceholderFragment extends Fragment {
         return rootView;
     }
 
-    public static void calcTime(String path) {
+
+    public static void calcTime(String text) {
+
+        Log.d("walktextt", text);
+
+        textView.setText(text);
+
+     /*
         int sumM = 0;
         int sumB = 0;
 
@@ -121,6 +124,6 @@ public class PlaceholderFragment extends Fragment {
                 sumB = 300;
             }
         }//while
-        total = sumB / 60 + sumM / 60;
+        total = sumB / 60 + sumM / 60; */
     }
 }

@@ -1,5 +1,6 @@
 package com.it.mahaalrasheed.route;
 
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -22,6 +23,7 @@ public class testroute {
     static ArrayList<LatLng> lineCoorAstar = new ArrayList<LatLng>();
     static ArrayList<LatLng> lineCoorBFS = new ArrayList<LatLng>();
     static ArrayList<LatLng> lineCoorDFS = new ArrayList<LatLng>();
+
 
 
     static String  fromId , toId, withen;
@@ -57,8 +59,12 @@ public class testroute {
     static final String [][] Bline4_2 = new String [10][10];
     static String AstarPath,BFSPath;
     static String AstarcoorPath, BFScoorPath;
+    static String walk ="s";
+    private static ViewPager mViewPager;
+    private static SectionsPagerAdapter mSectionsPagerAdapter;
 
-  public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2){
+
+    public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
@@ -107,6 +113,18 @@ public class testroute {
                             output = output.substring(output.indexOf("/") + 1);
                             distanceTo = output.substring(0);
 
+                            double sum = Double.parseDouble(testroute.distanceFrom) + Double.parseDouble(testroute.distanceTo);
+                            double time = 15*(sum/15);
+                            if (time > 30 )
+                                map.mSectionsPagerAdapter.walktext("You need a car to reach the first station");
+                            else
+                                map.mSectionsPagerAdapter.walktext("You need to walk "+time+" minutes to reach the first station");
+
+
+
+
+                            Log.d("walk",testroute.walk+"shahadtest");
+
 
                             //AStar Algorithm
                             String aStar = Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
@@ -114,8 +132,7 @@ public class testroute {
                             AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
                             Log.d("AStar:", AstarPath + "");
                             Log.d("AStarcoor:", AstarcoorPath + "");
-
-                            //pathCoordinates(1,AstarcoorPath, AstarPath);
+                           // pathCoordinates(1,AstarcoorPath, AstarPath);
 
                             //bfs Algorithm
 

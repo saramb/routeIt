@@ -112,8 +112,7 @@ public interface routeAPI {
     @FormUrlEncoded
     @POST("/stationName.php")
     public void stationName(
-            @Field("Number") int Number,
-            @Field("ID") String ID,
+            @Field("Path") String Path,
             Callback<Response> callback);
 }
 
