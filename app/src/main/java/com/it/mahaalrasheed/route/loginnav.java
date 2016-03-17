@@ -60,7 +60,7 @@ public class loginnav extends AppCompatActivity
             public void onClick(View v) {
 
                 wrong.setText("");
-
+                //checking if the fields are empty
                 if(username.getText().toString().equals("")||pass.getText().toString().equals("")){
                     if(username.getText().toString().equals("")) {
                         username.setError("Please enter user name");
@@ -86,7 +86,7 @@ public class loginnav extends AppCompatActivity
     }
 
     private void login(){
-        //Here we will handle the http request to insert user to mysql db
+        //Here we will handle the http request to login admin to mysql db
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(ROOT_URL) //Setting the Root URL
@@ -95,7 +95,7 @@ public class loginnav extends AppCompatActivity
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
 
-        //Defining the method insertuser of our interface
+        //Defining the method login of our interface
         api.login(
 
                 //Passing the values by getting it from editTexts

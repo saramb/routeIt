@@ -19,7 +19,7 @@ public class Enter extends AppCompatActivity {
         enter_bus_station=(Button)findViewById(R.id.button6);
         enter_metro_station=(Button)findViewById(R.id.button7);
 
-
+//if the user clicked on enter bus
         enter_bus_station.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -29,7 +29,7 @@ public class Enter extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
+//if the user clicked on enter metro
         enter_metro_station.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

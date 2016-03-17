@@ -18,7 +18,7 @@ public class Menu extends AppCompatActivity {
         enter=(Button)findViewById(R.id.button2);
         delete=(Button)findViewById(R.id.button3);
         post=(Button)findViewById(R.id.button4);
-
+//if user clicked on enter button
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -28,7 +28,7 @@ public class Menu extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
+//if user clicked on delete button
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,7 +36,7 @@ public class Menu extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
+//if user clicked on post button
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

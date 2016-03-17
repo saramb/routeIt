@@ -143,7 +143,7 @@ public class map extends AppCompatActivity
         to = (Button) findViewById(R.id.tobutton);
 
         DisplayMap();
-        //RetrieveNotifID();
+        RetrieveNotifID();
 
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
@@ -480,8 +480,6 @@ if(arg0.zoom>=14){
         } else if (id == R.id.nav_manage) {  //about us
             Intent intent = new Intent (this, aboutusnav.class);
             startActivity(intent);
-
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -525,11 +523,11 @@ if(arg0.zoom>=14){
 
                          //   Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
 
-                            if (!output.equals("NULL")) {
+                            if (output.length()!= 1) {
                                 //Check if there is an output from server
                                 notif = output;
                             }
-                             else if (output.equals("NULL")) {
+                             else if (output.length() == 1) {
                                myMenu.findItem(R.id.notifi).setEnabled(false);
                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
                             }

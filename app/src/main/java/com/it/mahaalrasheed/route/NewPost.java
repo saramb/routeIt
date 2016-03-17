@@ -79,7 +79,6 @@ public class NewPost extends AppCompatActivity {
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
 
-
         //Defining the method insertuser of our interface
         api.AddNotif(
                 message.getText().toString(),
@@ -103,12 +102,9 @@ public class NewPost extends AppCompatActivity {
 
                             Toast.makeText(NewPost.this, output, Toast.LENGTH_LONG).show();
 
-
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
-                        //Displaying the output as a toast
                     }
 
                     @Override
@@ -119,5 +115,4 @@ public class NewPost extends AppCompatActivity {
                 }
         );
     }
-
 }

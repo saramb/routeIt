@@ -18,7 +18,7 @@ public class Delete extends AppCompatActivity {
         delete_bus_station=(Button)findViewById(R.id.button10);
         delete_metro_station=(Button)findViewById(R.id.button11);
 
-
+//if the user clicked on delete bus
         delete_bus_station.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -26,7 +26,7 @@ public class Delete extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
+//if the user clicked on delete metro
         delete_metro_station.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,7 +34,5 @@ public class Delete extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-
     }
 }

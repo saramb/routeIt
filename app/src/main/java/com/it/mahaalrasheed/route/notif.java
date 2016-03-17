@@ -25,6 +25,7 @@ public class notif extends AppCompatActivity {
         content=getIntent().getExtras().getString("content");
         ArrContent=new ArrayList<String>();
         id="0";
+        content = content.substring(1);
         length = content.length();
 
         for(int i=0;i<length;i++) {

@@ -148,7 +148,7 @@ public class EnterMetroStation extends AppCompatActivity {
                 coor2.getText().toString(),
                 name.getText().toString(),
                 MetroLine.getSelectedItemPosition(),
-                getIntent().getExtras().getString("AdminID"),
+                "admin",
                 Position.getSelectedItemPosition()+"",
 
 

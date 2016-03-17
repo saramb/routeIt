@@ -171,7 +171,7 @@ public class EnterBusStation extends AppCompatActivity {
                 name.getText().toString(),
                 dropdown2.getSelectedItem().toString(),
                 dropdown1.getSelectedItemPosition(),
-                getIntent().getExtras().getString("AdminID"),
+                "admin",
                 dropdown3.getSelectedItemPosition()+"",
 
 
