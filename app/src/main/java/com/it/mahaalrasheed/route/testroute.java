@@ -57,8 +57,8 @@ public class testroute {
     static final String [][] Bline3_10 = new String [10][10];
     static final String [][] Bline4_1 = new String [10][10];
     static final String [][] Bline4_2 = new String [10][10];
-    static String AstarPath,BFSPath;
-    static String AstarcoorPath, BFScoorPath;
+    static String AstarPath,BFSPath, DFSPath;
+    static String AstarcoorPath, BFScoorPath, DFScoorPath;
     static String walk ="s";
     private static ViewPager mViewPager;
     private static SectionsPagerAdapter mSectionsPagerAdapter;
@@ -113,35 +113,44 @@ public class testroute {
                             output = output.substring(output.indexOf("/") + 1);
                             distanceTo = output.substring(0);
 
-                            double sum = Double.parseDouble(testroute.distanceFrom) + Double.parseDouble(testroute.distanceTo);
-                            double time = 15*(sum/15);
-                            if (time > 30 )
-                                map.mSectionsPagerAdapter.walktext("You need a car to reach the first station");
-                            else
-                                map.mSectionsPagerAdapter.walktext("You need to walk "+time+" minutes to reach the first station");
-
-
 
 
                             Log.d("walk",testroute.walk+"shahadtest");
 
-
+/*
                             //AStar Algorithm
                             String aStar = Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                             AstarPath = aStar.substring(0, aStar.indexOf('%'));
                             AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
                             Log.d("AStar:", AstarPath + "");
                             Log.d("AStarcoor:", AstarcoorPath + "");
-                           // pathCoordinates(1,AstarcoorPath, AstarPath);
+                            pathCoordinates(1, AstarcoorPath, AstarPath); */
 
+
+                         /*
                             //bfs Algorithm
-
-                          /* String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                            String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                             BFSPath = BFS.substring(0,BFS.indexOf('%'));
                             BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
                             Log.d("BFS:", BFSPath + "");
                             Log.d("BFScoor:", BFScoorPath + "");
-                            //pathCoordinates(2, BFScoorPath, BFSPath);*/
+                            pathCoordinates(2, BFScoorPath, BFSPath); */
+
+                            //DFS Algorithm
+                            String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                            DFSPath = DFS.substring(0, DFS.indexOf('%'));
+                            DFScoorPath = DFS.substring(DFS.indexOf('%') + 1);
+                            Log.d("DFS:", DFSPath + "");
+                            Log.d("DFScoor:", DFScoorPath + "");
+                            pathCoordinates(1, DFScoorPath, DFSPath);
+
+
+                            double sum = Double.parseDouble(testroute.distanceFrom) + Double.parseDouble(testroute.distanceTo);
+                            double time = 15*(sum/15);
+                            if (time > 30 )
+                                map.mSectionsPagerAdapter.walktext("You need a car to reach the first station");
+                            else
+                                map.mSectionsPagerAdapter.walktext("You need to walk "+time+" minutes to reach the first station");
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -189,7 +198,7 @@ public class testroute {
 
                             //Reading the output in the string
                             output = reader.readLine();
-
+                            Log.d("output",output);
                             boolean flag = true;
                             while (flag) {
                                 fromId = output.substring(0, output.indexOf("/"));
@@ -677,7 +686,6 @@ public class testroute {
             else{
                 lineCoor.add(new LatLng(Double.parseDouble(coordeinates.substring(0, coordeinates.indexOf(":"))),Double.parseDouble(coordeinates.substring(coordeinates.indexOf(":") + 1))));
                 flag1 = false;
-                routeInfo.startRouteInfo(Path);
             }
 
         }

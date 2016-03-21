@@ -69,7 +69,7 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
-    public static final String ROOT_URL = "http://192.168.1.58/";
+    public static final String ROOT_URL = "http://10.6.203.65/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
     double latat=0, longt=0;
@@ -182,11 +182,10 @@ public class map extends AppCompatActivity
                     from.setText("Current Location");
                     Fromlng = lng;
                     Fromlat = lat;}
-               testroute.route(Fromlat, Fromlng,Tolat ,Tolng);
-                mViewPager.getLayoutParams().height = 300;
+                testroute.route(Fromlat, Fromlng,Tolat ,Tolng);
 
-               // PlotLine(testroute.lineCoorAstar);
-                }
+                mViewPager.getLayoutParams().height = 300;
+             }
             }
 
         // draw marker when clicked on specific favorite location
@@ -360,7 +359,7 @@ if(arg0.zoom>=14){
         );}//end if
     }
 
-    public static void PlotLine(ArrayList<LatLng> lineCoor) {
+    public static void PlotLine(ArrayList<LatLng> lineCoor , ArrayList<Integer> type) {
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
 
 
@@ -370,8 +369,8 @@ if(arg0.zoom>=14){
         try {
 
             for (int j = 0; j < lineCoor.size() - 1; j++) {
-                int type1 = routeInfo.type.get(j);
-                int type2 = routeInfo.type.get(j + 1);
+                int type1 = type.get(j);
+                int type2 = type.get(j + 1);
                 LatLng tempCoor1 = lineCoor.get(j);
                 LatLng tempCoor2 = lineCoor.get(j + 1);
                 Log.e("type", type1 + ":" + type2);
@@ -764,7 +763,7 @@ if(arg0.zoom>=14){
 
             @Override
             public void onCameraChange(CameraPosition arg0) {
-               // PlotStation(arg0);
+              //  PlotStation(arg0);
             }
         });
     }

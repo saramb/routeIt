@@ -3,7 +3,6 @@ package com.it.mahaalrasheed.route;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
 ////new things
  public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -22,8 +21,7 @@ import android.util.Log;
     public void walktext (String text) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        Log.d("walktext", text);
-         PlaceholderFragment.calcTime(text);
+         PlaceholderFragment.calcTime(text,  PlaceholderFragment.newInstance(1));
     }
 
 

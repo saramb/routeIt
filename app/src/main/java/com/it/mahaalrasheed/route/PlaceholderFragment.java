@@ -23,9 +23,8 @@ public class PlaceholderFragment extends Fragment {
     static int total = 0;
     static TextView textView;
     private static final String ARG_SECTION_NUMBER = "section_number";
-    static String s ;
-
     static String walk ="s";
+    static int n = 0;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -35,13 +34,6 @@ public class PlaceholderFragment extends Fragment {
 
     public static PlaceholderFragment newInstance(int sectionNumber) { //position o call either A* of bfs
         PlaceholderFragment fragment = new PlaceholderFragment();
-
-        if (sectionNumber == 1 ) {
-          Log.d("maha", "maaha");
-
-        } else if (sectionNumber == 2) {
-        Log.d("sha", "shahad");
-        }
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
@@ -53,7 +45,14 @@ public class PlaceholderFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         textView = (TextView) rootView.findViewById(R.id.section_label);
-       //textView.setText(s+"shahad");
+        n= getArguments().getInt(ARG_SECTION_NUMBER);
+        if (n==1 ){
+            textView.setText(n+"");
+        }
+        else if (n==2 ){
+            textView.setText(n+"");}
+        else if (n==3 ){
+            textView.setText(n+"");}
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,13 +66,20 @@ public class PlaceholderFragment extends Fragment {
     }
 
 
-    public static void calcTime(String text) {
+    public static void calcTime(String text, PlaceholderFragment p) {
+        if ((p.getArguments().getInt(ARG_SECTION_NUMBER)) == 1) {
+            Log.d("pathhh", testroute.DFSPath);
+            routeInfo.startRouteInfo(testroute.DFSPath, testroute.lineCoorDFS);
+        }
+        if ((p.getArguments().getInt(ARG_SECTION_NUMBER)) == 2) {
+            Log.d("pathh", testroute.BFSPath);
 
-        Log.d("walktextt", text);
 
-        textView.setText(text);
+        }
 
-     /*
+
+/*
+
         int sumM = 0;
         int sumB = 0;
 

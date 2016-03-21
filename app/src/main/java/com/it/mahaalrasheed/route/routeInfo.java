@@ -1,5 +1,7 @@
 package com.it.mahaalrasheed.route;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,9 +26,12 @@ public class routeInfo {
     static  int number ;
     public static int count = 0;
     static ArrayList<Integer>  type = new ArrayList<Integer>() ;
+    static ArrayList<LatLng> linecoor;
 
-    public static void startRouteInfo(String Path){
+    public static ArrayList<Integer> startRouteInfo(String Path , ArrayList<LatLng> Coorline){
+        linecoor = Coorline;
         stationName(Path);
+        return type;
     }
 
    static  public void stationName(String path){
@@ -39,7 +44,7 @@ public class routeInfo {
        //Creating object for our interface
        routeAPI api = adapter.create(routeAPI.class);
 
-
+        final String Path = path;
        //Defining the method PlotStation of our interface
        api.stationName(
                path,
@@ -61,7 +66,8 @@ public class routeInfo {
                            output = reader.readLine();
                            String path = output ;
                            while (path.length()!=0){
-                               type.add( Integer.parseInt(path.substring(0, path.indexOf(":"))));
+                               type.add(Integer.parseInt(path.substring(0, path.indexOf(":"))));
+                               System.out.print(type.get(0)+"****************");
                                Number[count ]=  Integer.parseInt(path.substring(0, path.indexOf(":")));
                                path = path.substring(path.indexOf(":") + 1);
                                line = Integer.parseInt(path.substring(0, path.indexOf(":")));
@@ -71,6 +77,7 @@ public class routeInfo {
                                 stationName[count++] = name;
                                path = path.substring(path.indexOf("|") + 1);
                            }
+                           map.PlotLine(linecoor,routeInfo.type);
 
                        } catch (IOException e) {
                            e.printStackTrace();
