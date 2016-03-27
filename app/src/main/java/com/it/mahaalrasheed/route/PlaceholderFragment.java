@@ -68,8 +68,8 @@ public class PlaceholderFragment extends Fragment {
 
     public static void calcTime(String text, PlaceholderFragment p) {
         if ((p.getArguments().getInt(ARG_SECTION_NUMBER)) == 1) {
-            Log.d("pathhh", testroute.DFSPath);
-            routeInfo.startRouteInfo(testroute.DFSPath, testroute.lineCoorDFS);
+            Log.d("pathhh", testroute.AstarPath);
+            routeInfo.startRouteInfo(testroute.AstarPath, testroute.lineCoorAstar);
         }
         if ((p.getArguments().getInt(ARG_SECTION_NUMBER)) == 2) {
             Log.d("pathh", testroute.BFSPath);

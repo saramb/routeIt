@@ -194,10 +194,6 @@ public class Favorites extends AppCompatActivity
             Intent intent = new Intent (this, Favorites.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) {
-            Intent intent = new Intent (this, loginnav.class);
-            startActivity(intent);
-
         } else if (id == R.id.nav_manage) {  //about us
             Intent intent = new Intent (this, aboutusnav.class);
             startActivity(intent);

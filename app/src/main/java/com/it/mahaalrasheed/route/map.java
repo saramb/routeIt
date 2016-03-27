@@ -69,7 +69,7 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
-    public static final String ROOT_URL = "http://10.6.203.65/";
+    public static final String ROOT_URL = "http://192.168.1.59/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
     double latat=0, longt=0;
@@ -478,12 +478,11 @@ if(arg0.zoom>=14){
            Intent intent = new Intent (this, Favorites.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) { //login
-            Intent intent = new Intent (this, loginnav.class);
-            startActivity(intent);
+        }
 
 
-        } else if (id == R.id.nav_manage) {  //about us
+       // }
+    else if (id == R.id.nav_manage) {  //about us
             Intent intent = new Intent (this, aboutusnav.class);
             startActivity(intent);
         }
