@@ -29,34 +29,63 @@ public class testroute {
     static String  fromId , toId, withen;
     static String fromCoorX,toCoorX,fromCoorY,toCoorY,distanceTo,distanceFrom;
     static  String finalPath="";
-    static final String [][] Mline1 = new String [29][29];
-    static final String [][] Mline2 = new String [13][13];
-    static final String [][] Mline3 = new String [25][25];
-    static final String [][] Mline4 = new String [12][12];
-    static final String [][] Mline5 = new String [19][19];
-    static final String [][] Mline6 = new String [12][12];
-    static final String [][] Bline2_1 = new String [46][46];
-    static final String [][] Bline2_2 = new String [37][37];
-    static final String [][] Bline2_3 = new String [55][55];
-    static final String [][] Bline2_4 = new String [79][79];
-    static final String [][] Bline2_5 = new String [56][56];
-    static final String [][] Bline2_6 = new String [32][32];
-    static final String [][] Bline2_7 = new String [70][70];
-    static final String [][] Bline2_8 = new String [35][35];
-    static final  String [][] Bline2_9= new String [73][73];
-    static final String [][] Bline2_10 = new String [69][69];
-    static final  String [][] Bline3_1 = new String [7][7];
-    static final String [][] Bline3_2 = new String [10][10];
-    static final  String [][] Bline3_3 = new String [4][4];
-    static final String [][] Bline3_4 = new String [5][5];
-    static final String [][] Bline3_5 = new String [10][10];
-    static final String [][] Bline3_6 = new String [12][12];
-    static final String [][] Bline3_7 = new String [16][16];
-    static final String [][] Bline3_8 = new String [10][10];
-    static final String [][] Bline3_9 = new String [10][10];
-    static final String [][] Bline3_10 = new String [10][10];
-    static final String [][] Bline4_1 = new String [10][10];
-    static final String [][] Bline4_2 = new String [10][10];
+    static  String [][] Mline1 = null;
+    static  String [][] Mline2 = null;
+    static  String [][] Mline3 = null;
+    static  String [][] Mline4 = null;
+    static  String [][] Mline5 = null;
+    static  String [][] Mline6 = null;
+    static  String [][] Bline2_1=null;
+    static  String [][] Bline2_2=null;
+    static  String [][] Bline2_3=null;
+    static  String [][] Bline2_4=null;
+    static  String [][] Bline2_5=null;
+    static  String [][] Bline2_6=null;
+    static  String [][] Bline2_7=null;
+    static  String [][] Bline2_8=null;
+    static  String [][] Bline2_9=null;
+    static  String [][] Bline2_10=null;
+    static  String [][] Bline3_1=null;
+    static  String [][] Bline3_2=null;
+    static  String [][] Bline3_3=null;
+    static  String [][] Bline3_4=null;
+    static  String [][] Bline3_5=null;
+    static  String [][] Bline3_6=null;
+    static  String [][] Bline3_7=null;
+    static  String [][] Bline3_8=null;
+    static  String [][] Bline3_9=null;
+    static  String [][] Bline3_10=null;
+    static  String [][] Bline4_1 = null;
+    static  String [][] Bline4_2 = null;
+
+    /*static final String [][] Mline2 = new String [Splash.arraySize[1]][Splash.arraySize[1]];
+    static final String [][] Mline3 = new String [Splash.arraySize[2]][Splash.arraySize[2]];
+    static final String [][] Mline4 = new String [Splash.arraySize[3]][Splash.arraySize[3]];
+    static final String [][] Mline5 = new String [Splash.arraySize[4]][Splash.arraySize[4]];
+    static final String [][] Mline6 = new String [Splash.arraySize[5]][Splash.arraySize[5]];
+    static final String [][] Bline2_1 = new String [Splash.arraySize[6]][Splash.arraySize[6]];
+    static final String [][] Bline2_2 = new String [Splash.arraySize[7]][Splash.arraySize[7]];
+    static final String [][] Bline2_3 = new String [Splash.arraySize[8]][Splash.arraySize[8]];
+    static final String [][] Bline2_4 = new String [Splash.arraySize[9]][Splash.arraySize[9]];
+    static final String [][] Bline2_5 = new String [Splash.arraySize[10]][Splash.arraySize[10]];
+    static final String [][] Bline2_6 = new String [Splash.arraySize[11]][Splash.arraySize[11]];
+    static final String [][] Bline2_7 = new String [Splash.arraySize[12]][Splash.arraySize[12]];
+    static final String [][] Bline2_8 = new String [Splash.arraySize[13]][Splash.arraySize[13]];
+    static final  String [][] Bline2_9= new String [Splash.arraySize[14]][Splash.arraySize[14]];
+    static final String [][] Bline2_10 = new String [Splash.arraySize[15]][Splash.arraySize[15]];
+    static final  String [][] Bline3_1 = new String [Splash.arraySize[16]][Splash.arraySize[16]];
+    static final String [][] Bline3_2 = new String [Splash.arraySize[17]][Splash.arraySize[17]];
+    static final  String [][] Bline3_3 = new String [Splash.arraySize[18]][Splash.arraySize[18]];
+    static final String [][] Bline3_4 = new String [Splash.arraySize[19]][Splash.arraySize[19]];
+    static final String [][] Bline3_5 = new String [Splash.arraySize[20]][Splash.arraySize[20]];
+    static final String [][] Bline3_6 = new String [Splash.arraySize[21]][Splash.arraySize[21]];
+    static final String [][] Bline3_7 = new String [Splash.arraySize[22]][Splash.arraySize[22]];
+    static final String [][] Bline3_8 = new String [Splash.arraySize[23]][Splash.arraySize[23]];
+    static final String [][] Bline3_9 = new String [Splash.arraySize[24]][Splash.arraySize[24]];
+    static final String [][] Bline3_10 = new String [Splash.arraySize[25]][Splash.arraySize[25]];
+    static final String [][] Bline4_1 = new String [Splash.arraySize[26]][Splash.arraySize[26]];
+    static final String [][] Bline4_2 = new String [Splash.arraySize[27]][Splash.arraySize[27]];*/
+
     static String AstarPath,BFSPath, DFSPath;
     static String AstarcoorPath, BFScoorPath, DFScoorPath;
     static String walk ="s";
@@ -117,14 +146,14 @@ public class testroute {
 
                             Log.d("walk",testroute.walk+"shahadtest");
 
-/*
+
                             //AStar Algorithm
                             String aStar = Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                             AstarPath = aStar.substring(0, aStar.indexOf('%'));
                             AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
                             Log.d("AStar:", AstarPath + "");
                             Log.d("AStarcoor:", AstarcoorPath + "");
-                            pathCoordinates(1, AstarcoorPath, AstarPath); */
+                            pathCoordinates(1, AstarcoorPath, AstarPath);
 
 
                          /*
@@ -137,13 +166,13 @@ public class testroute {
                             pathCoordinates(2, BFScoorPath, BFSPath); */
 
                             //DFS Algorithm
-                            String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                          /*  String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                             DFSPath = DFS.substring(0, DFS.indexOf('%'));
                             DFScoorPath = DFS.substring(DFS.indexOf('%') + 1);
                             Log.d("DFS:", DFSPath + "");
                             Log.d("DFScoor:", DFScoorPath + "");
                             pathCoordinates(1, DFScoorPath, DFSPath);
-
+*/
 
                             double sum = Double.parseDouble(testroute.distanceFrom) + Double.parseDouble(testroute.distanceTo);
                             double time = 15*(sum/15);
@@ -391,190 +420,190 @@ public class testroute {
     public static void MetroLinkExternal( int line, int station , String id, String coor){
 
         if (line == 1) {
-            if (Mline1[station][28] == null)
-                Mline1[station][28] = id+"|"+coor;
+            if (Mline1[station][Mline1.length-1] == null)
+                Mline1[station][Mline1.length-1] = id+"|"+coor;
             else
-                Mline1[station][28] = Mline1[station][28] + "," + id+"|"+coor;
-            Mline1[28][station] = null;
+                Mline1[station][Mline1.length-1] = Mline1[station][Mline1.length-1] + "," + id+"|"+coor;
+            Mline1[Mline1.length-1][station] = null;
         } else if (line == 2) {
-            if (Mline2[station][12] == null)
-                Mline2[station][12] = id+"|"+coor;
+            if (Mline2[station][Mline2.length-1] == null)
+                Mline2[station][Mline2.length-1] = id+"|"+coor;
             else
-                Mline2[station][12] = Mline2[station][12] + "," + id+"|"+coor;
-            Mline2[12][station] = null;
+                Mline2[station][Mline2.length-1] = Mline2[station][Mline2.length-1] + "," + id+"|"+coor;
+            Mline2[Mline2.length-1][station] = null;
         } else if (line == 3) {
-            if (Mline3[station][24] == null)
-                Mline3[station][24] = id+"|"+coor;
+            if (Mline3[station][Mline3.length-1] == null)
+                Mline3[station][Mline3.length-1] = id+"|"+coor;
             else
-                Mline3[station][24] = Mline3[station][24] + "," + id+"|"+coor;
-            Mline3[24][station] = null;
+                Mline3[station][Mline3.length-1] = Mline3[station][Mline3.length-1] + "," + id+"|"+coor;
+            Mline3[Mline3.length-1][station] = null;
         } else if (line == 4) {
-            if (Mline4[station][11] == null)
-                Mline4[station][11] = id+"|"+coor;
+            if (Mline4[station][Mline4.length-1] == null)
+                Mline4[station][Mline4.length-1] = id+"|"+coor;
             else
-                Mline4[station][11] = Mline4[station][11] + "," + id+"|"+coor;
-            Mline4[11][station] = null;
+                Mline4[station][Mline4.length-1] = Mline4[station][Mline4.length-1] + "," + id+"|"+coor;
+            Mline4[Mline4.length-1][station] = null;
         } else if (line == 5) {
-            if (Mline5[station][18] == null)
-                Mline5[station][18] = id+"|"+coor;
+            if (Mline5[station][Mline5.length-1] == null)
+                Mline5[station][Mline5.length-1] = id+"|"+coor;
             else
-                Mline5[station][18] = Mline5[station][18] + "," + id+"|"+coor;
-            Mline5[18][station] = null;
+                Mline5[station][Mline5.length-1] = Mline5[station][Mline5.length-1] + "," + id+"|"+coor;
+            Mline5[Mline5.length-1][station] = null;
         } else if (line == 6) {
-            if (Mline6[station][11] == null)
-                Mline6[station][11] = id+"|"+coor;
+            if (Mline6[station][Mline6.length-1] == null)
+                Mline6[station][Mline6.length-1] = id+"|"+coor;
             else
-                Mline6[station][11] = Mline6[station][11] + "," + id+"|"+coor;
-            Mline6[11][station] = null;
+                Mline6[station][Mline6.length-1] = Mline6[station][Mline6.length-1] + "," + id+"|"+coor;
+            Mline6[Mline6.length-1][station] = null;
         }
     }
 
     public static void BusExternalLink( int line, String StStationFrom, int station , String id, String coor){
         if (line == 2) {
             if (StStationFrom.equals("1")) {
-                if (Bline2_1[station][45] == null)
-                    Bline2_1[station][45] =id+"|"+coor;
+                if (Bline2_1[station][Bline2_1.length-1] == null)
+                    Bline2_1[station][Bline2_1.length-1] =id+"|"+coor;
                 else
-                    Bline2_1[station][45] = Bline2_1[station][45] + "," +id+"|"+coor;
-                Bline2_1[45][station] = null;
+                    Bline2_1[station][Bline2_1.length-1] = Bline2_1[station][Bline2_1.length-1] + "," +id+"|"+coor;
+                Bline2_1[Bline2_1.length-1][station] = null;
             } else if (StStationFrom.equals("2")) {
-                if (Bline2_2[station][36] == null)
-                    Bline2_2[station][36] = id+"|"+coor;
+                if (Bline2_2[station][Bline2_2.length-1] == null)
+                    Bline2_2[station][Bline2_2.length-1] = id+"|"+coor;
                 else
-                    Bline2_2[station][36] = Bline2_2[station][36] + "," + id+"|"+coor;
-                Bline2_2[36][station] = null;
+                    Bline2_2[station][Bline2_2.length-1] = Bline2_2[station][Bline2_2.length-1] + "," + id+"|"+coor;
+                Bline2_2[Bline2_2.length-1][station] = null;
             } else if (StStationFrom.equals("3")) {
-                if (Bline2_3[station][54] == null)
-                    Bline2_3[station][54] = id+"|"+coor;
+                if (Bline2_3[station][Bline2_3.length-1] == null)
+                    Bline2_3[station][Bline2_3.length-1] = id+"|"+coor;
                 else
-                    Bline2_3[station][54] = Bline2_3[station][54] + "," + id+"|"+coor;
-                Bline2_3[54][station] = null;
+                    Bline2_3[station][Bline2_3.length-1] = Bline2_3[station][Bline2_3.length-1] + "," + id+"|"+coor;
+                Bline2_3[Bline2_3.length-1][station] = null;
             } else if (StStationFrom.equals("4")) {
-                if (Bline2_4[station][78] == null)
-                    Bline2_4[station][78] = id+"|"+coor;
+                if (Bline2_4[station][Bline2_4.length-1] == null)
+                    Bline2_4[station][Bline2_4.length-1] = id+"|"+coor;
                 else
-                    Bline2_4[station][78] = Bline2_4[station][78] + "," + id+"|"+coor;
-                Bline2_4[78][station] = null;
+                    Bline2_4[station][Bline2_4.length-1] = Bline2_4[station][Bline2_4.length-1] + "," + id+"|"+coor;
+                Bline2_4[Bline2_4.length-1][station] = null;
             }
 
             if (StStationFrom.equals("5")) {
-                if (Bline2_5[station][55] == null)
-                    Bline2_5[station][55] = id+"|"+coor;
+                if (Bline2_5[station][Bline2_5.length-1] == null)
+                    Bline2_5[station][Bline2_5.length-1] = id+"|"+coor;
                 else
-                    Bline2_5[station][55] = Bline2_5[station][55] + "," +id+"|"+coor;
-                Bline2_5[55][station] = null;
+                    Bline2_5[station][Bline2_5.length-1] = Bline2_5[station][Bline2_5.length-1] + "," +id+"|"+coor;
+                Bline2_5[Bline2_5.length-1][station] = null;
             } else if (StStationFrom.equals("6")) {
-                if (Bline2_6[station][31] == null)
-                    Bline2_6[station][31] =id+"|"+coor;
+                if (Bline2_6[station][Bline2_6.length-1] == null)
+                    Bline2_6[station][Bline2_6.length-1] =id+"|"+coor;
                 else
-                    Bline2_6[station][31] = Bline2_6[station][31] + "," + id+"|"+coor;
-                Bline2_6[31][station] = null;
+                    Bline2_6[station][Bline2_6.length-1] = Bline2_6[station][Bline2_6.length-1] + "," + id+"|"+coor;
+                Bline2_6[Bline2_6.length-1][station] = null;
             } else if (StStationFrom.equals("7")) {
-                if (Bline2_7[station][69] == null)
-                    Bline2_7[station][69] = id+"|"+coor;
+                if (Bline2_7[station][Bline2_7.length-1] == null)
+                    Bline2_7[station][Bline2_7.length-1] = id+"|"+coor;
                 else
-                    Bline2_7[station][69] = Bline2_7[station][69] + "," + id+"|"+coor;
-                Bline2_7[69][station] = null;
+                    Bline2_7[station][Bline2_7.length-1] = Bline2_7[station][Bline2_7.length-1] + "," + id+"|"+coor;
+                Bline2_7[Bline2_7.length-1][station] = null;
             } else if (StStationFrom.equals("8")) {
-                if (Bline2_8[station][34] == null)
-                    Bline2_8[station][34] = id+"|"+coor;
+                if (Bline2_8[station][Bline2_8.length-1] == null)
+                    Bline2_8[station][Bline2_8.length-1] = id+"|"+coor;
                 else
-                    Bline2_8[station][34] = Bline2_8[station][34] + "," + id+"|"+coor;
-                Bline2_8[34][station] = null;
+                    Bline2_8[station][Bline2_8.length-1] = Bline2_8[station][Bline2_8.length-1] + "," + id+"|"+coor;
+                Bline2_8[Bline2_8.length-1][station] = null;
             } else if (StStationFrom.equals("9")) {
-                if (Bline2_9[station][72] == null)
-                    Bline2_9[station][72] = id+"|"+coor;
+                if (Bline2_9[station][Bline2_9.length-1] == null)
+                    Bline2_9[station][Bline2_9.length-1] = id+"|"+coor;
                 else
-                    Bline2_9[station][72] = Bline2_9[station][72] + "," + id+"|"+coor;
-                Bline2_9[72][station] = null;
+                    Bline2_9[station][Bline2_9.length-1] = Bline2_9[station][Bline2_9.length-1] + "," + id+"|"+coor;
+                Bline2_9[Bline2_9.length-1][station] = null;
             } else if (StStationFrom.equals("10")) {
-                if (Bline2_10[station][68] == null)
-                    Bline2_10[station][68] = id+"|"+coor;
+                if (Bline2_10[station][Bline2_10.length-1] == null)
+                    Bline2_10[station][Bline2_10.length-1] = id+"|"+coor;
                 else
-                    Bline2_10[station][68] = Bline2_10[station][68] + "," +id+"|"+coor;
-                Bline2_10[68][station] = null;
+                    Bline2_10[station][Bline2_10.length-1] = Bline2_10[station][Bline2_10.length-1] + "," +id+"|"+coor;
+                Bline2_10[Bline2_10.length-1][station] = null;
             }
 
         }// if bus line ==2
         else if (line == 3) {
             if (StStationFrom.equals("1")) {
-                if (Bline3_1[station][6] == null)
-                    Bline3_1[station][6] = id+"|"+coor;
+                if (Bline3_1[station][Bline3_1.length-1] == null)
+                    Bline3_1[station][Bline3_1.length-1] = id+"|"+coor;
                 else
-                    Bline3_1[station][6] = Bline3_1[station][6] + "," + id+"|"+coor;
-                Bline3_1[6][station] = null;
+                    Bline3_1[station][Bline3_1.length-1] = Bline3_1[station][Bline3_1.length-1] + "," + id+"|"+coor;
+                Bline3_1[Bline3_1.length-1][station] = null;
             } else if (StStationFrom.equals("2")) {
-                if (Bline3_2[station][9] == null)
-                    Bline3_2[station][9] = id+"|"+coor;
+                if (Bline3_2[station][Bline3_2.length-1] == null)
+                    Bline3_2[station][Bline3_2.length-1] = id+"|"+coor;
                 else
-                    Bline3_2[station][9] = Bline3_2[station][9] + "," + id+"|"+coor;
-                Bline3_2[9][station] = null;
+                    Bline3_2[station][Bline3_2.length-1] = Bline3_2[station][Bline3_2.length-1] + "," + id+"|"+coor;
+                Bline3_2[Bline3_2.length-1][station] = null;
             } else if (StStationFrom.equals("3")) {
-                if (Bline3_3[station][3] == null)
-                    Bline3_3[station][3] = id+"|"+coor;
+                if (Bline3_3[station][Bline3_3.length-1] == null)
+                    Bline3_3[station][Bline3_3.length-1] = id+"|"+coor;
                 else
-                    Bline3_3[station][3] = Bline3_3[station][3] + "," + id+"|"+coor;
-                Bline3_3[3][station] = null;
+                    Bline3_3[station][Bline3_3.length-1] = Bline3_3[station][Bline3_3.length-1] + "," + id+"|"+coor;
+                Bline3_3[Bline3_3.length-1][station] = null;
             } else if (StStationFrom.equals("4")) {
-                if (Bline3_4[station][4] == null)
-                    Bline3_4[station][4] = id+"|"+coor;
+                if (Bline3_4[station][Bline3_4.length-1] == null)
+                    Bline3_4[station][Bline3_4.length-1] = id+"|"+coor;
                 else
-                    Bline3_4[station][4] = Bline3_4[station][4] + "," + id+"|"+coor;
-                Bline3_4[4][station] = null;
+                    Bline3_4[station][Bline3_4.length-1] = Bline3_4[station][Bline3_4.length-1] + "," + id+"|"+coor;
+                Bline3_4[Bline3_4.length-1][station] = null;
             }
             else
             if (StStationFrom.equals("5")) {
-                if (Bline3_5[station][9] == null)
-                    Bline3_5[station][9] = id+"|"+coor;
+                if (Bline3_5[station][Bline3_5.length-1] == null)
+                    Bline3_5[station][Bline3_5.length-1] = id+"|"+coor;
                 else
-                    Bline3_5[station][9] = Bline3_5[station][9] + "," + id+"|"+coor;
-                Bline3_5[9][station] = null;
+                    Bline3_5[station][Bline3_5.length-1] = Bline3_5[station][Bline3_5.length-1] + "," + id+"|"+coor;
+                Bline3_5[Bline3_5.length-1][station] = null;
             } else if (StStationFrom.equals("6")) {
-                if (Bline3_6[station][11] == null)
-                    Bline3_6[station][11] = id+"|"+coor;
+                if (Bline3_6[station][Bline3_6.length-1] == null)
+                    Bline3_6[station][Bline3_6.length-1] = id+"|"+coor;
                 else
-                    Bline3_6[station][11] = Bline3_6[station][11] + "," + id+"|"+coor;
-                Bline3_6[11][station] =null;
+                    Bline3_6[station][Bline3_6.length-1] = Bline3_6[station][Bline3_6.length-1] + "," + id+"|"+coor;
+                Bline3_6[Bline3_6.length-1][station] =null;
             } else if (StStationFrom.equals("7")) {
-                if (Bline3_7[station][15] == null)
-                    Bline3_7[station][15] = id+"|"+coor;
+                if (Bline3_7[station][Bline3_7.length-1] == null)
+                    Bline3_7[station][Bline3_7.length-1] = id+"|"+coor;
                 else
-                    Bline3_7[station][15] = Bline3_7[station][15] + "," + id+"|"+coor;
-                Bline3_7[15][station] = null;
+                    Bline3_7[station][Bline3_7.length-1] = Bline3_7[station][Bline3_7.length-1] + "," + id+"|"+coor;
+                Bline3_7[Bline3_7.length-1][station] = null;
             } else if (StStationFrom.equals("8")) {
-                if (Bline3_8[station][9] == null)
-                    Bline3_8[station][9] = id+"|"+coor;
+                if (Bline3_8[station][Bline3_8.length-1] == null)
+                    Bline3_8[station][Bline3_8.length-1] = id+"|"+coor;
                 else
-                    Bline3_8[station][9] = Bline3_8[station][9] + "," + id+"|"+coor;
-                Bline3_8[9][station] = null;
+                    Bline3_8[station][Bline3_8.length-1] = Bline3_8[station][Bline3_8.length-1] + "," + id+"|"+coor;
+                Bline3_8[Bline3_8.length-1][station] = null;
             } else if (StStationFrom.equals("9")) {
-                if (Bline3_9[station][9] == null)
-                    Bline3_9[station][9] = id+"|"+coor;
+                if (Bline3_9[station][Bline3_9.length-1] == null)
+                    Bline3_9[station][Bline3_9.length-1] = id+"|"+coor;
                 else
-                    Bline3_9[station][9] = Bline3_9[station][9] + "," + id+"|"+coor;
-                Bline3_9[9][station] = null;
+                    Bline3_9[station][Bline3_9.length-1] = Bline3_9[station][Bline3_9.length-1] + "," + id+"|"+coor;
+                Bline3_9[Bline3_9.length-1][station] = null;
             } else if (StStationFrom.equals("10")) {
-                if (Bline3_10[station][9] == null)
-                    Bline3_10[station][9] = id+"|"+coor;
+                if (Bline3_10[station][Bline3_10.length-1] == null)
+                    Bline3_10[station][Bline3_10.length-1] = id+"|"+coor;
                 else
-                    Bline3_10[station][9] = Bline3_10[station][9] + "," + id+"|"+coor;
-                Bline3_10[9][station] = null;
+                    Bline3_10[station][Bline3_10.length-1] = Bline3_10[station][Bline3_10.length-1] + "," + id+"|"+coor;
+                Bline3_10[Bline3_10.length-1][station] = null;
             }
         }// if bus line==3
         else if (line == 4) {
             if (StStationFrom.equals("1")) {
-                if (Bline4_1[station][9] == null)
-                    Bline4_1[station][9] = id+"|"+coor;
+                if (Bline4_1[station][Bline4_1.length-1] == null)
+                    Bline4_1[station][Bline4_1.length-1] = id+"|"+coor;
                 else
-                    Bline4_1[station][9] = Bline4_1[station][9] + "," + id+"|"+coor;
-                Bline4_1[9][station] = null;
+                    Bline4_1[station][Bline4_1.length-1] = Bline4_1[station][Bline4_1.length-1] + "," + id+"|"+coor;
+                Bline4_1[Bline4_1.length-1][station] = null;
             }
             if (StStationFrom.equals("2")) {
-                if (Bline4_2[station][9] == null)
-                    Bline4_2[station][9] = id+"|"+coor;
+                if (Bline4_2[station][Bline4_2.length-1] == null)
+                    Bline4_2[station][Bline4_2.length-1] = id+"|"+coor;
                 else
-                    Bline4_2[station][9] = Bline4_2[station][9] + "," + id+"|"+coor;
-                Bline4_2[9][station] = null;
+                    Bline4_2[station][Bline4_2.length-1] = Bline4_2[station][Bline4_2.length-1] + "," + id+"|"+coor;
+                Bline4_2[Bline4_2.length-1][station] = null;
             }
         }// bus line ==4
     }
@@ -583,34 +612,25 @@ public class testroute {
         if (line == 2) {
             if (StStationFrom.equals("1")) {
                 Bline2_1[station1][station2] = tocoor;
-                Bline2_1[station2][station1] = fromcoor;
+               // Bline2_1[station2][station1] = fromcoor;
             } else if (StStationFrom.equals("2")) {
                 Bline2_2[station1][station2] = tocoor;
-                Bline2_2[station2][station1] = fromcoor;
             } else if (StStationFrom.equals("3")) {
                 Bline2_3[station1][station2] = tocoor;
-                Bline2_3[station2][station1] = fromcoor;
             } else if (StStationFrom.equals("4")) {
                 Bline2_4[station1][station2] = tocoor;
-                Bline2_4[station2][station1] = fromcoor;
             } else if (StStationFrom.equals("5")) {
                 Bline2_5[station1][station2] = tocoor;
-                Bline2_5[station2][station1] = fromcoor;
             } else if (StStationFrom.equals("6")) {
                 Bline2_6[station1][station2] = tocoor;
-                Bline2_6[station2][station1] = fromcoor;
             } else if (StStationFrom.equals("7")) {
                 Bline2_7[station1][station2] = tocoor;
-                Bline2_7[station2][station1] = fromcoor;
             } else if (StStationFrom.equals("8")) {
                 Bline2_8[station1][station2] = tocoor;
-                Bline2_8[station2][station1] = fromcoor;
             } else if (StStationFrom.equals("9")) {
                 Bline2_9[station1][station2] = tocoor;
-                Bline2_9[station2][station1] = fromcoor;
             } else if (StStationFrom.equals("10")) {
                 Bline2_10[station1][station2] = tocoor;
-                Bline2_10[station2][station1] = fromcoor;
             }
         } else if (line == 3) {
             if (StStationFrom.equals("1")) {

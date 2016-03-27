@@ -114,5 +114,11 @@ public interface routeAPI {
     public void stationName(
             @Field("Path") String Path,
             Callback<Response> callback);
+
+    @FormUrlEncoded
+    @POST("/numOfStation.php")
+    public void numOfStation(
+            @Field("ID") String ID,
+            Callback<Response> callback);
 }
 
