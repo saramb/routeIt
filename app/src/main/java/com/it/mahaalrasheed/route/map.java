@@ -184,9 +184,7 @@ public class map extends AppCompatActivity
                     Fromlat = lat;}
                 testroute.route(Fromlat, Fromlng,Tolat ,Tolng);
 
-                mViewPager.getLayoutParams().height = 300;
-             }
-            }
+                mViewPager.getLayoutParams().height = 300; }  }
 
         // draw marker when clicked on specific favorite location
 if(Favorites.latFav != 0){
@@ -533,8 +531,8 @@ if(arg0.zoom>=14){
                                 notif = output;
                             }
                              else if (output.length() == 1) {
-                               myMenu.findItem(R.id.notifi).setEnabled(false);
-                               myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
+                                myMenu.findItem(R.id.notifi).setEnabled(false);
+                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
                             }
 
 

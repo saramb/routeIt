@@ -9,13 +9,38 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.it.mahaalrasheed.route.Splash">
 
-    <ImageView
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="105dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView3"
+            android:src="@drawable/spsmall"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="©All copyrights are reserved for King Saud University, Riyadh, Saudi Arabia 2016"
+        android:id="@+id/copyRight"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:textSize="12dp"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imageView3"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:src="@drawable/logo"
-        android:scaleType="centerCrop"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="165dp"></LinearLayout>
 </RelativeLayout>

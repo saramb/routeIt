@@ -40,25 +40,6 @@
         <activity
             android:name=".Menu"
             android:label="Admin " />
-        <activity android:name=".EnterMetroStation"
-            android:label="Enter Metro Station"
-            />
-        <activity android:name=".EnterBusStation"
-            android:label="Enter Bus Station"
-            />
-        <activity android:name=".Delete"
-            android:label="Delete"
-
-            />
-        <activity android:name=".DeleteBusStation"
-            android:label="Delete Bus Station"
-            />
-        <activity android:name=".DeleteMetroStation"
-            android:label="Delete Metro Station"
-            />
-        <activity android:name=".Enter"
-            android:label="Enter"
-            />
         <activity android:name=".NewPost"
             android:label="New Post"
             />
@@ -66,10 +47,6 @@
         <activity
             android:name=".aboutusnav"
             android:label="About us"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".loginnav"
-            android:label="Login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Favorites"

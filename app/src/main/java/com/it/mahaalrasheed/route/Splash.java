@@ -18,7 +18,9 @@ import retrofit.client.Response;
 
 public class Splash extends AppCompatActivity {
 
-    private final int SPLASH_DISPLAY_LENGTH = 300;
+    private final int SPLASH_DISPLAY_LENGTH = 1200;
+    static int arraySize [] =new int[30];
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,6 @@ public class Splash extends AppCompatActivity {
 
 
     }
-static int arraySize [] =new int[30];
     private void numOfStation() {
         //Here we will handle the http request to retrieve from mysql db
         //Creating a RestAdapter

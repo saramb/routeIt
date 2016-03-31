@@ -2,6 +2,7 @@ package com.it.mahaalrasheed.route;
 
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -164,7 +165,7 @@ public class testroute {
                             Log.d("BFS:", BFSPath + "");
                             Log.d("BFScoor:", BFScoorPath + "");
                             pathCoordinates(2, BFScoorPath, BFSPath); */
-
+/*
                             //DFS Algorithm
                           /*  String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                             DFSPath = DFS.substring(0, DFS.indexOf('%'));
@@ -255,6 +256,7 @@ public class testroute {
                                 }
 
                                 String firstType = fromId.charAt(0) + "";
+                                System.out.println("firstType"+firstType+"");
                                 String secondType = toId.charAt(0) + "";
                                 int firstline = Integer.parseInt(fromId.charAt(2) + "");
                                 int secondline = Integer.parseInt(toId.charAt(2) + "");
