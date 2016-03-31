@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -72,7 +73,7 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 //test commit
-public static final String ROOT_URL = "http://192.168.100.12/";
+    public static final String ROOT_URL = "http://192.168.100.12./";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
     double latat=0, longt=0;
@@ -447,7 +448,8 @@ if(Favorites.latFav != 0) {
             notifID=Integer.parseInt( message+"");
 
                 Notification n=new Notification();
-                n.setID(notifID);n.setPk(0);
+                n.setID(notifID);
+                n.setPk(0);
                 Realm realm = Realm.getInstance(getApplicationContext());
                 //Update realm object with the new notification id
                 realm.beginTransaction();
@@ -518,13 +520,11 @@ if(Favorites.latFav != 0) {
                             output = reader.readLine();
 
 
-                         //   Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
-
-                            if (output.length()!= 1) {
+                            Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
+                            if (output.length() != 1) {
                                 //Check if there is an output from server
                                 notif = output;
-                            }
-                             else if (output.length() == 1) {
+                            } else if (output.length() == 1) {
                                 myMenu.findItem(R.id.notifi).setEnabled(false);
                                 myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
                             }
@@ -558,6 +558,7 @@ if(Favorites.latFav != 0) {
         if(itemNot.size() != 0)
             notifID = itemNot.get(0).getID();
             RetrieveNotif(notifID);
+
     }
 
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -25,7 +26,7 @@ public class notif extends AppCompatActivity {
         content=getIntent().getExtras().getString("content");
         ArrContent=new ArrayList<String>();
         id="0";
-        content = content.substring(1);
+        content = content.substring(1,content.length());
         length = content.length();
 
         for(int i=0;i<length;i++) {
