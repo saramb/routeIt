@@ -134,7 +134,12 @@ public class from extends AppCompatActivity implements
             Log.e(LOG_TAG,"name"+ Html.fromHtml(place.getName() + ""));
             Log.e(LOG_TAG,"getAddress"+Html.fromHtml(place.getAddress() + ""));
             Log.e(LOG_TAG,"getAddress"+Html.fromHtml(place.getLatLng() + ""));
-
+            Intent n = new Intent(from.this, map.class);
+            n.putExtra("page","from".toString());
+            n.putExtra("name", place.getName().toString());
+            n.putExtra("lat", place.getLatLng().latitude );
+            n.putExtra("lng", place.getLatLng().longitude);
+            startActivity(n);
             if (attributions != null) {
                 // mAttTextView.setText(Html.fromHtml(attributions.toString()));
             }
@@ -149,6 +154,7 @@ public class from extends AppCompatActivity implements
             array[i] = item.get(i).getName();}
 
         addapter = new ArrayAdapter(from.this, android.R.layout.simple_list_item_1,array);
+
         lv.setAdapter(addapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
