@@ -47,6 +47,8 @@ public class to extends AppCompatActivity {
                     n.putExtra("lat", place.getLatLng().latitude );
                     n.putExtra("lng", place.getLatLng().longitude);
                     startActivity(n);
+                    finish();
+
                 }
 
                 @Override
@@ -76,6 +78,8 @@ public class to extends AppCompatActivity {
                     n.putExtra("lat", F.getLat());
                     n.putExtra("lng", F.getLng());
                     startActivity(n);
+                    finish();
+
                 }
             });
 
