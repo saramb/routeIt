@@ -39,7 +39,6 @@ public class Splash extends AppCompatActivity {
             }
         }, SPLASH_DISPLAY_LENGTH);
 
-
     }
     private void numOfStation() {
         //Here we will handle the http request to retrieve from mysql db

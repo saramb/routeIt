@@ -20,16 +20,24 @@ public class PlaceholderFragment extends Fragment {
     public static int offpeakB = 600;
     static String IDcurrent, IDnext;
     static int MBcurrent, MBnext, Linecurrent, Linenext;
-    static int total = 0;
+
     static TextView textView;
     private static final String ARG_SECTION_NUMBER = "section_number";
-    static String walk ="s";
     static int n = 0;
+    static int test = 0;
+    static double sx = 0;
+    static double sy = 0;
+    static double gx = 0;
+    static double gy = 0;
+    public static String walk = "";
+
+
 
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
+
     public PlaceholderFragment(){}
 
     public static PlaceholderFragment newInstance(int sectionNumber) { //position o call either A* of bfs
@@ -38,6 +46,7 @@ public class PlaceholderFragment extends Fragment {
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
+
     }
 
     @Override
@@ -45,14 +54,14 @@ public class PlaceholderFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         textView = (TextView) rootView.findViewById(R.id.section_label);
+
+        testroute.route(sx, sy, gx, gy, 1);
+        textView.setText(walk);
         n= getArguments().getInt(ARG_SECTION_NUMBER);
-        if (n==1 ){
-            textView.setText(n+"");
-        }
-        else if (n==2 ){
-            textView.setText(n+"");}
-        else if (n==3 ){
-            textView.setText(n+"");}
+        Log.d("whatis", "this" + n + "");
+        ++test; //to make bfs doesnt work here
+
+        // if (n==1)
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,24 +70,58 @@ public class PlaceholderFragment extends Fragment {
                 startActivity(n);
             }
         });
+        //you can't print bfs text except here
 
         return rootView;
     }
 
-
-    public static void calcTime(String text, PlaceholderFragment p) {
-        if ((p.getArguments().getInt(ARG_SECTION_NUMBER)) == 1) {
-            Log.d("pathhh", testroute.AstarPath);
-            routeInfo.startRouteInfo(testroute.AstarPath, testroute.lineCoorAstar);
+    public void onPause() {
+        super.onPause();
+        if (n == 1){
+            testroute.route(sx, sy, gx, gy, 1);
+            textView.setText(walk);
+            Log.d("check", "4");
         }
-        if ((p.getArguments().getInt(ARG_SECTION_NUMBER)) == 2) {
-            Log.d("pathh", testroute.BFSPath);
-
-
+        else if (n == 3){
+            testroute.route(sx, sy, gx, gy, 3);
+            textView.setText(walk);
+            Log.d("check", "3");
         }
+    }
+
+    public void onResume() {
+        super.onResume();
+        if (test > 6) {
+            testroute.route(sx, sy, gx, gy, 2);
+
+            Log.d("check", "2");
+        }
+        else if (n == 1 ) {
+            testroute.route(sx, sy, gx, gy, 1);
+            textView.setText(walk);
+            Log.d("check", "1");
+        }
+
+
+    }
+
+
+    public static void routeoption (double fromCoor1, double fromCoor2,double toCoor1,double toCoor2, int n) {
+        sx = fromCoor1;
+        sy = fromCoor2;
+        gx = toCoor1;
+        gy = toCoor2;
+
+    }
+
+
+    public static void calcTime(String text) {
+        walk = text;
+    }
 
 
 /*
+    public static void Time(String path, int opt) {
 
         int sumM = 0;
         int sumB = 0;
@@ -89,7 +132,7 @@ public class PlaceholderFragment extends Fragment {
             if (path.indexOf("|") != -1 ) {
                 IDcurrent = path.substring(0, path.indexOf("|"));
                 path = path.substring(path.indexOf("|") + 1);
-                if (!(path.length()<=7))
+                if (!(path.length()<=8))
                 IDnext = path.substring(0, path.indexOf("|"));
                 else
                     IDnext = path;
@@ -110,7 +153,7 @@ public class PlaceholderFragment extends Fragment {
                     Calendar c = Calendar.getInstance();
                     int hour = c.get(Calendar.HOUR_OF_DAY);
                     if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {//peek
-                        sumM += peakM[Linecurrent];
+                        sumM += peakM[Linecurrent-1];
                     } else {
                         sumM += offpeakM;
                     }
@@ -130,6 +173,13 @@ public class PlaceholderFragment extends Fragment {
                 sumB = 300;
             }
         }//while
-        total = sumB / 60 + sumM / 60; */
-    }
+
+        if (opt == 1)
+         total1 = sumB / 60 + sumM / 60;
+        else if (opt == 2)
+            total2 = sumB / 60 + sumM / 60;
+       else if (opt == 3)
+            total3 = sumB / 60 + sumM / 60;
+
+    } */
 }

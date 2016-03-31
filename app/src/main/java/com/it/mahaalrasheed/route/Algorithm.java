@@ -52,6 +52,9 @@ public class Algorithm {
 
             //if current station is the destination station
             if (newStation.getName().equals(to)) {
+                explored = null;
+                frontier = null;
+                Stringfrontier = null;
                 return path(newStation)+"%"+coorPath(newStation);
             }
 
@@ -170,8 +173,6 @@ public class Algorithm {
 
         } // end while
 
-
-
     }//end A*
 
     // --------------------------BFS algorithm---------------------
@@ -247,8 +248,12 @@ public class Algorithm {
                         double y = Double.parseDouble(externals.substring(externals.indexOf(":") + 1));
 
                         Extract(id, x, y, newStation);
-                        if (Station.getName().equals(to))
-                            return path(newStation)+"%"+coorPath(newStation);
+                        if (Station.getName().equals(to)) {
+                            explored = null;
+                            frontier = null;
+                            Stringfrontier = null;
+                            return path(newStation) + "%" + coorPath(newStation);
+                        }
 
                         if (!explored.contains(Station.getName()) && !Stringfrontier.contains(Station.getName()))
                             // add to the of frontier
@@ -273,8 +278,12 @@ public class Algorithm {
                             }
 
                             Extract(id, x, y, newStation);
-                            if (Station.getName().equals(to))
-                                return path(newStation)+"%"+coorPath(newStation);
+                            if (Station.getName().equals(to)) {
+                                explored = null;
+                                frontier = null;
+                                Stringfrontier = null;
+                                return path(newStation) + "%" + coorPath(newStation);
+                            }
 
                             if (!explored.contains(Station.getName())
                                     && !Stringfrontier.contains(Station.getName()))
@@ -422,12 +431,12 @@ public class Algorithm {
         //y2 = 46.67521543
         //result = 3.13
 
-        return 3956*2*Math.asin (Math.sqrt ( Math.pow ( Math.sin ( (coordinateX-goalcordX)*3.14/180/2) ,2) +
+        return 1;/*3956*2*Math.asin (Math.sqrt ( Math.pow ( Math.sin ( (coordinateX-goalcordX)*3.14/180/2) ,2) +
 
 
                 Math.cos (coordinateX*3.14/180) * Math.cos(goalcordY*3.14/180) *
 
-                        Math.pow (Math.sin ( (coordinateY- goalcordY) *3.14/180/2), 2) ));
+                        Math.pow (Math.sin ( (coordinateY- goalcordY) *3.14/180/2), 2) ));*/
 
 
     } //end heuristic

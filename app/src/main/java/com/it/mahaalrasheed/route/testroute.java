@@ -1,8 +1,6 @@
 package com.it.mahaalrasheed.route;
 
-import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -10,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -89,12 +88,16 @@ public class testroute {
 
     static String AstarPath,BFSPath, DFSPath;
     static String AstarcoorPath, BFScoorPath, DFScoorPath;
-    static String walk ="s";
-    private static ViewPager mViewPager;
-    private static SectionsPagerAdapter mSectionsPagerAdapter;
+
+    public static int[] peakM = {180, 180, 180, 220, 180, 220};
+    public static int offpeakM = 420;
+    public static int peakB = 420;
+    public static int offpeakB = 600;
+    static String IDcurrent, IDnext;
+    static int MBcurrent, MBnext, Linecurrent, Linenext;
 
 
-    public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2){
+    public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2, final int algorithmoption){// final int algorithmoption){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
@@ -145,42 +148,60 @@ public class testroute {
 
 
 
-                            Log.d("walk",testroute.walk+"shahadtest");
 
+                            if (algorithmoption == 1) {
+                                //AStar Algorithm
+                                String aStar = Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                                AstarPath = aStar.substring(0, aStar.indexOf('%'));
+                                AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
+                                Log.d("AStar:", AstarPath + "");
+                                Log.d("AStarcoor:", AstarcoorPath + "");
+                                pathCoordinates(1, AstarcoorPath, AstarPath);
+                                routeInfo.startRouteInfo(AstarPath, lineCoorAstar);
+                                map.textView2.setText(Time(AstarPath, 1));
+                                map.imageView.setImageResource(R.mipmap.busicon);
 
-                            //AStar Algorithm
-                            String aStar = Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
-                            AstarPath = aStar.substring(0, aStar.indexOf('%'));
-                            AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
-                            Log.d("AStar:", AstarPath + "");
-                            Log.d("AStarcoor:", AstarcoorPath + "");
-                            pathCoordinates(1, AstarcoorPath, AstarPath);
+                            }
 
+                            if (algorithmoption == 2) {
+                                //bfs Algorithm
+                                String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                                BFSPath = BFS.substring(0,BFS.indexOf('%'));
+                                BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
+                                Log.d("BFS:", BFSPath + "");
+                                Log.d("BFScoor:", BFScoorPath + "");
+                                pathCoordinates(2, BFScoorPath, BFSPath);
+                                routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
+                                map.textView2.setText(Time(BFSPath, 2));
+                                map.imageView.setImageResource(R.mipmap.busicon);
 
-                         /*
-                            //bfs Algorithm
-                            String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
-                            BFSPath = BFS.substring(0,BFS.indexOf('%'));
-                            BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
-                            Log.d("BFS:", BFSPath + "");
-                            Log.d("BFScoor:", BFScoorPath + "");
-                            pathCoordinates(2, BFScoorPath, BFSPath); */
-/*
-                            //DFS Algorithm
-                          /*  String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
-                            DFSPath = DFS.substring(0, DFS.indexOf('%'));
-                            DFScoorPath = DFS.substring(DFS.indexOf('%') + 1);
-                            Log.d("DFS:", DFSPath + "");
-                            Log.d("DFScoor:", DFScoorPath + "");
-                            pathCoordinates(1, DFScoorPath, DFSPath);
-*/
+                            }
+
+                            else if (algorithmoption == 3){
+
+                                //DFS Algorithm
+                                String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                                DFSPath = DFS.substring(0, DFS.indexOf('%'));
+                                DFScoorPath = DFS.substring(DFS.indexOf('%') + 1);
+                                Log.d("DFS:", DFSPath + "");
+                                Log.d("DFScoor:", DFScoorPath + "");
+                                pathCoordinates(3, DFScoorPath, DFSPath);
+                                routeInfo.startRouteInfo(DFSPath, lineCoorDFS);
+                                map.textView2.setText(Time(DFSPath, 3));
+                               map.imageView.setImageResource(R.mipmap.busicon);
+
+                            }
+
 
                             double sum = Double.parseDouble(testroute.distanceFrom) + Double.parseDouble(testroute.distanceTo);
                             double time = 15*(sum/15);
+                            Log.d("sum", testroute.distanceFrom +"--"+testroute.distanceTo+"---"+time);
+
                             if (time > 30 )
                                 map.mSectionsPagerAdapter.walktext("You need a car to reach the first station");
                             else
-                                map.mSectionsPagerAdapter.walktext("You need to walk "+time+" minutes to reach the first station");
+                                map.mSectionsPagerAdapter.walktext("You need to walk "+Math.round(time)+" minutes to reach the first station");
+
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -197,6 +218,63 @@ public class testroute {
         );
     }
 
+    public static String Time(String path, int opt) {
+
+        int sumM = 0;
+        int sumB = 0;
+
+        boolean flag = true;
+
+        while (flag) {
+            if (path.indexOf("|") != -1 ) {
+                IDcurrent = path.substring(0, path.indexOf("|"));
+                path = path.substring(path.indexOf("|") + 1);
+                if (!(path.length()<=8))
+                    IDnext = path.substring(0, path.indexOf("|"));
+                else
+                    IDnext = path;
+            } else {
+                IDcurrent = path;
+                flag = false;
+                break;
+            }
+
+            MBcurrent = Integer.parseInt(IDcurrent.charAt(0) + "");
+            Linecurrent = Integer.parseInt(IDcurrent.charAt(2) + "");
+            MBnext = Integer.parseInt(IDnext.charAt(0) + "");
+            Linenext = Integer.parseInt(IDnext.charAt(2) + "");
+
+            if (MBcurrent == 1 && MBnext == 1) {
+
+                if (Linecurrent == Linenext) {
+                    Calendar c = Calendar.getInstance();
+                    int hour = c.get(Calendar.HOUR_OF_DAY);
+                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {//peek
+                        sumM += peakM[Linecurrent-1];
+                    } else {
+                        sumM += offpeakM;
+                    }
+                } else {
+                    sumM += 300;
+                }
+            } else if (MBcurrent == 2 && MBnext == 2) {
+
+                Calendar c = Calendar.getInstance();
+                int hour = c.get(Calendar.HOUR_OF_DAY);
+                if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {//peek
+                    sumB += peakB;
+                } else {
+                    sumB += offpeakB;
+                }
+            } else {
+                sumB = 300;
+            }
+        }//while
+
+
+        return sumB / 60 + sumM / 60+"";
+
+    }
 
     public static  void link(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db

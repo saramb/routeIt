@@ -29,11 +29,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.MapFragment;
@@ -90,7 +94,7 @@ public class map extends AppCompatActivity
     static GoogleMap googleMap;
     static double  Tolng,Fromlng,lng;
     static double Tolat, Fromlat,lat;
-    Button from, to;
+    static Button from, to;
     Location location;
     MapFragment fm;
     LocationManager locationManager;
@@ -105,13 +109,19 @@ public class map extends AppCompatActivity
     ListView lv;
     String Locationname , page="";
     public static String fromname = "From";
+    public static TextView maintext;
 
-   static public ViewPager mViewPager;
-   static  public SectionsPagerAdapter mSectionsPagerAdapter;
+    static public ViewPager mViewPager;
+    static  public SectionsPagerAdapter mSectionsPagerAdapter;
 
     Realm relam;
     FavoriteClass F;
     int id;
+    static Marker marker;
+    static Marker m;
+    static TextView textView2;
+    static ImageView imageView;
+    static TableRow t;
 
 
 
@@ -130,7 +140,7 @@ public class map extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-       mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -141,6 +151,9 @@ public class map extends AppCompatActivity
         lv = (ListView) findViewById(R.id.list);
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
+        textView2 = (TextView) findViewById(R.id.section_label2);
+        t = (TableRow) findViewById(R.id.table);
+        imageView = (ImageView) findViewById(R.id.imageView2);
 
         DisplayMap();
         RetrieveNotifID();
@@ -182,19 +195,25 @@ public class map extends AppCompatActivity
                     from.setText("Current Location");
                     Fromlng = lng;
                     Fromlat = lat;}
-                testroute.route(Fromlat, Fromlng,Tolat ,Tolng);
 
-                mViewPager.getLayoutParams().height = 300; }  }
+                test();
+
+            }
+            }
 
         // draw marker when clicked on specific favorite location
-if(Favorites.latFav != 0){
-    latat=Favorites.latFav;
-    longt= Favorites.lngFav;
-  googleMap.addMarker(new MarkerOptions().position(new LatLng(Favorites.latFav,Favorites.lngFav)));}
-
+if(Favorites.latFav != 0) {
+    latat = Favorites.latFav;
+    longt = Favorites.lngFav;
+    m = googleMap.addMarker(new MarkerOptions().position(new LatLng(Favorites.latFav, Favorites.lngFav)));
+}
         onMapReady(googleMap);
     }
 
+
+    public void test(){
+        mSectionsPagerAdapter.passroute(Fromlat, Fromlng,Tolat ,Tolng);
+        mViewPager.getLayoutParams().height = 300;}
 
     public static int getPixelsFromDp(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
@@ -233,6 +252,7 @@ if(Favorites.latFav != 0){
             // Getiting the name of the best provider
             provider = locationManager.getBestProvider(criteria, true);
 
+
             // Getting Current Location
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -246,43 +266,23 @@ if(Favorites.latFav != 0){
             }
             location = locationManager.getLastKnownLocation(provider);
 
-            LocationListener locationListener = new LocationListener() {
-                public void onLocationChanged(Location location) {
-                    // redraw the marker when get location update.
+            GoogleMap.OnMyLocationChangeListener locationListener = new GoogleMap.OnMyLocationChangeListener() {
+                @Override
+                public void onMyLocationChange(Location location) {
                     lat = location.getLatitude();
                     lng = location.getLongitude();
-                    drawMarker(lat,lng);
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
+                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder().target(new LatLng(lat, lng)).zoom(11).build()));
+                    // googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16.0f));
 
                 }
             };
-            locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
+            //locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
+            googleMap.setOnMyLocationChangeListener(locationListener);
 
         } //!!!!!!!!!!Map part end
     }
 
-    private void drawMarker(double latitude, double longitude) {
-        googleMap.clear();
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude, longitude))
-                .snippet("Lat:" + location.getLatitude() + "Lng:" + location.getLongitude()));
-    }
-
-
-    private void PlotStation(CameraPosition arg0){
+    private void PlotStation(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
         map.clear(); //to clear all markers before
         if(latat !=0 && longt !=0){
@@ -290,7 +290,6 @@ if(Favorites.latFav != 0){
         map.addMarker(new MarkerOptions().position(update));}
 
 
-if(arg0.zoom>=14){
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(ROOT_URL) //Setting the Root URL
@@ -354,7 +353,7 @@ if(arg0.zoom>=14){
                         Toast.makeText(map.this, error.toString(), Toast.LENGTH_LONG).show();
                     }
                 }
-        );}//end if
+        );
     }
 
     public static void PlotLine(ArrayList<LatLng> lineCoor , ArrayList<Integer> type) {
@@ -449,7 +448,8 @@ if(arg0.zoom>=14){
             notifID=Integer.parseInt( message+"");
 
                 Notification n=new Notification();
-                n.setID(notifID);n.setPk(0);
+                n.setID(notifID);
+                n.setPk(0);
                 Realm realm = Realm.getInstance(getApplicationContext());
                 //Update realm object with the new notification id
                 realm.beginTransaction();
@@ -476,11 +476,7 @@ if(arg0.zoom>=14){
            Intent intent = new Intent (this, Favorites.class);
             startActivity(intent);
 
-        }
-
-
-       // }
-    else if (id == R.id.nav_manage) {  //about us
+        } else if (id == R.id.nav_manage) {  //about us
             Intent intent = new Intent (this, aboutusnav.class);
             startActivity(intent);
         }
@@ -524,13 +520,11 @@ if(arg0.zoom>=14){
                             output = reader.readLine();
 
 
-                         //   Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
-
-                            if (output.length()!= 1) {
+                            Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
+                            if (output.length() != 1) {
                                 //Check if there is an output from server
                                 notif = output;
-                            }
-                             else if (output.length() == 1) {
+                            } else if (output.length() == 1) {
                                 myMenu.findItem(R.id.notifi).setEnabled(false);
                                 myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
                             }
@@ -564,6 +558,7 @@ if(arg0.zoom>=14){
         if(itemNot.size() != 0)
             notifID = itemNot.get(0).getID();
             RetrieveNotif(notifID);
+
     }
 
 
@@ -633,13 +628,6 @@ if(arg0.zoom>=14){
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(24.96215255,46.70097149);
-
-       // map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10));
-
-
-
         final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout)findViewById(R.id.map_relative_layout);
 
         // MapWrapperLayout initialization
@@ -663,12 +651,17 @@ if(arg0.zoom>=14){
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
                 // Here we can perform some action triggered after clicking the button
+                if ( m != null)
+                    m.remove();
+
                 Fromlat= latat;
                 Fromlng = longt;
                 if(Favorites.nameFav.equals(""))
                 from.setText(latat + "," + longt);
                 else
                     from.setText(Favorites.nameFav+"");
+
+                marker.remove();
 
                 Toast.makeText(getApplicationContext(), "from", Toast.LENGTH_SHORT).show();
             }
@@ -681,14 +674,18 @@ if(arg0.zoom>=14){
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
                 // Here we can perform some action triggered after clicking the button
+                if ( m != null)
+                    m.remove();
                 Tolat= latat;
                 Tolng = longt;
                 if(Favorites.nameFav.equals(""))
                     to.setText(latat + "," + longt);
                 else
-                    to.setText(Favorites.nameFav+"");                mViewPager.getLayoutParams().height = 300;
-              //  testroute.route(Fromlat, Fromlng, Tolat, Tolng);
+                    to.setText(Favorites.nameFav+"");
                 Toast.makeText(getApplicationContext(),"to", Toast.LENGTH_SHORT).show();
+                marker.remove();
+
+                test();
             }
         };
 
@@ -709,6 +706,8 @@ if(arg0.zoom>=14){
                 relam.beginTransaction();
                 relam.copyToRealmOrUpdate(F);
                 relam.commitTransaction();
+                if ( m != null)
+                    m.remove();
                 // Here we can perform some action triggered after clicking the button
                 Toast.makeText(getApplicationContext(),"fav.", Toast.LENGTH_SHORT).show();
             }
@@ -743,7 +742,6 @@ if(arg0.zoom>=14){
         googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                map.clear(); //to clear all markers before
                 map.addMarker(new MarkerOptions().position(latLng));
                 latat = latLng.latitude;
                 longt = latLng.longitude;
@@ -751,18 +749,9 @@ if(arg0.zoom>=14){
             }
         });  //end on click
 
+         PlotStation();
 
-        //final CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(24.96215255,46.70097149)).zoom(15).build();
 
-        //map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-
-            @Override
-            public void onCameraChange(CameraPosition arg0) {
-              //  PlotStation(arg0);
-            }
-        });
     }
 }
 
