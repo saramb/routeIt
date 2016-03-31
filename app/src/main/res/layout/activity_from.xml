@@ -13,13 +13,16 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="New AutoCompleteTextView"
-            android:id="@+id/autoCompleteTextView" />
+            android:id="@+id/autoCompleteTextView"
+            android:background="#ffffff"
+            android:height="50dp" />
 
     <!--    <fragment
             android:id="@+id/place_autocomplete_fragment"

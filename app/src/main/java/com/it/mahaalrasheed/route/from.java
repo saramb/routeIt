@@ -47,7 +47,7 @@ public class from extends AppCompatActivity implements
     private AutoCompleteTextView mAutocompleteTextView;
     private GoogleApiClient mGoogleApiClient;
     private PlaceArrayAdapter mPlaceArrayAdapter;
-    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+    public static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(24.329542, 46.380488),new LatLng(25.159071, 47.239394));
     ////////////////////////////////////////
     @Override
@@ -70,16 +70,22 @@ public class from extends AppCompatActivity implements
         mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
                 BOUNDS_MOUNTAIN_VIEW, null);
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
+        if(!mAutocompleteTextView.hasFocus()){
+            mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_name, 0, 0, 0);
+            mAutocompleteTextView.setHint("Search");
+
+        }
         mAutocompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    mAutocompleteTextView.setHint("");
+                if (!hasFocus) {
+                    mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_name, 0, 0, 0);
+                    mAutocompleteTextView.setHint("Search");
+
                 } else {
                     //Assign your image again to the view, otherwise it will always be gone even if the text is 0 again.
-                    mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.map_icon, 0, 0, 0);
-                    mAutocompleteTextView.setHint("Search");
+                    mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                    mAutocompleteTextView.setHint("");
 
                 }
             }
