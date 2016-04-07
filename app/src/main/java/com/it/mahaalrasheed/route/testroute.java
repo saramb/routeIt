@@ -158,8 +158,7 @@ public class testroute {
                                 Log.d("AStarcoor:", AstarcoorPath + "");
                                 pathCoordinates(1, AstarcoorPath, AstarPath);
                                 routeInfo.startRouteInfo(AstarPath, lineCoorAstar);
-                                map.textView2.setText(Time(AstarPath, 1));
-                                map.imageView.setImageResource(R.mipmap.busicon);
+
 
                             }
 
@@ -172,8 +171,7 @@ public class testroute {
                                 Log.d("BFScoor:", BFScoorPath + "");
                                 pathCoordinates(2, BFScoorPath, BFSPath);
                                 routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
-                                map.textView2.setText(Time(BFSPath, 2));
-                                map.imageView.setImageResource(R.mipmap.busicon);
+
 
                             }
 
@@ -187,21 +185,19 @@ public class testroute {
                                 Log.d("DFScoor:", DFScoorPath + "");
                                 pathCoordinates(3, DFScoorPath, DFSPath);
                                 routeInfo.startRouteInfo(DFSPath, lineCoorDFS);
-                                map.textView2.setText(Time(DFSPath, 3));
-                               map.imageView.setImageResource(R.mipmap.busicon);
 
                             }
 
 
                             double sum = Double.parseDouble(testroute.distanceFrom) + Double.parseDouble(testroute.distanceTo);
                             double time = 15*(sum/15);
-                            Log.d("sum", testroute.distanceFrom +"--"+testroute.distanceTo+"---"+time);
+                            Log.d("sum", testroute.distanceFrom + "--" + testroute.distanceTo + "---" + time);
 
                             if (time > 30 )
-                                map.mSectionsPagerAdapter.walktext("You need a car to reach the first station");
-                            else
-                                map.mSectionsPagerAdapter.walktext("You need to walk "+Math.round(time)+" minutes to reach the first station");
+                                map.section_label.setText("You need a car to reach the first station");
 
+                            else
+                                map.section_label.setText("You need to walk "+Math.round(time)+" minutes to reach the first station");
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -218,10 +214,17 @@ public class testroute {
         );
     }
 
-    public static String Time(String path, int opt) {
+    public static String Time(String path) {
 
         int sumM = 0;
         int sumB = 0;
+
+        int[] peakM = {180, 180, 180, 220, 180, 220};
+        int offpeakM = 420;
+        int peakB = 420;
+        int offpeakB = 600;
+        String IDcurrent, IDnext;
+        int MBcurrent, MBnext, Linecurrent, Linenext;
 
         boolean flag = true;
 
@@ -270,8 +273,7 @@ public class testroute {
                 sumB = 300;
             }
         }//while
-
-
+        Log.d("time",sumB / 60 + sumM / 60+"");
         return sumB / 60 + sumM / 60+"";
 
     }

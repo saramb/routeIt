@@ -1,8 +1,10 @@
 package com.it.mahaalrasheed.route;
 
+import android.app.Application;
+
 import java.util.ArrayList;
 
-public class Algorithm {
+public class Algorithm extends Application {
 
 //***  Decalring variables  ***
 
@@ -52,9 +54,6 @@ public class Algorithm {
 
             //if current station is the destination station
             if (newStation.getName().equals(to)) {
-                explored = null;
-                frontier = null;
-                Stringfrontier = null;
                 return path(newStation)+"%"+coorPath(newStation);
             }
 
@@ -76,9 +75,8 @@ public class Algorithm {
                             Station = new Station(capacity2[newStation.getLine()-1],newStation.getLine(),newStation.getStreet(),i+1,newStation, TempMatrix[newStation.getStationNumber()-1][i]);
                         if (!explored.contains (Station.getName())){
                             //calculate FN
-                            Station.setGn(heuristic(newStation.getX(), newStation.getY(), Station.getX(), Station.getY()) + newStation.getGn());
-                            double tempFn = heuristic (Station.getX(), Station.getY(), goalX, goalY) + Station.getGn();
-                            Station.incFN(tempFn);
+                            Station.setGn(heuristic(Station.getX(), Station.getY(), goalX, goalY));
+
                             if (Stringfrontier.contains(Station.getName()))  {
                                 for (int k = 0; k < Stringfrontier.size(); k++) {
                                     if (Stringfrontier.get(k).equals(Station.getName()) && frontier.get(k).getFn() > Station.getFn()) {
@@ -108,12 +106,12 @@ public class Algorithm {
                             Extract(id,x,y, newStation);
                             if (!explored.contains (Station.getName())){
                                 //calculate FN
-                                Station.setGn(heuristic(newStation.getX(), newStation.getY(), Station.getX(), Station.getY()) + newStation.getGn());
-                                double tempFn = heuristic (Station.getX(), Station.getY(), goalX, goalY) + Station.getGn();
-                                Station.incFN(tempFn);
+                                Station.setGn(heuristic(Station.getX(), Station.getY(), goalX, goalY));
+
                                 if (Stringfrontier.contains(Station.getName()))  {
                                     for (int k = 0; k < Stringfrontier.size(); k++) {
                                         if (Stringfrontier.get(k).equals(Station.getName()) && frontier.get(k).getFn() > Station.getFn()) {
+
                                             Stringfrontier.add(k, Station.getName());
                                             frontier.add(k, Station);
                                         }
@@ -146,9 +144,7 @@ public class Algorithm {
 
                                 if (!explored.contains (Station.getName())){
                                     //calculate FN
-                                    Station.setGn(heuristic(newStation.getX(), newStation.getY(), Station.getX(), Station.getY()) + newStation.getGn());
-                                    double tempFn = heuristic (Station.getX(), Station.getY(), goalX, goalY) + Station.getGn();
-                                    Station.incFN(tempFn);
+                                    Station.setGn(heuristic(Station.getX(), Station.getY(), goalX, goalY));
                                     if (Stringfrontier.contains(Station.getName()))  {
                                         for (int k = 0; k < Stringfrontier.size(); k++) {
                                             if (Stringfrontier.get(k).equals(Station.getName()) && frontier.get(k).getFn() > Station.getFn()) {
@@ -168,9 +164,7 @@ public class Algorithm {
                     }
                 }
             }
-
             sort(frontier);
-
         } // end while
 
     }//end A*
@@ -248,12 +242,8 @@ public class Algorithm {
                         double y = Double.parseDouble(externals.substring(externals.indexOf(":") + 1));
 
                         Extract(id, x, y, newStation);
-                        if (Station.getName().equals(to)) {
-                            explored = null;
-                            frontier = null;
-                            Stringfrontier = null;
-                            return path(newStation) + "%" + coorPath(newStation);
-                        }
+                        if (Station.getName().equals(to))
+                            return path(newStation)+"%"+coorPath(newStation);
 
                         if (!explored.contains(Station.getName()) && !Stringfrontier.contains(Station.getName()))
                             // add to the of frontier
@@ -278,12 +268,8 @@ public class Algorithm {
                             }
 
                             Extract(id, x, y, newStation);
-                            if (Station.getName().equals(to)) {
-                                explored = null;
-                                frontier = null;
-                                Stringfrontier = null;
-                                return path(newStation) + "%" + coorPath(newStation);
-                            }
+                            if (Station.getName().equals(to))
+                                return path(newStation)+"%"+coorPath(newStation);
 
                             if (!explored.contains(Station.getName())
                                     && !Stringfrontier.contains(Station.getName()))
@@ -406,7 +392,7 @@ public class Algorithm {
         int i, in;
         for(i=0; i < x.size(); i++)
             for(in=0; in<x.size(); in++)
-                if( x.get(i). getFn() < x.get(in).getFn())
+                if( x.get(i). getGn() < x.get(in).getGn())
                     swap(x, in, i);
     } //end print
 
@@ -422,22 +408,18 @@ public class Algorithm {
     //--------------------------heuristic---------------------
 //to caculate the heuristic
     public static double heuristic (double coordinateX, double coordinateY,double goalcordX,double goalcordY) {
-        //double goalcordX = 24.71347768;
-        //double goalcordY = 46.67521543;
-        //we will get the coordinates from database for sorce
-        //x1= 24.691207
-        //x2= 24.71347768
-        //y1 = 46.725234
-        //y2 = 46.67521543
-        //result = 3.13
 
-        return 1;/*3956*2*Math.asin (Math.sqrt ( Math.pow ( Math.sin ( (coordinateX-goalcordX)*3.14/180/2) ,2) +
+
+
+
+
+
+        return  3956*2*Math.asin (Math.sqrt ( Math.pow ( Math.sin ( (coordinateX-goalcordX)*3.14/180/2) ,2) +
 
 
                 Math.cos (coordinateX*3.14/180) * Math.cos(goalcordY*3.14/180) *
 
-                        Math.pow (Math.sin ( (coordinateY- goalcordY) *3.14/180/2), 2) ));*/
-
+                        Math.pow (Math.sin ( (coordinateY- goalcordY) *3.14/180/2), 2) ));
 
     } //end heuristic
 
@@ -480,6 +462,7 @@ public class Algorithm {
 
     }
 
+
     //perform extraction of station
     public static void Extract(String from, double startX, double startY, Station parent) {
 
@@ -497,6 +480,7 @@ public class Algorithm {
         else
             Station = new Station (capacity2[lineFrom-1],lineFrom,streetNumber,stationNumber,parent, startXY);
     }
+
 
     //--------------------------countCommas---------------------
     //count the number of commas to know the no# of the extrnal sation
@@ -634,6 +618,10 @@ public class Algorithm {
 
 }//end class Test
 
+
+
+
+
 //--------------------------Station class---------------------
 //class for each station
 class Station{
@@ -686,7 +674,10 @@ class Station{
         return gn; }
 
     public void setGn (double g) {
-        gn = g; }
+        gn = g;
+        double fn = Algorithm.heuristic(parent.getX(), parent.getY(), Double.parseDouble(this.xCoordinate),  Double.parseDouble(this.yCoordinate));
+        gn += fn+parent.getGn();
+    }
 
     public int getCapacity () {
         return capacity; }

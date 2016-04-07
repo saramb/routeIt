@@ -1,8 +1,8 @@
 package com.it.mahaalrasheed.route;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -16,13 +16,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.List;
@@ -154,6 +151,7 @@ public class to extends AppCompatActivity implements
             n.putExtra("lat", place.getLatLng().latitude );
             n.putExtra("lng", place.getLatLng().longitude);
             startActivity(n);
+            finish();
             if (attributions != null) {
                 // mAttTextView.setText(Html.fromHtml(attributions.toString()));
             }

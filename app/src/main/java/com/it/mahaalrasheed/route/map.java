@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,9 +27,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TableRow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,7 +71,7 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 //test commit
-    public static final String ROOT_URL = "http://192.168.100.12/";
+    public static final String ROOT_URL = "http://192.168.1.103/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
     double latat=0, longt=0;
@@ -83,6 +81,8 @@ public class map extends AppCompatActivity
     private Button infoButton;
     private Button infoButton1;
     private Button infoButton2;
+
+    static RelativeLayout frag;
 
     private OnInfoWindowElemTouchListener infoButtonListener;
     private OnInfoWindowElemTouchListener infoButtonListener1;
@@ -109,20 +109,18 @@ public class map extends AppCompatActivity
     ListView lv;
     String Locationname , page="";
     public static String fromname = "From";
-    public static TextView maintext;
-
-    static public ViewPager mViewPager;
-    static  public SectionsPagerAdapter mSectionsPagerAdapter;
 
     Realm relam;
     FavoriteClass F;
     int id;
     static Marker marker;
     static Marker m;
-    static TextView textView2;
-    static ImageView imageView;
-    static TableRow t;
 
+
+
+    ImageButton left, right;
+    static int swiping = 1;
+    static TextView section_label;
 
 
     @Override
@@ -130,6 +128,18 @@ public class map extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        frag = (RelativeLayout) findViewById(R.id.frag);
+        left = (ImageButton) findViewById(R.id.swipeleft);
+        right = (ImageButton) findViewById(R.id.swiperight);
+        section_label = (TextView)findViewById(R.id.section_label);
+
+        frag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 Intent intent = new Intent(map.this, path_Info.class);
+                startActivity(intent);
+            }
+        });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -140,23 +150,46 @@ public class map extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.getLayoutParams().height = 0;
-
-
 
         lv = (ListView) findViewById(R.id.list);
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
-        textView2 = (TextView) findViewById(R.id.section_label2);
-        t = (TableRow) findViewById(R.id.table);
-        imageView = (ImageView) findViewById(R.id.imageView2);
+
+
 
         DisplayMap();
-        RetrieveNotifID();
+        //RetrieveNotifID();
+
+
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                section_label.setText("right");
+                swiping++;
+                  if (swiping == 4)
+                      swiping = 1;
+
+                testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
+
+
+            }
+        });
+
+        left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                section_label.setText("left");
+                swiping--;
+                if (swiping == -1)
+                    swiping = 3;
+
+
+
+                testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
+
+
+            }
+        });
 
         from = (Button) findViewById(R.id.frombutton);
         to = (Button) findViewById(R.id.tobutton);
@@ -196,10 +229,15 @@ public class map extends AppCompatActivity
                     Fromlng = lng;
                     Fromlat = lat;}
 
-                test();
+                frag.getLayoutParams().height = 300;
+                swiping = 1;
+                section_label.setText("AStar");
+                testroute.route(Fromlat, Fromlng, Tolat, Tolng, 1);
 
             }
+
             }
+
 
         // draw marker when clicked on specific favorite location
 if(Favorites.latFav != 0) {
@@ -212,8 +250,8 @@ if(Favorites.latFav != 0) {
 
 
     public void test(){
-        mSectionsPagerAdapter.passroute(Fromlat, Fromlng,Tolat ,Tolng);
-        mViewPager.getLayoutParams().height = 300;}
+        testroute.route(Fromlat, Fromlng,Tolat ,Tolng,1);
+       }
 
     public static int getPixelsFromDp(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
@@ -586,21 +624,113 @@ if(Favorites.latFav != 0) {
         return url;
     }
 
+    private final int SPLASH_DISPLAY_LENGTH = 1200;
+    static int arraySize [] =new int[30];
+
+    public static void numOfStation() {
+        //Here we will handle the http request to retrieve from mysql db
+        //Creating a RestAdapter
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(ROOT_URL) //Setting the Root URL
+                .build(); //Finally building the adapter
+
+        //Creating object for our interface
+        routeAPI api = adapter.create(routeAPI.class);
+
+        //Defining the method  RetrieveNotif of our interface
+        api.numOfStation(
+
+                //Passing the values
+                "1",
+                //Creating an anonymous callback
+                new Callback<Response>() {
+                    @Override
+                    public void success(Response result, Response response) {
+                        //On success we will read the server's output using bufferedreader
+                        //Creating a bufferedreader object
+                        BufferedReader reader = null;
+
+                        //An string to store output from the server
+                        String output = "";
+
+                        try {
+                            //Initializing buffered reader
+                            reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
+
+                            //Reading the output in the string
+                            output = reader.readLine();
+                            Log.d("output", "output[" + "]" + ":" + output);
+
+                            //Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
+                            int i = 0;
+                            //Check if there is an output from server
+                            while (!output.equals("")) {
+                                arraySize[i] = Integer.parseInt(output.substring(0, output.indexOf("/"))) + 1;
+                                Log.d("arraySize", "arraySize[" + i + "]" + ":" + arraySize[i]);
+                                i++;
+                                output = output.substring(output.indexOf("/") + 1);
+                            }
+                            testroute.Mline1 = new String[arraySize[0]][arraySize[0]];
+                            testroute.Mline2 = new String[arraySize[1]][arraySize[1]];
+                            testroute.Mline3 = new String[arraySize[2]][arraySize[2]];
+                            testroute.Mline4 = new String[arraySize[3]][arraySize[3]];
+                            testroute.Mline5 = new String[arraySize[4]][arraySize[4]];
+                            testroute.Mline6 = new String[arraySize[5]][arraySize[5]];
+                            testroute.Bline2_1 = new String[arraySize[6]][arraySize[6]];
+                            testroute.Bline2_2 = new String[arraySize[7]][arraySize[7]];
+                            testroute.Bline2_3 = new String[arraySize[8]][arraySize[8]];
+                            testroute.Bline2_4 = new String[arraySize[9]][arraySize[9]];
+                            testroute.Bline2_5 = new String[arraySize[10]][arraySize[10]];
+                            testroute.Bline2_6 = new String[arraySize[11]][arraySize[11]];
+                            testroute.Bline2_7 = new String[arraySize[12]][arraySize[12]];
+                            testroute.Bline2_8 = new String[arraySize[13]][arraySize[13]];
+                            testroute.Bline2_9 = new String[arraySize[14]][arraySize[14]];
+                            testroute.Bline2_10 = new String[arraySize[15]][arraySize[15]];
+                            testroute.Bline3_1 = new String[arraySize[16]][arraySize[16]];
+                            testroute.Bline3_2 = new String[arraySize[17]][arraySize[17]];
+                            testroute.Bline3_3 = new String[arraySize[18]][arraySize[18]];
+                            testroute.Bline3_4 = new String[arraySize[19]][arraySize[19]];
+                            testroute.Bline3_5 = new String[arraySize[20]][arraySize[20]];
+                            testroute.Bline3_6 = new String[arraySize[21]][arraySize[21]];
+                            testroute.Bline3_7 = new String[arraySize[22]][arraySize[22]];
+                            testroute.Bline3_8 = new String[arraySize[23]][arraySize[23]];
+                            testroute.Bline3_9 = new String[arraySize[24]][arraySize[24]];
+                            testroute.Bline3_10 = new String[arraySize[25]][arraySize[25]];
+                            testroute.Bline4_1 = new String[arraySize[26]][arraySize[26]];
+                            testroute.Bline4_2 = new String[arraySize[27]][arraySize[27]];
+                            testroute.link();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        //If any error occured displaying the error as toast
+                        // Toast.makeText(map.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+    }
+    
     /** A method to download json data from url */
     public static String downloadUrl(String strUrl) throws IOException{
         String data = "";
         InputStream iStream = null;
         HttpURLConnection urlConnection = null;
+
         try{
+
             URL url = new URL(strUrl);
 
-// Creating an http connection to communicate with url
+            // Creating an http connection to communicate with url
             urlConnection = (HttpURLConnection) url.openConnection();
 
-// Connecting to url
+            // Connecting to url
             urlConnection.connect();
 
-// Reading data from url
+            // Reading data from url
             iStream = urlConnection.getInputStream();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
@@ -616,8 +746,8 @@ if(Favorites.latFav != 0) {
 
             br.close();
 
-        }catch(Exception e){
-        }finally{
+        } catch(Exception e){
+        } finally{
             iStream.close();
             urlConnection.disconnect();
         }
@@ -742,7 +872,10 @@ if(Favorites.latFav != 0) {
         googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                map.addMarker(new MarkerOptions().position(latLng));
+                if (marker != null)
+                    marker.remove();
+                marker =  map.addMarker(new MarkerOptions().position(latLng));
+
                 latat = latLng.latitude;
                 longt = latLng.longitude;
 
@@ -786,6 +919,4 @@ if(Favorites.latFav != 0) {
         parserTask.execute(result);
 
     }
-
-
  }

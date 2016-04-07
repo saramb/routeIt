@@ -26,15 +26,15 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import io.realm.Realm;
 
 
@@ -51,7 +51,7 @@ public class Favorites extends AppCompatActivity
     public static int id;
     int iddelete;
     ArrayAdapter addapter;
-    String[] array;
+    ArrayList<String> array;
     static double latFav=0.0;
     static double lngFav=0.0;
     static String nameFav = "";
@@ -178,6 +178,18 @@ public class Favorites extends AppCompatActivity
                         relam.beginTransaction();
                         relam.allObjects(FavoriteClass.class).remove(iddelete);
                         relam.commitTransaction();
+
+                        F = new FavoriteClass();
+                        F.setId(iddelete);
+                        F.setLat(0);
+                        F.setLng(0);
+                        F.setName("-");
+
+                        relam = Realm.getInstance(getApplicationContext());
+                        relam.beginTransaction();
+                        relam.copyToRealmOrUpdate(F);
+                        relam.commitTransaction();
+
                         update();
                         Toast.makeText(Favorites.this, "Correctly delete favorite", Toast.LENGTH_LONG).show();
                         break;
@@ -269,9 +281,12 @@ public class Favorites extends AppCompatActivity
     public void update(){
         relam = Realm.getInstance(getApplicationContext());
         item = relam.allObjects(FavoriteClass.class);
-        array = new String[item.size()];
+        array = new ArrayList<String>();
         for (int i = 0; i < item.size(); i++) {
-            array[i] = item.get(i).getName();}
+            if ( !item.get(i).getName().equals("-"))
+            array.add(i,item.get(i).getName());}
+
+        id= item.size();
 
         addapter = new ArrayAdapter(Favorites.this, android.R.layout.simple_list_item_1,array);
         lv.setAdapter(addapter);
