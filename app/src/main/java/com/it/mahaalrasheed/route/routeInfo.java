@@ -46,7 +46,6 @@ public class routeInfo {
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
 
-        final String Path = path;
         //Defining the method PlotStation of our interface
         api.stationName(
                 path,

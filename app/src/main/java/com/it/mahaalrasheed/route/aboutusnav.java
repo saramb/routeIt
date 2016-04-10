@@ -51,7 +51,6 @@ public class aboutusnav extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -75,7 +74,6 @@ public class aboutusnav extends AppCompatActivity
         } else if (id == R.id.nav_manage) {  //about us
             Intent intent = new Intent (this, aboutusnav.class);
             startActivity(intent);
-
 
         }
 

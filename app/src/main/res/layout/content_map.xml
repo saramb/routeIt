@@ -48,6 +48,8 @@
                     android:layout_marginRight="35dp"
                     android:background="@color/purple"
                     android:textColor="#FFFFFF"
+                    android:layout_gravity="center_horizontal"
+
                     />
 
 
@@ -60,7 +62,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginRight="2dp"
                     android:layout_marginLeft="40dp"
-
+                    android:layout_gravity="center_horizontal"
                     android:background="@color/purple"
                     android:textColor="#FFFFFF"
                     />

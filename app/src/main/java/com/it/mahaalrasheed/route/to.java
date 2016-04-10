@@ -56,28 +56,6 @@ public class to extends AppCompatActivity implements
             lv = (ListView)findViewById(R.id.listView2);
             update();
 
-
-
-          /*  autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-                @Override
-                public void onPlaceSelected(Place place) {
-                    Intent n = new Intent(to.this, map.class);
-                    n.putExtra("page","to".toString());
-                    n.putExtra("name", place.getName().toString());
-                    n.putExtra("lat", place.getLatLng().latitude );
-                    n.putExtra("lng", place.getLatLng().longitude);
-                    startActivity(n);
-                    finish();
-
-                }
-
-                @Override
-                public void onError(Status status) {
-                    // TODO: Handle the error.
-
-                }
-            });*/
         //////---search-----////
         mGoogleApiClient = new GoogleApiClient.Builder(to.this)
                 .addApi(Places.GEO_DATA_API)
@@ -113,10 +91,6 @@ public class to extends AppCompatActivity implements
         });
         }
 
-
-    /////////////////////////
-
-
     private AdapterView.OnItemClickListener mAutocompleteClickListener
             = new AdapterView.OnItemClickListener() {
         @Override
@@ -141,7 +115,6 @@ public class to extends AppCompatActivity implements
             }
             // Selecting the first object buffer.
             final Place place = places.get(0);
-            CharSequence attributions = places.getAttributions();
             Log.e(LOG_TAG,"name"+ Html.fromHtml(place.getName() + ""));
             Log.e(LOG_TAG,"getAddress"+Html.fromHtml(place.getAddress() + ""));
             Log.e(LOG_TAG,"getAddress"+Html.fromHtml(place.getLatLng() + ""));
@@ -152,9 +125,6 @@ public class to extends AppCompatActivity implements
             n.putExtra("lng", place.getLatLng().longitude);
             startActivity(n);
             finish();
-            if (attributions != null) {
-                // mAttTextView.setText(Html.fromHtml(attributions.toString()));
-            }
         }
     };
         public void update(){
@@ -177,7 +147,6 @@ public class to extends AppCompatActivity implements
                     n.putExtra("lng", F.getLng());
                     startActivity(n);
                     finish();
-
                 }
             });
 

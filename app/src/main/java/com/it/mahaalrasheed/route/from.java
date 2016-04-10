@@ -16,12 +16,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -91,27 +89,6 @@ public class from extends AppCompatActivity implements
             }
         });
 
-        /////////////////////////
-        
-       /* autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                Intent n = new Intent(from.this, map.class);
-                n.putExtra("page","from".toString());
-                n.putExtra("name", place.getName().toString());
-                n.putExtra("lat", place.getLatLng().latitude );
-                n.putExtra("lng", place.getLatLng().longitude);
-                startActivity(n);
-                finish();
-            }
-
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-
-            }
-        });*/
     }
     private AdapterView.OnItemClickListener mAutocompleteClickListener
             = new AdapterView.OnItemClickListener() {
@@ -137,7 +114,6 @@ public class from extends AppCompatActivity implements
             }
             // Selecting the first object buffer.
             final Place place = places.get(0);
-            CharSequence attributions = places.getAttributions();
             Log.e(LOG_TAG,"name"+ Html.fromHtml(place.getName() + ""));
             Log.e(LOG_TAG,"getAddress"+Html.fromHtml(place.getAddress() + ""));
             Log.e(LOG_TAG,"getAddress"+Html.fromHtml(place.getLatLng() + ""));
@@ -147,9 +123,7 @@ public class from extends AppCompatActivity implements
             n.putExtra("lat", place.getLatLng().latitude );
             n.putExtra("lng", place.getLatLng().longitude);
             startActivity(n);
-            if (attributions != null) {
-                // mAttTextView.setText(Html.fromHtml(attributions.toString()));
-            }
+            finish();
         }
     };
 

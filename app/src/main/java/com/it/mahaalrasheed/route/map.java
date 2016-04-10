@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
@@ -33,15 +34,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -66,15 +70,14 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-
-
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+    //test commit
+    public static final String ROOT_URL = "http://192.168.100.16/";
 
-    public static final String ROOT_URL = "http://192.168.100.13/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
-    double latat=0, longt=0;
+    double latat = 0, longt = 0;
     public GoogleMap map;
 
     private ViewGroup infoWindow;
@@ -88,39 +91,45 @@ public class map extends AppCompatActivity
     private OnInfoWindowElemTouchListener infoButtonListener1;
     private OnInfoWindowElemTouchListener infoButtonListener2;
 
-    private Polyline mMutablePolyline;
-    private static Polyline mClickablePolyline;
+    static ArrayList<Polyline> polylines = new ArrayList<Polyline>();
 
     static GoogleMap googleMap;
-    static double  Tolng,Fromlng,lng;
-    static double Tolat, Fromlat,lat;
+    static double Tolng, Fromlng, lng;
+    static double Tolat, Fromlat, lat;
     static Button from, to;
     Location location;
     MapFragment fm;
     LocationManager locationManager;
     String provider;
     static int notifID;
-    String notif="";
+    String notif = "";
     Realm realm;
     Menu myMenu;
-    private Map<Marker, MetroStation> spots = new HashMap<>();;
+    private Map<Marker, MetroStation> spots = new HashMap<>();
+    ;
     private static MetroStation[] SPOTS_ARRAY;
     private BottomSheetBehavior mBottomSheetBehavior;
     ListView lv;
-    String Locationname , page="";
+    String Locationname, page = "";
     public static String fromname = "From";
 
     Realm relam;
     FavoriteClass F;
     int id;
-    static Marker marker;
+    static Marker marker, line;
     static Marker m;
-
+    static LatLng riyadh = new LatLng(24.713552, 46.675296);
 
 
     ImageButton left, right;
     static int swiping = 1;
     static TextView section_label;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
 
 
     @Override
@@ -128,10 +137,21 @@ public class map extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        //premission
+
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                lng = location.getLongitude();
+                lat = location.getLatitude();
+            }
+        };
+
+        //end permission
+
         frag = (RelativeLayout) findViewById(R.id.frag);
         left = (ImageButton) findViewById(R.id.swipeleft);
         right = (ImageButton) findViewById(R.id.swiperight);
-        section_label = (TextView)findViewById(R.id.section_label);
+        section_label = (TextView) findViewById(R.id.section_label);
 
         frag.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,8 +176,10 @@ public class map extends AppCompatActivity
         to = (Button) findViewById(R.id.tobutton);
 
 
-
         DisplayMap();
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(riyadh, 10));
+
+        //RetrieveNotifID();
         RetrieveNotifID();
 
 
@@ -166,8 +188,8 @@ public class map extends AppCompatActivity
             public void onClick(View v) {
                 section_label.setText("right");
                 swiping++;
-                  if (swiping == 4)
-                      swiping = 1;
+                if (swiping == 4)
+                    swiping = 1;
 
                 testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
 
@@ -182,7 +204,6 @@ public class map extends AppCompatActivity
                 swiping--;
                 if (swiping == -1)
                     swiping = 3;
-
 
 
                 testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
@@ -227,38 +248,43 @@ public class map extends AppCompatActivity
                 if (Fromlat == 0 || Fromlng == 0) {
                     from.setText("Current Location");
                     Fromlng = lng;
-                    Fromlat = lat;}
+                    Fromlat = lat;
+                }
 
-                frag.getLayoutParams().height = 300;
-                swiping = 1;
-                section_label.setText("AStar");
-                testroute.route(Fromlat, Fromlng, Tolat, Tolng, 1);
-
+                test();
             }
 
-            }
+        }
 
 
         // draw marker when clicked on specific favorite location
-if(Favorites.latFav != 0) {
-    latat = Favorites.latFav;
-    longt = Favorites.lngFav;
-    m = googleMap.addMarker(new MarkerOptions().position(new LatLng(Favorites.latFav, Favorites.lngFav)));
-}
+        if (Favorites.latFav != 0) {
+            latat = Favorites.latFav;
+            longt = Favorites.lngFav;
+            m = googleMap.addMarker(new MarkerOptions().position(new LatLng(Favorites.latFav, Favorites.lngFav)));
+        }
         onMapReady(googleMap);
+
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
 
-    public void test(){
-        testroute.route(Fromlat, Fromlng,Tolat ,Tolng,1);
-       }
+    public void test() {
+        frag.getLayoutParams().height = 300;
+        swiping = 1;
+        section_label.setText("AStar");
+        testroute.route(Fromlat, Fromlng, Tolat, Tolng, 1);
+    }
 
     public static int getPixelsFromDp(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
-        return (int)(dp * scale + 0.5f);
+        return (int) (dp * scale + 0.5f);
     }
 
-    public void DisplayMap(){
+    public void DisplayMap() {
 
         //!!!!!!!!!!Map part start
         // Getting Google Play availability status
@@ -304,28 +330,19 @@ if(Favorites.latFav != 0) {
             }
             location = locationManager.getLastKnownLocation(provider);
 
-            GoogleMap.OnMyLocationChangeListener locationListener = new GoogleMap.OnMyLocationChangeListener() {
-                @Override
-                public void onMyLocationChange(Location location) {
-                    lat = location.getLatitude();
-                    lng = location.getLongitude();
-                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder().target(new LatLng(lat, lng)).zoom(11).build()));
-                    // googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 16.0f));
-
-                }
-            };
-            //locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
-            googleMap.setOnMyLocationChangeListener(locationListener);
 
         } //!!!!!!!!!!Map part end
+
     }
 
-    private void PlotStation(){
+
+    private void PlotStation() {
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
         map.clear(); //to clear all markers before
-        if(latat !=0 && longt !=0){
-        LatLng update = new LatLng(latat,longt);
-        map.addMarker(new MarkerOptions().position(update));}
+        if (latat != 0 && longt != 0) {
+            LatLng update = new LatLng(latat, longt);
+            map.addMarker(new MarkerOptions().position(update));
+        }
 
 
         //Creating a RestAdapter
@@ -394,14 +411,19 @@ if(Favorites.latFav != 0) {
         );
     }
 
-    public static void PlotLine(ArrayList<LatLng> lineCoor , ArrayList<Integer> type) {
+    public static void PlotLine(ArrayList<LatLng> lineCoor, ArrayList<Integer> type) {
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
-
-
-        Log.v("lineCoorAstar", lineCoor + "");
-        //Creating a RestAdapter
+        //to zoom the camera to the starting point
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Fromlat, Fromlng), 13));
 
         try {
+
+            if (!polylines.isEmpty()) {
+                for (Polyline p : polylines)
+                    p.remove();
+
+            }
+
 
             for (int j = 0; j < lineCoor.size() - 1; j++) {
                 int type1 = type.get(j);
@@ -410,12 +432,15 @@ if(Favorites.latFav != 0) {
                 LatLng tempCoor2 = lineCoor.get(j + 1);
                 Log.e("type", type1 + ":" + type2);
                 Log.e("type", tempCoor1 + ":" + tempCoor2);
+
+
                 if (type1 == 1 && type2 == 1) {
-                    mClickablePolyline = googleMap.addPolyline((new PolylineOptions())
+
+                    polylines.add(googleMap.addPolyline((new PolylineOptions())
                             .add(tempCoor1, tempCoor2)
                             .width(10)
                             .color(Color.BLUE)
-                            .geodesic(true));
+                            .geodesic(true)));
                 } else {
                     // Getting URL to the Google Directions API
                     String url = getDirectionsUrl(tempCoor1, tempCoor2);
@@ -432,6 +457,7 @@ if(Favorites.latFav != 0) {
         }
 
     }
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
@@ -451,9 +477,9 @@ if(Favorites.latFav != 0) {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater=getMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.map, menu);
-        myMenu=menu;
+        myMenu = menu;
         return true;
     }
 
@@ -463,11 +489,11 @@ if(Favorites.latFav != 0) {
         // automatically handle clicks on the notification button
 
         //noinspection SimplifiableIfStatement
-        if ( item.getItemId() == R.id.notifi) { //if user press the notification icon on the menu bar, go to  activity
-            Intent intent = new Intent (this, notif.class);
-            intent.putExtra("content", notif+"");
+        if (item.getItemId() == R.id.notifi) { //if user press the notification icon on the menu bar, go to  activity
+            Intent intent = new Intent(this, notif.class);
+            intent.putExtra("content", notif + "");
             startActivityForResult(intent, 1);
-           return true;
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -478,14 +504,13 @@ if(Favorites.latFav != 0) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // check if the request code is same as what is passed  here it is 1
-        if(requestCode==1)
-        {
+        if (requestCode == 1) {
             //If the result is returned correctly
-            if(resultCode== Activity.RESULT_OK){
-            String message=data.getStringExtra("id");
-            notifID=Integer.parseInt( message+"");
+            if (resultCode == Activity.RESULT_OK) {
+                String message = data.getStringExtra("id");
+                notifID = Integer.parseInt(message + "");
 
-                Notification n=new Notification();
+                Notification n = new Notification();
                 n.setID(notifID);
                 n.setPk(0);
                 Realm realm = Realm.getInstance(getApplicationContext());
@@ -507,15 +532,15 @@ if(Favorites.latFav != 0) {
 
         if (id == R.id.nav_camera) { //map
             // Handle the map action
-           Intent intent = new Intent (this, map.class);
+            Intent intent = new Intent(this, map.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_gallery) {  //favorites
-           Intent intent = new Intent (this, Favorites.class);
+            Intent intent = new Intent(this, Favorites.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_manage) {  //about us
-            Intent intent = new Intent (this, aboutusnav.class);
+            Intent intent = new Intent(this, aboutusnav.class);
             startActivity(intent);
         }
 
@@ -558,6 +583,7 @@ if(Favorites.latFav != 0) {
                             output = reader.readLine();
 
 
+                            Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
                             if (output.length() != 1) {
                                 //Check if there is an output from server
                                 notif = output;
@@ -584,47 +610,62 @@ if(Favorites.latFav != 0) {
     @Override
     protected void onStart() {
         super.onStart();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "map Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.it.mahaalrasheed.route/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
     }
 
-    public void RetrieveNotifID(){
+    public void RetrieveNotifID() {
         //retrieve realm content
         realm = Realm.getInstance(getApplicationContext());
-        List<Notification> itemNot =realm.allObjects(Notification.class);
+        List<Notification> itemNot = realm.allObjects(Notification.class);
 
         //store all returned content from realm
-        if(itemNot.size() != 0)
+        if (itemNot.size() != 0)
             notifID = itemNot.get(0).getID();
-            RetrieveNotif(notifID);
+        RetrieveNotif(notifID);
 
     }
 
 
-
-    private static String getDirectionsUrl(LatLng origin, LatLng dest){
+    private static String getDirectionsUrl(LatLng origin, LatLng dest) {
 
 // Origin of route
-        String str_origin = "origin="+origin.latitude+","+origin.longitude;
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
 
 // Destination of route
-        String str_dest = "destination="+dest.latitude+","+dest.longitude;
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
 // Sensor enabled
         String sensor = "sensor=false";
 
 // Building the parameters to the web service
-        String parameters = str_origin+"&"+str_dest+"&"+sensor;
+        String parameters = str_origin + "&" + str_dest + "&" + sensor;
 
 // Output format
         String output = "json";
 
 // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
         return url;
     }
 
     private final int SPLASH_DISPLAY_LENGTH = 1200;
-    static int arraySize [] =new int[30];
+    static int arraySize[] = new int[30];
 
     public static void numOfStation() {
         //Here we will handle the http request to retrieve from mysql db
@@ -712,14 +753,16 @@ if(Favorites.latFav != 0) {
                 }
         );
     }
-    
-    /** A method to download json data from url */
-    public static String downloadUrl(String strUrl) throws IOException{
+
+    /**
+     * A method to download json data from url
+     */
+    public static String downloadUrl(String strUrl) throws IOException {
         String data = "";
         InputStream iStream = null;
         HttpURLConnection urlConnection = null;
 
-        try{
+        try {
 
             URL url = new URL(strUrl);
 
@@ -737,7 +780,7 @@ if(Favorites.latFav != 0) {
             StringBuffer sb = new StringBuffer();
 
             String line = "";
-            while( ( line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
 
@@ -745,19 +788,22 @@ if(Favorites.latFav != 0) {
 
             br.close();
 
-        } catch(Exception e){
-        } finally{
+        } catch (Exception e) {
+        } finally {
             iStream.close();
             urlConnection.disconnect();
         }
         return data;
     }
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout)findViewById(R.id.map_relative_layout);
+
+
+        final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout) findViewById(R.id.map_relative_layout);
 
         // MapWrapperLayout initialization
         // 39 - default marker height
@@ -766,29 +812,28 @@ if(Favorites.latFav != 0) {
 
         // We want to reuse the info window for all the markers,
         // so let's create only one class member instance
-        this.infoWindow = (ViewGroup)getLayoutInflater().inflate(R.layout.activity_map_wrapper_layout, null);
-        this.infoButton = (Button)infoWindow.findViewById(R.id.button);
-        this.infoButton1 = (Button)infoWindow.findViewById(R.id.button2);
-        this.infoButton2 = (Button)infoWindow.findViewById(R.id.button3);
+        this.infoWindow = (ViewGroup) getLayoutInflater().inflate(R.layout.activity_map_wrapper_layout, null);
+        this.infoButton = (Button) infoWindow.findViewById(R.id.button);
+        this.infoButton1 = (Button) infoWindow.findViewById(R.id.button2);
+        this.infoButton2 = (Button) infoWindow.findViewById(R.id.button3);
 
         // Setting custom OnTouchListener which deals with the pressed state
         // so it shows up
         this.infoButtonListener = new OnInfoWindowElemTouchListener(infoButton,
                 getResources().getDrawable(R.drawable.cast_ic_notification_1),
-                getResources().getDrawable(R.drawable.cast_ic_notification_2))
-        {
+                getResources().getDrawable(R.drawable.cast_ic_notification_2)) {
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
                 // Here we can perform some action triggered after clicking the button
-                if ( m != null)
+                if (m != null)
                     m.remove();
 
-                Fromlat= latat;
+                Fromlat = latat;
                 Fromlng = longt;
-                if(Favorites.nameFav.equals(""))
-                from.setText(latat + "," + longt);
+                if (Favorites.nameFav.equals(""))
+                    from.setText(latat + "," + longt);
                 else
-                    from.setText(Favorites.nameFav+"");
+                    from.setText(Favorites.nameFav + "");
 
                 marker.remove();
 
@@ -798,20 +843,19 @@ if(Favorites.latFav != 0) {
 
         this.infoButtonListener1 = new OnInfoWindowElemTouchListener(infoButton1,
                 getResources().getDrawable(R.drawable.cast_ic_notification_1),
-                getResources().getDrawable(R.drawable.cast_ic_notification_2))
-        {
+                getResources().getDrawable(R.drawable.cast_ic_notification_2)) {
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
                 // Here we can perform some action triggered after clicking the button
-                if ( m != null)
+                if (m != null)
                     m.remove();
-                Tolat= latat;
+                Tolat = latat;
                 Tolng = longt;
-                if(Favorites.nameFav.equals(""))
+                if (Favorites.nameFav.equals(""))
                     to.setText(latat + "," + longt);
                 else
-                    to.setText(Favorites.nameFav+"");
-                Toast.makeText(getApplicationContext(),"to", Toast.LENGTH_SHORT).show();
+                    to.setText(Favorites.nameFav + "");
+                Toast.makeText(getApplicationContext(), "to", Toast.LENGTH_SHORT).show();
                 marker.remove();
 
                 test();
@@ -820,8 +864,7 @@ if(Favorites.latFav != 0) {
 
         this.infoButtonListener2 = new OnInfoWindowElemTouchListener(infoButton2,
                 getResources().getDrawable(R.drawable.cast_ic_notification_1),
-                getResources().getDrawable(R.drawable.cast_ic_notification_2))
-        {
+                getResources().getDrawable(R.drawable.cast_ic_notification_2)) {
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
 
@@ -829,16 +872,16 @@ if(Favorites.latFav != 0) {
                 F.setId((Favorites.id)++);
                 F.setLat(latat);
                 F.setLng(longt);
-                F.setName(latat+","+longt);
+                F.setName(latat + "," + longt);
 
                 relam = Realm.getInstance(getApplicationContext());
                 relam.beginTransaction();
                 relam.copyToRealmOrUpdate(F);
                 relam.commitTransaction();
-                if ( m != null)
+                if (m != null)
                     m.remove();
                 // Here we can perform some action triggered after clicking the button
-                Toast.makeText(getApplicationContext(),"fav.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "fav.", Toast.LENGTH_SHORT).show();
             }
         };
         this.infoButton.setOnTouchListener(infoButtonListener);
@@ -873,7 +916,7 @@ if(Favorites.latFav != 0) {
             public void onMapLongClick(LatLng latLng) {
                 if (marker != null)
                     marker.remove();
-                marker =  map.addMarker(new MarkerOptions().position(latLng));
+                marker = map.addMarker(new MarkerOptions().position(latLng));
 
                 latat = latLng.latitude;
                 longt = latLng.longitude;
@@ -881,14 +924,34 @@ if(Favorites.latFav != 0) {
             }
         });  //end on click
 
-         PlotStation();
+        //PlotStation();
 
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "map Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.it.mahaalrasheed.route/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 }
 
 
- class DownloadTask extends AsyncTask<String, Void, String> {
+class DownloadTask extends AsyncTask<String, Void, String> {
 
     // Downloading data in non-ui thread
     @Override
@@ -918,4 +981,6 @@ if(Favorites.latFav != 0) {
         parserTask.execute(result);
 
     }
- }
+
+
+}

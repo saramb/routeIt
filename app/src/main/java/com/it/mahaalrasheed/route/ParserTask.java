@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONObject;
@@ -17,12 +18,14 @@ import java.util.List;
 
 public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> > {
 
+    static ArrayList<Polyline> polylines = new ArrayList<Polyline>();
     // Parsing the data in non-ui thread
     @Override
     protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
 
         JSONObject jObject;
         List<List<HashMap<String, String>>> routes = null;
+
 
         try{
             jObject = new JSONObject(jsonData[0]);
@@ -43,6 +46,11 @@ public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<Str
         ArrayList points = null;
         PolylineOptions lineOptions = null;
         MarkerOptions markerOptions = new MarkerOptions();
+        if (!polylines.isEmpty()) {
+            for (Polyline p : polylines)
+                p.remove();
+
+        }
 
 // Traversing through all the routes
         for(int i=0;i<result.size();i++){
@@ -70,7 +78,8 @@ public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<Str
 
         }
 
+
 // Drawing polyline in the Google Map for the i-th route
-     map.googleMap.addPolyline(lineOptions);
+        polylines.add( map.googleMap.addPolyline(lineOptions));
     }
 }

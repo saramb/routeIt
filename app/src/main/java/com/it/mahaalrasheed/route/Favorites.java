@@ -1,5 +1,6 @@
 package com.it.mahaalrasheed.route;
 
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -8,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -26,13 +27,17 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.realm.Realm;
@@ -41,19 +46,19 @@ import io.realm.Realm;
 public class Favorites extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks {
+        GoogleApiClient.ConnectionCallbacks,TimePickerDialog.OnTimeSetListener,DatePickerDialog.OnDateSetListener {
 
     PlaceAutocompleteFragment autocompleteFragment;
     Realm relam;
     FavoriteClass F;
     List<FavoriteClass> item;
     SwipeMenuListView lv;
-    public static int id=0;
+    public static int id = 0;
     int iddelete;
     ArrayAdapter addapter;
     ArrayList<String> array;
-    static double latFav=0.0;
-    static double lngFav=0.0;
+    static double latFav = 0.0;
+    static double lngFav = 0.0;
     static String nameFav = "";
     ////////////////////// search ////////////////////
     private static final String LOG_TAG = "FromActivity";
@@ -61,9 +66,9 @@ public class Favorites extends AppCompatActivity
     private AutoCompleteTextView mAutocompleteTextView;
     private GoogleApiClient mGoogleApiClient;
     private PlaceArrayAdapter mPlaceArrayAdapter;
-    LatLngBounds BOUNDS_MOUNTAIN_VIEW ;
+    LatLngBounds BOUNDS_MOUNTAIN_VIEW;
     ////////////////////////////////////////
-
+    Calendar calendar;
 
 
     @Override
@@ -83,8 +88,7 @@ public class Favorites extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        lv = (SwipeMenuListView)findViewById(R.id.listView);
-
+        lv = (SwipeMenuListView) findViewById(R.id.listView);
         update();
 //////---search-----////
         mGoogleApiClient = new GoogleApiClient.Builder(Favorites.this)
@@ -99,11 +103,13 @@ public class Favorites extends AppCompatActivity
         mPlaceArrayAdapter = new PlaceArrayAdapter(this, android.R.layout.simple_list_item_1,
                 BOUNDS_MOUNTAIN_VIEW, null);
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
-        if(!mAutocompleteTextView.hasFocus()){
+        if (!mAutocompleteTextView.hasFocus()) {
             mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.searchicon2, 0, 0, 0);
             mAutocompleteTextView.setHint("Search");
 
         }
+
+
         mAutocompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -119,36 +125,6 @@ public class Favorites extends AppCompatActivity
                 }
             }
         });
-
-
-
-    /////////////////////////
-
-        /*autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                F = new FavoriteClass();
-                F.setId(id++);
-                F.setLat(place.getLatLng().latitude);
-                F.setLng(place.getLatLng().longitude);
-                F.setName(place.getName().toString());
-
-                relam = Realm.getInstance(getApplicationContext());
-                relam.beginTransaction();
-                relam.copyToRealmOrUpdate(F);
-                relam.commitTransaction();
-                Toast.makeText(Favorites.this, "Correctly add favorite", Toast.LENGTH_LONG).show();
-                update();
-            }
-
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-
-            }
-        });*/
-
 
         // step 1. create a MenuCreator
         SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -173,25 +149,14 @@ public class Favorites extends AppCompatActivity
         lv.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+
                 switch (index) {
                     case 0:
-                        relam.beginTransaction();
-                        relam.allObjects(FavoriteClass.class).remove(iddelete);
-                        relam.commitTransaction();
 
-                        F = new FavoriteClass();
-                        F.setId(iddelete);
-                        F.setLat(0);
-                        F.setLng(0);
-                        F.setName("-");
-
-                        relam = Realm.getInstance(getApplicationContext());
-                        relam.beginTransaction();
-                        relam.copyToRealmOrUpdate(F);
-                        relam.commitTransaction();
-
-                        update();
-                        Toast.makeText(Favorites.this, "Correctly delete favorite", Toast.LENGTH_LONG).show();
+                        Intent n = new Intent(Favorites.this, Editfav.class);
+                        n.putExtra("id", position);
+                        startActivity(n);
+                        finish();
                         break;
                 }
                 return false;
@@ -203,13 +168,13 @@ public class Favorites extends AppCompatActivity
 
             @Override
             public void onSwipeStart(int position) {
-                iddelete=position;
+                iddelete = position;
                 // swipe start
             }
 
             @Override
             public void onSwipeEnd(int position) {
-                // swipe end
+                iddelete = position;
             }
         });
 
@@ -235,6 +200,20 @@ public class Favorites extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         autocompleteFragment.onActivityResult(requestCode, resultCode, data);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                mAutocompleteTextView.setHint(" ");
+            }
+
+            @Override
+            public void onError(Status status) {
+
+            }
+        });
+
+
     }
 
     @Override
@@ -255,15 +234,15 @@ public class Favorites extends AppCompatActivity
 
         if (id == R.id.nav_camera) { //map
             // Handle the map action
-            Intent intent = new Intent (this, map.class);
+            Intent intent = new Intent(this, map.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_gallery) {  //favorites
-            Intent intent = new Intent (this, Favorites.class);
+            Intent intent = new Intent(this, Favorites.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_manage) {  //about us
-            Intent intent = new Intent (this, aboutusnav.class);
+            Intent intent = new Intent(this, aboutusnav.class);
             startActivity(intent);
         }
 
@@ -278,32 +257,37 @@ public class Favorites extends AppCompatActivity
         super.onStart();
     }
 
-    public void update(){
+    public void update() {
         relam = Realm.getInstance(getApplicationContext());
         item = relam.allObjects(FavoriteClass.class);
         array = new ArrayList<String>();
         for (int i = 0; i < item.size(); i++) {
-            if ( !item.get(i).getName().equals("-"))
-            array.add(i,item.get(i).getName());
+            if (!item.get(i).getName().equals("-"))
+                array.add(i, item.get(i).getName());
         }
 
-        id= item.size();
 
-        addapter = new ArrayAdapter(Favorites.this, android.R.layout.simple_list_item_1,array);
-        lv.setAdapter(addapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent n = new Intent(Favorites.this,map.class);
-                FavoriteClass F = relam.allObjects(FavoriteClass.class).get(position);
-                latFav= F.getLat();
-                lngFav = F.getLng();
-                nameFav= F.getName();
-                startActivity(n);
-            }
-        });
 
+    addapter=new ArrayAdapter(Favorites.this, android.R.layout.simple_list_item_1, array);
+
+    lv.setAdapter(addapter);
+    lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
+
+    {
+        @Override
+        public void onItemClick (AdapterView < ? > parent, View view,int position, long id){
+        Intent n = new Intent(Favorites.this, map.class);
+        FavoriteClass F = relam.allObjects(FavoriteClass.class).get(position);
+        latFav = F.getLat();
+        lngFav = F.getLng();
+        nameFav = F.getName();
+        startActivity(n);
+        finish();
     }
+    }
+
+    ); }
+
 
     private AdapterView.OnItemClickListener mAutocompleteClickListener
             = new AdapterView.OnItemClickListener() {
@@ -329,31 +313,28 @@ public class Favorites extends AppCompatActivity
             }
             // Selecting the first object buffer.
             final Place place = places.get(0);
-            CharSequence attributions = places.getAttributions();
-            Log.e(LOG_TAG,"name"+ Html.fromHtml(place.getName() + ""));
-            Log.e(LOG_TAG,"getAddress"+Html.fromHtml(place.getAddress() + ""));
-            Log.e(LOG_TAG,"getAddress"+Html.fromHtml(place.getLatLng() + ""));
+
             F = new FavoriteClass();
-            F.setId(id++);
+            F.setId((int) Calendar.getInstance().getTimeInMillis());
+            Log.d("idtest", id + "");
             F.setLat(place.getLatLng().latitude);
             F.setLng(place.getLatLng().longitude);
             F.setName(place.getName().toString());
 
-            relam = Realm.getInstance(getApplicationContext());
             relam.beginTransaction();
             relam.copyToRealmOrUpdate(F);
             relam.commitTransaction();
+
+
+            mAutocompleteTextView.setText(" ");
+
             Toast.makeText(Favorites.this, "Correctly add favorite", Toast.LENGTH_LONG).show();
+
+
+
+
+
             update();
-            Intent n = new Intent(Favorites.this, map.class);
-            n.putExtra("page","favorite".toString());
-            n.putExtra("name", place.getName().toString());
-            n.putExtra("lat", place.getLatLng().latitude );
-            n.putExtra("lng", place.getLatLng().longitude);
-            startActivity(n);
-            if (attributions != null) {
-                // mAttTextView.setText(Html.fromHtml(attributions.toString()));
-            }
         }
     };
 
@@ -379,5 +360,19 @@ public class Favorites extends AppCompatActivity
     public void onConnectionSuspended(int i) {
         mPlaceArrayAdapter.setGoogleApiClient(null);
         Log.e(LOG_TAG, "Google Places API connection suspended.");
+    }
+
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
     }
 }

@@ -6,7 +6,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class FavoriteClass extends RealmObject {
     @PrimaryKey
-    private int id ;
+    private int id;
     private double lng;
     private double lat;
     private String name;

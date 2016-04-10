@@ -28,7 +28,6 @@ public class testroute {
 
     static String  fromId , toId, withen;
     static String fromCoorX,toCoorX,fromCoorY,toCoorY,distanceTo,distanceFrom;
-    static  String finalPath="";
     static  String [][] Mline1 = null;
     static  String [][] Mline2 = null;
     static  String [][] Mline3 = null;
