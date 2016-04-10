@@ -21,9 +21,13 @@ public class Algorithm extends Application {
     public static String walk = "";
     //First station (Source Station)
     static Station newStation, Station;
+    public static String altID="";
+    public static double altLat=0;
+    public static double altLong=0;
+    public static boolean altFlag = true;
 
-    //--------------------------Astar algorithm---------------------
-//Perform A star algorithm
+
+
 
     //--------------------------Astar algorithm---------------------
 //Perform A star algorithm
@@ -240,8 +244,19 @@ public class Algorithm extends Application {
                         externals = externals.substring(externals.indexOf("|") + 1);
                         double x = Double.parseDouble(externals.substring(0, externals.indexOf(":")));
                         double y = Double.parseDouble(externals.substring(externals.indexOf(":") + 1));
-
                         Extract(id, x, y, newStation);
+
+
+                        //ALT
+                        if(altFlag){
+                            altID = id;
+                            altLat=x;
+                            altLong = y;
+                            altFlag = false;
+                            Station.setName(to);
+                        }
+                        //ALT
+
                         if (Station.getName().equals(to))
                             return path(newStation)+"%"+coorPath(newStation);
 
@@ -267,7 +282,17 @@ public class Algorithm extends Application {
                                 externals = externals.substring(externals.indexOf(",") + 1);
                             }
 
+
                             Extract(id, x, y, newStation);
+                            //ALT
+                            if(altFlag){
+                                altID = id;
+                                altLat=x;
+                                altLong = y;
+                                altFlag = false;
+                                Station.setName(to);
+                            }
+                            //ALT
                             if (Station.getName().equals(to))
                                 return path(newStation)+"%"+coorPath(newStation);
 
@@ -277,6 +302,7 @@ public class Algorithm extends Application {
                                 AddToFrontier(Station);
 
                         } // end for
+
                     } // 2.2)if the station is in different line of the
                     // current station
                 }
@@ -284,15 +310,125 @@ public class Algorithm extends Application {
         } // end while
     }// end BFS
 
+public static void altBFS(String from , double startX, double startY, String child,String visitedChild){
 
-    //--------------------------DFS algorithm---------------------
+    Extraction(from, startX, startY);
+
+
+    while (true) {
+
+        // remove from the head of the frontier
+        removeFromFrontier();
+
+        // locate the station to its matrix
+        assignMatrix(newStation.getName().charAt(0) + "", newStation.getLine(), newStation.getStreet());
+
+        for (int i = 0; i < TempMatrix.length; i++) {
+            // 1)if the station is in the same line of the current station
+            if (TempMatrix[newStation.getStationNumber() - 1][i] != null
+                    && !TempMatrix[newStation.getStationNumber() - 1][i].contains("|")) {
+                // if metro station
+                if (newStation.getStreet() == 0)
+                    Station = new Station(capacity[newStation.getLine() - 1], newStation.getLine(), i + 1,
+                            newStation, TempMatrix[newStation.getStationNumber() - 1][i]);
+                else // bus station
+                    Station = new Station(capacity2[newStation.getLine() - 1], newStation.getLine(),
+                            newStation.getStreet(), i + 1, newStation,
+                            TempMatrix[newStation.getStationNumber() - 1][i]);
+
+                //ALT
+                if (altFlag && !child.equals(Station.getName()) && !visitedChild.equals(Station.getName())) {
+                    altID = Station.getName();
+                    altLat = Station.getX();
+                    altLong = Station.getY();
+                    altFlag = false;
+                    return;
+                }
+                //ALT
+
+
+            } //// 1)if the station is in the same line of the current
+            //// station
+
+            // 2)if the station is in different line or street of the
+            // current station
+            else if (TempMatrix[newStation.getStationNumber() - 1][i] != null
+                    && TempMatrix[newStation.getStationNumber() - 1][i].indexOf("|") >= 0) {
+                String externals = TempMatrix[newStation.getStationNumber() - 1][i];
+                int count = countCommas(externals);
+                // 2.1)if the station is in different street of the
+                // current station
+                if (externals.indexOf(",") < 0) {
+                    String id = externals.substring(0, externals.indexOf("|"));
+                    externals = externals.substring(externals.indexOf("|") + 1);
+                    double x = Double.parseDouble(externals.substring(0, externals.indexOf(":")));
+                    double y = Double.parseDouble(externals.substring(externals.indexOf(":") + 1));
+                    Extract(id, x, y, newStation);
+
+
+                    //ALT
+                    if(altFlag && !child.equals(Station.getName()) && !visitedChild.equals(Station.getName())){
+                        altID = id;
+                        altLat=x;
+                        altLong = y;
+                        altFlag = false;
+                        return;
+                    }
+                    //ALT
+
+                    // 2.2)if the station is in different line of the
+                    // current station
+                } else {
+                    String id = "";
+                    for (int j = 0; j < count + 1; j++) {
+
+                        id = externals.substring(0, externals.indexOf("|"));
+                        externals = externals.substring(externals.indexOf("|") + 1);
+                        double x = Double.parseDouble(externals.substring(0, externals.indexOf(":")));
+                        double y;
+                        if (j == count)
+                            y = Double.parseDouble(externals.substring(externals.indexOf(":") + 1));
+                        else {
+                            y = Double.parseDouble(
+                                    externals.substring(externals.indexOf(":") + 1, externals.indexOf(",")));
+                            externals = externals.substring(externals.indexOf(",") + 1);
+                        }
+
+
+                        Extract(id, x, y, newStation);
+                        //ALT
+                        if(altFlag && !child.equals(Station.getName()) && !visitedChild.equals(Station.getName())){
+                            altID = id;
+                            altLat=x;
+                            altLong = y;
+                            altFlag = false;
+                            return;
+
+                        }
+                        //ALT
+
+
+                    } // end for
+
+                } // 2.2)if the station is in different line of the
+                // current station
+            }
+        }
+    } // end while
+}// end BFS
+// end BFS
+
+                //--------------------------DFS algorithm---------------------
 //Perform A star algorithm
+
     public static String DFS(String from, String to,  double StartX,double StartY, double GoalX, double GoalY){
 
         // explored arraylist to mark which vertices have been visited while doing the A*
         explored =new ArrayList<String>();
         // frontier arraylist to mark which vertices have been visited while doing the A*
         frontier =new ArrayList<Station>();
+        ArrayList<Station> Queuefrontier =new ArrayList<Station>();
+
         Stringfrontier = new ArrayList <String>();
 
         double goalX = GoalX;
@@ -336,7 +472,7 @@ public class Algorithm extends Application {
                         else // bus station
                             Station = new Station(capacity2[newStation.getLine()-1],newStation.getLine(),newStation.getStreet(),i+1,newStation, TempMatrix[newStation.getStationNumber()-1][i]);
                         if (!explored.contains (Station.getName()) && !Stringfrontier.contains(Station.getName()))
-                            AddToFrontier(Station);
+                            Queuefrontier.add(0,Station);
 
                     }////1)if the station is in the same line of the current station
 
@@ -352,7 +488,7 @@ public class Algorithm extends Application {
                             double y = Double.parseDouble(externals.substring(externals.indexOf(":")+1));
                             Extract(id,x,y, newStation);
                             if (!explored.contains (Station.getName()) && !Stringfrontier.contains(Station.getName()))
-                                AddToFrontier(Station);
+                                Queuefrontier.add(0, Station);
                         } ////2.1)if the station is in different street of the current station
 
                         //2.2)if the station is in different line of the current station
@@ -373,11 +509,14 @@ public class Algorithm extends Application {
                                 Extract(id,x,y, newStation);
 
                                 if (!explored.contains (Station.getName()) && !Stringfrontier.contains(Station.getName()))
-                                    AddToFrontier(Station);
+                                    Queuefrontier.add(0,Station);
 
                             }//end for
                         }//2.2)if the station is in different line of the current station
                     }
+                }
+                while(  Queuefrontier.size() !=0) {
+                    AddToBegFrontier(Queuefrontier.remove(0));
                 }
             }//end big else (else if not the goal)
 
@@ -433,6 +572,11 @@ public class Algorithm extends Application {
         frontier.add(Station);
         Stringfrontier.add(Station.getName());}
 
+    //--------------------------AddToBigenningFrontier---------------------
+//add to the  of frontier
+    public static void AddToBegFrontier(Station Station){
+        frontier.add(0,Station);
+        Stringfrontier.add(0,Station.getName());}
     //--------------------------removeFromFrontier---------------------
 //remove from the head of frontier
     public static void removeFromFrontier(){
@@ -684,6 +828,8 @@ class Station{
 
     public String getName () {
         return name; }
+    public void  setName(String n ){
+        name = n;}
 
     public int getLine () {
         return line; }

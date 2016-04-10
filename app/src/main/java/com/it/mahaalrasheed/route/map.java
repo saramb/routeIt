@@ -70,8 +70,8 @@ import retrofit.client.Response;
 
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
-//test commit
-    public static final String ROOT_URL = "http://192.168.1.103/";
+
+    public static final String ROOT_URL = "http://192.168.100.13/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
     double latat=0, longt=0;
@@ -136,7 +136,7 @@ public class map extends AppCompatActivity
         frag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 Intent intent = new Intent(map.this, path_Info.class);
+                Intent intent = new Intent(map.this, path_Info.class);
                 startActivity(intent);
             }
         });
@@ -158,7 +158,7 @@ public class map extends AppCompatActivity
 
 
         DisplayMap();
-        //RetrieveNotifID();
+        RetrieveNotifID();
 
 
         right.setOnClickListener(new View.OnClickListener() {
@@ -558,7 +558,6 @@ if(Favorites.latFav != 0) {
                             output = reader.readLine();
 
 
-                            Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
                             if (output.length() != 1) {
                                 //Check if there is an output from server
                                 notif = output;

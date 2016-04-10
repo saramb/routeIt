@@ -19,7 +19,7 @@
 
         <AutoCompleteTextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:id="@+id/autoCompleteTextView"
             android:background="#ffffff"
             android:height="50dp" />
@@ -36,7 +36,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/listView2"
             android:layout_below="@+id/place_autocomplete_fragment"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:paddingTop="30dp" />
     </LinearLayout>
 
 

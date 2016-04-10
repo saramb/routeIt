@@ -71,6 +71,6 @@ public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<Str
         }
 
 // Drawing polyline in the Google Map for the i-th route
-        map.googleMap.addPolyline(lineOptions);
+     map.googleMap.addPolyline(lineOptions);
     }
 }

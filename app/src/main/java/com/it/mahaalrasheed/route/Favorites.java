@@ -48,7 +48,7 @@ public class Favorites extends AppCompatActivity
     FavoriteClass F;
     List<FavoriteClass> item;
     SwipeMenuListView lv;
-    public static int id;
+    public static int id=0;
     int iddelete;
     ArrayAdapter addapter;
     ArrayList<String> array;
@@ -100,7 +100,7 @@ public class Favorites extends AppCompatActivity
                 BOUNDS_MOUNTAIN_VIEW, null);
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
         if(!mAutocompleteTextView.hasFocus()){
-            mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_name, 0, 0, 0);
+            mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.searchicon2, 0, 0, 0);
             mAutocompleteTextView.setHint("Search");
 
         }
@@ -108,7 +108,7 @@ public class Favorites extends AppCompatActivity
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_name, 0, 0, 0);
+                    mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.searchicon2, 0, 0, 0);
                     mAutocompleteTextView.setHint("Search");
 
                 } else {
@@ -284,7 +284,8 @@ public class Favorites extends AppCompatActivity
         array = new ArrayList<String>();
         for (int i = 0; i < item.size(); i++) {
             if ( !item.get(i).getName().equals("-"))
-            array.add(i,item.get(i).getName());}
+            array.add(i,item.get(i).getName());
+        }
 
         id= item.size();
 

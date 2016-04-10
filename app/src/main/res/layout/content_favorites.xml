@@ -29,7 +29,7 @@ tools:showIn="@layout/app_bar_map">
 
     <AutoCompleteTextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:id="@+id/autoCompleteTextView"
         android:layout_gravity="center_horizontal"
         android:background="#fcfafa"
@@ -38,7 +38,9 @@ tools:showIn="@layout/app_bar_map">
     <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:paddingTop="30dp" />
+
 </LinearLayout>
 </RelativeLayout>
 

@@ -120,5 +120,11 @@ public interface routeAPI {
     public void numOfStation(
             @Field("ID") String ID,
             Callback<Response> callback);
+
+    @FormUrlEncoded
+    @POST("/RetrieveHours.php")
+    public void RetrieveHours(
+            @Field("id") String id,
+            Callback<Response> callback);
 }
 

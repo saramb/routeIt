@@ -58,36 +58,11 @@ public class testroute {
     static  String [][] Bline4_1 = null;
     static  String [][] Bline4_2 = null;
 
-    /*static final String [][] Mline2 = new String [Splash.arraySize[1]][Splash.arraySize[1]];
-    static final String [][] Mline3 = new String [Splash.arraySize[2]][Splash.arraySize[2]];
-    static final String [][] Mline4 = new String [Splash.arraySize[3]][Splash.arraySize[3]];
-    static final String [][] Mline5 = new String [Splash.arraySize[4]][Splash.arraySize[4]];
-    static final String [][] Mline6 = new String [Splash.arraySize[5]][Splash.arraySize[5]];
-    static final String [][] Bline2_1 = new String [Splash.arraySize[6]][Splash.arraySize[6]];
-    static final String [][] Bline2_2 = new String [Splash.arraySize[7]][Splash.arraySize[7]];
-    static final String [][] Bline2_3 = new String [Splash.arraySize[8]][Splash.arraySize[8]];
-    static final String [][] Bline2_4 = new String [Splash.arraySize[9]][Splash.arraySize[9]];
-    static final String [][] Bline2_5 = new String [Splash.arraySize[10]][Splash.arraySize[10]];
-    static final String [][] Bline2_6 = new String [Splash.arraySize[11]][Splash.arraySize[11]];
-    static final String [][] Bline2_7 = new String [Splash.arraySize[12]][Splash.arraySize[12]];
-    static final String [][] Bline2_8 = new String [Splash.arraySize[13]][Splash.arraySize[13]];
-    static final  String [][] Bline2_9= new String [Splash.arraySize[14]][Splash.arraySize[14]];
-    static final String [][] Bline2_10 = new String [Splash.arraySize[15]][Splash.arraySize[15]];
-    static final  String [][] Bline3_1 = new String [Splash.arraySize[16]][Splash.arraySize[16]];
-    static final String [][] Bline3_2 = new String [Splash.arraySize[17]][Splash.arraySize[17]];
-    static final  String [][] Bline3_3 = new String [Splash.arraySize[18]][Splash.arraySize[18]];
-    static final String [][] Bline3_4 = new String [Splash.arraySize[19]][Splash.arraySize[19]];
-    static final String [][] Bline3_5 = new String [Splash.arraySize[20]][Splash.arraySize[20]];
-    static final String [][] Bline3_6 = new String [Splash.arraySize[21]][Splash.arraySize[21]];
-    static final String [][] Bline3_7 = new String [Splash.arraySize[22]][Splash.arraySize[22]];
-    static final String [][] Bline3_8 = new String [Splash.arraySize[23]][Splash.arraySize[23]];
-    static final String [][] Bline3_9 = new String [Splash.arraySize[24]][Splash.arraySize[24]];
-    static final String [][] Bline3_10 = new String [Splash.arraySize[25]][Splash.arraySize[25]];
-    static final String [][] Bline4_1 = new String [Splash.arraySize[26]][Splash.arraySize[26]];
-    static final String [][] Bline4_2 = new String [Splash.arraySize[27]][Splash.arraySize[27]];*/
 
-    static String AstarPath,BFSPath, DFSPath;
-    static String AstarcoorPath, BFScoorPath, DFScoorPath;
+    static String AstarPath,BFSPath,AltBFSPath, DFSPath;
+    static String AstarcoorPath, AltBFScoorPath,BFScoorPath, DFScoorPath;
+    public static ArrayList<String> metroPeakHours = new ArrayList<String>();
+    public static ArrayList<String> busPeakHours = new ArrayList<String>();
 
     public static int[] peakM = {180, 180, 180, 220, 180, 220};
     public static int offpeakM = 420;
@@ -95,6 +70,69 @@ public class testroute {
     public static int offpeakB = 600;
     static String IDcurrent, IDnext;
     static int MBcurrent, MBnext, Linecurrent, Linenext;
+
+
+    public static void RetrieveHours(){
+
+        //Here we will handle the http request to retrieve Metro coordinates from mysql db
+        //Creating a RestAdapter
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(ROOT_URL) //Setting the Root URL
+                .build(); //Finally building the adapter
+
+        //Creating object for our interface
+        routeAPI api = adapter.create(routeAPI.class);
+        //Defining the method PlotStation of our interface
+        api.RetrieveHours(
+                "1",
+                //Creating an anonymous callback
+                new Callback<Response>() {
+                    @Override
+                    public void success(Response result, Response response) {
+                        //On success we will read the server's output using buffered reader
+                        //Creating a buffered reader object
+                        BufferedReader reader = null;
+
+                        //An string to store output from the server
+                        String output = "";
+
+                        try {
+                            //Initializing buffered reader
+                            reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
+
+                            //Reading the output in the string
+                            output = reader.readLine();
+                            Log.d("hours", output + "");
+                            while(output.indexOf(':')!= 0)
+                            {metroPeakHours.add(output.substring(0, output.indexOf("/")));
+                            output = output.substring(output.indexOf("/") + 1);}
+
+                            while(output.indexOf(':')!= 0)
+                            {metroPeakHours.add(output.substring(0, output.indexOf("/")));
+                                output = output.substring(output.indexOf("/") + 1);}
+                            output = output.substring(output.indexOf(":") + 1);
+                            while(output.length()!= 0)
+                            {busPeakHours.add(output.substring(0, output.indexOf("/")));
+                                output = output.substring(output.indexOf("/") + 1);}
+
+
+
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+
+                }
+        );
+    }
+    ////////////
 
 
     public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2, final int algorithmoption){// final int algorithmoption){
@@ -163,15 +201,52 @@ public class testroute {
                             }
 
                             if (algorithmoption == 2) {
-                                //bfs Algorithm
+
                                 String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 BFSPath = BFS.substring(0,BFS.indexOf('%'));
                                 BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
+
+                                String temp =  BFSPath.substring(0, BFSPath.indexOf("|"));
+                                String tempBFSPath = BFSPath.substring(BFSPath.indexOf("|") + 1);
+                                String tempBFScoorPath = BFScoorPath.substring(BFScoorPath.indexOf("|") + 1);
+                                double tempLat= Double.parseDouble(tempBFScoorPath.substring(0, tempBFScoorPath.indexOf(":")));
+                                double tempLong= Double.parseDouble(tempBFScoorPath.substring(tempBFScoorPath.indexOf(":")+1,tempBFScoorPath.indexOf("|")));
+                                String tempChild = "";
+
+                                while (tempBFSPath.indexOf("|")!=-1){
+
+                                 String tempComp= tempBFSPath.substring(0,tempBFSPath.indexOf("|"));
+                                    String tempCoor = tempBFScoorPath.substring(0,tempBFScoorPath.indexOf("|"));
+                                   tempBFSPath = tempBFSPath.substring(tempBFSPath.indexOf("|")+1);
+                                    tempBFScoorPath = tempBFScoorPath.substring(tempBFScoorPath.indexOf("|")+1);
+
+                                 if(tempComp.charAt(0) != temp.charAt(0) || tempComp.charAt(2) != temp.charAt(2))
+                                 {   Algorithm.altID =  tempComp;
+                                     Algorithm.altBFS(temp,tempLat,tempLong,tempComp,tempChild);
+                                     tempBFSPath="";
+                                 }
+                                    tempChild = temp;
+                                    temp = tempComp;
+                                    tempLat =Double.parseDouble(tempCoor.substring(tempCoor.indexOf(":") + 1));
+                                    tempLong =Double.parseDouble(tempCoor.substring(0,tempCoor.indexOf(":")));
+
+
+
+                                }
+
+
+                                Log.d("ALT:","ID:"+ Algorithm.altID + " LAT: "+Algorithm.altLat+" Long: "+Algorithm.altLong);
+                                String AltBFS= Algorithm.BFS(Algorithm.altID, toId, Algorithm.altLat, Algorithm.altLong, Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                                AltBFSPath = BFSPath+"|" + AltBFS.substring(0,AltBFS.indexOf('%'))+"|"+toId;
+                                AltBFScoorPath = BFScoorPath +"|" + AltBFS.substring(AltBFS.indexOf('%') + 1)+"|"+toCoorX+":"+toCoorY;
+
                                 Log.d("BFS:", BFSPath + "");
                                 Log.d("BFScoor:", BFScoorPath + "");
-                                pathCoordinates(2, BFScoorPath, BFSPath);
-                                routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
+                                Log.d("AltBFS:", AltBFSPath + "");
+                                Log.d("AltBFScoor:", AltBFScoorPath + "");
 
+                                pathCoordinates(2, AltBFScoorPath, AltBFSPath);
+                                routeInfo.startRouteInfo(AltBFSPath, lineCoorBFS);
 
                             }
 

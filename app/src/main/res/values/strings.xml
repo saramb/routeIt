@@ -18,6 +18,7 @@
     <string name="title_activity_notefication_nav">notefication_nav</string>
     <string name="title_activity_favorites">Favorites</string>
     <string name="title_activity_splash_test_">Splash_test_Activity</string>
+    <string name="aboutUS">“Want to arrive on time, avoid traffic, and reduce the stress of running late? ROUTE IT provide the solution you need.” People are always complaining about traffic and they try different ways to avoid it, specially in peak hours but they tend to fail. The idea behind \"ROUT IT\" is to solves these problems by providing algorithm that find the shortest route based on the congestion from your location to the destination. IT Only requires few clicks and Voila you have reached your destination on time!</string>
 
 
 </resources>
