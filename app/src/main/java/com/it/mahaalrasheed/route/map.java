@@ -87,6 +87,7 @@ public class map extends AppCompatActivity
     private Button infoButton1;
     private Button infoButton2;
 
+
     static RelativeLayout frag;
 
     private OnInfoWindowElemTouchListener infoButtonListener;
