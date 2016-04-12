@@ -37,12 +37,7 @@
         <activity
             android:name=".to"
             android:label="To" />
-        <activity
-            android:name=".Menu"
-            android:label="Admin " />
-        <activity
-            android:name=".NewPost"
-            android:label="New Post" />
+
         <activity android:name=".notif" />
         <activity
             android:name=".aboutusnav"

@@ -26,8 +26,8 @@ public class testroute {
 
 
 
-    static String  fromId , toId, withen;
-    static String fromCoorX,toCoorX,fromCoorY,toCoorY,distanceTo,distanceFrom;
+    static  String  fromId , toId, withen;
+    static  String fromCoorX,toCoorX,fromCoorY,toCoorY,distanceTo,distanceFrom;
     static  String [][] Mline1 = null;
     static  String [][] Mline2 = null;
     static  String [][] Mline3 = null;
@@ -58,7 +58,7 @@ public class testroute {
     static  String [][] Bline4_2 = null;
 
 
-    static String AstarPath,BFSPath,AltBFSPath, DFSPath;
+    static String AstarPath, BFSPath, AltBFSPath, DFSPath;
     static String AstarcoorPath, AltBFScoorPath,BFScoorPath, DFScoorPath;
     public static ArrayList<String> metroPeakHours = new ArrayList<String>();
     public static ArrayList<String> busPeakHours = new ArrayList<String>();
@@ -131,10 +131,9 @@ public class testroute {
                 }
         );
     }
-    ////////////
 
 
-    public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2, final int algorithmoption){// final int algorithmoption){
+    public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2, final int algorithmoption){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
@@ -236,17 +235,26 @@ public class testroute {
 
                                 Log.d("ALT:","ID:"+ Algorithm.altID + " LAT: "+Algorithm.altLat+" Long: "+Algorithm.altLong);
                                 String AltBFS= Algorithm.BFS(Algorithm.altID, toId, Algorithm.altLat, Algorithm.altLong, Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
-                                AltBFSPath = BFSPath+"|" + AltBFS.substring(0,AltBFS.indexOf('%'))+"|"+toId;
-                                AltBFScoorPath = BFScoorPath +"|" + AltBFS.substring(AltBFS.indexOf('%') + 1)+"|"+toCoorX+":"+toCoorY;
+                                BFSPath += "|" + AltBFS.substring(0,AltBFS.indexOf('%'))+"|"+toId;
+                                BFScoorPath +=  "|" + AltBFS.substring(AltBFS.indexOf('%') + 1)+"|"+toCoorX+":"+toCoorY;
 
                                 Log.d("BFS:", BFSPath + "");
                                 Log.d("BFScoor:", BFScoorPath + "");
                                 Log.d("AltBFS:", AltBFSPath + "");
                                 Log.d("AltBFScoor:", AltBFScoorPath + "");
 
-                                pathCoordinates(2, AltBFScoorPath, AltBFSPath);
-                                routeInfo.startRouteInfo(AltBFSPath, lineCoorBFS);
+                                pathCoordinates(2, BFScoorPath, BFSPath);
+                                routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
+/*
 
+                                //DFS Algorithm
+                                String BFS = Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                                BFSPath = BFS.substring(0, BFS.indexOf('%'));
+                                BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
+                                Log.d("DFS:", DFSPath + "");
+                                Log.d("DFScoor:", DFScoorPath + "");
+                                pathCoordinates(2, BFScoorPath, BFSPath);
+                                routeInfo.startRouteInfo(BFSPath, lineCoorBFS);*/
                             }
 
                             else if (algorithmoption == 3){
@@ -474,61 +482,6 @@ public class testroute {
                             }//while
 
 
-                            printt(Mline1);
-                            Log.d("Matrix M2 :", "=================");
-                            printt(Mline2);
-                            Log.d("Matrix M3:", "=================");
-                            printt(Mline3);
-                            Log.d("Matrix M4:", "=================");
-                            printt(Mline4);
-                            Log.d("Matrix M5:", "=================");
-                            printt(Mline5);
-                            Log.d("Matrix M6:", "=================");
-                            printt(Mline6);
-                            Log.d("Matrix B2_1:", "=================");
-                            printt(Bline2_1);
-                            Log.d("Matrix B2_2:", "=================");
-                            printt(Bline2_2);
-                            Log.d("Matrix B2_3:", "=================");
-                            printt(Bline2_3);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline2_4);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline2_5);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline2_6);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline2_7);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline2_8);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline2_9);
-                            Log.d("Matrix B2_10:", "=================");
-                            printt(Bline2_10);
-                            Log.d("Matrix B3_1:", "=================");
-                            printt(Bline3_1);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline3_2);
-                            Log.d("Matrix :", "=====================");
-                            printt(Bline3_3);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline3_4);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline3_5);
-                            Log.d("Matrix :", "Bline3_6=================");
-                            printt(Bline3_6);
-                            Log.d("Matrix :", "Bline3_7=================");
-                            printt(Bline3_7);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline3_8);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline3_9);
-                            Log.d("Matrix B3_10:", "=================");
-                            printt(Bline3_10);
-                            Log.d("Matrix B4_1:", "=================");
-                            printt(Bline4_1);
-                            Log.d("Matrix :", "=================");
-                            printt(Bline4_2);
 
 
                         } catch (IOException e) {
@@ -831,20 +784,7 @@ public class testroute {
         }
     }
 
-    public static void printt(String[][] matrix){
-        String s="{";
-        for(int i = 0 ; i < matrix.length ; i ++)
-        {s="";
-            for(int j = 0 ; j < matrix.length;j++)
 
-                if (matrix[i][j] != null ){
-                s=s+ "\""+matrix[i][j]+"\""+",";}
-            else
-                    s=s+matrix[i][j]+",";
-
-            Log.d("Matrix :", s+"");
-        }
-    }//print
 
     public static void pathCoordinates(int type ,String coorPath, String Path){
         String coordeinates = coorPath;
