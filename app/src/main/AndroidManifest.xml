@@ -60,7 +60,7 @@
         </activity>
         <activity android:name=".path_Info" />
         <activity android:name=".Editfav"
-            android:label="Edit favorite"
+            android:label="Edit Favorite"
             ></activity>
     </application>
 
