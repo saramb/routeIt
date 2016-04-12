@@ -2,8 +2,10 @@ package com.it.mahaalrasheed.route;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -258,8 +260,14 @@ public class map extends AppCompatActivity
                     Fromlat = lat;
                 }
 if(Fromlng == Tolng && Fromlat == Tolat )
-    //najat
-    Toast.makeText(getApplicationContext(), "Form and To is the same place, please change one of them", Toast.LENGTH_LONG).show();
+    new AlertDialog.Builder(map.this)
+            .setMessage("The point you have chosen for 'From' is the same point in 'To'")
+            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            }).show();
 else
     test();
             }
@@ -856,8 +864,14 @@ else
                     from.setText(Favorites.nameFav + "");
                 // Here action triggered after clicking the button
                 if(Tolat== Fromlat && Tolng == Fromlng )
-                    //najat
-                    Toast.makeText(getApplicationContext(), "The point you have chosen for 'From' is the same point in 'To'", Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(map.this)
+                            .setMessage("The point you have chosen for 'From' is the same point in 'To'")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
                 else
                 Toast.makeText(getApplicationContext(), "The point is added", Toast.LENGTH_SHORT).show();
                 marker.remove();
@@ -880,9 +894,16 @@ else
                 else
                     to.setText(Favorites.nameFav + "");
                 marker.remove();
-                // Here action triggered after clicking the button
-                //najat
-                if(Tolat== Fromlat && Tolng == Fromlng ) Toast.makeText(getApplicationContext(), "The point you have chosen for 'To' is the same point in 'From'", Toast.LENGTH_SHORT).show();
+                if(Tolat== Fromlat && Tolng == Fromlng )
+                    new AlertDialog.Builder(map.this)
+                            .setMessage("The point you have chosen for 'From' is the same point in 'To'")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
+
                 else
                 Toast.makeText(getApplicationContext(), "The point is added", Toast.LENGTH_SHORT).show();
 
