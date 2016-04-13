@@ -37,13 +37,10 @@
         <activity
             android:name=".to"
             android:label="To" />
-        <activity
-            android:name=".Menu"
-            android:label="Admin " />
-        <activity
-            android:name=".NewPost"
-            android:label="New Post" />
-        <activity android:name=".notif" />
+
+        <activity android:name=".notif"
+            android:label="Notifications"
+            />
         <activity
             android:name=".aboutusnav"
             android:label="About us"
@@ -62,7 +59,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".path_Info" />
-        <activity android:name=".Editfav"></activity>
+        <activity android:name=".Editfav"
+            android:label="Edit Favorite"
+            ></activity>
     </application>
 
 </manifest>

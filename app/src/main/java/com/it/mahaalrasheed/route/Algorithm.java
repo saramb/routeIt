@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Algorithm extends Application {
 
@@ -83,7 +84,8 @@ public class Algorithm extends Application {
                             Station = new Station(capacity2[newStation.getLine()-1],newStation.getLine(),newStation.getStreet(),i+1,newStation, TempMatrix[newStation.getStationNumber()-1][i]);
                         if (!explored.contains (Station.getName())){
                             //calculate FN
-                            Station.setGn(heuristic(Station.getX(), Station.getY(), goalX, goalY));
+                            //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
+                            Station.setGn(((heuristic(Station.getX(), Station.getY(), goalX, goalY)/0.621371 )/120 )*60+ Schedule(Station.getParent().getName(), Station.getName(),Station.getX(),Station.getY(),Station.getParent().getX(),Station.getParent().getY()));;
 
                             if (Stringfrontier.contains(Station.getName()))  {
                                 for (int k = 0; k < Stringfrontier.size(); k++) {
@@ -114,7 +116,8 @@ public class Algorithm extends Application {
                             Extract(id,x,y, newStation);
                             if (!explored.contains (Station.getName())){
                                 //calculate FN
-                                Station.setGn(heuristic(Station.getX(), Station.getY(), goalX, goalY));
+                                //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
+                                Station.setGn(((heuristic(Station.getX(), Station.getY(), goalX, goalY)/0.621371 )/120 )*60+ Schedule(Station.getParent().getName(), Station.getName(),Station.getX(),Station.getY(),Station.getParent().getX(),Station.getParent().getY()));;
 
                                 if (Stringfrontier.contains(Station.getName()))  {
                                     for (int k = 0; k < Stringfrontier.size(); k++) {
@@ -152,7 +155,8 @@ public class Algorithm extends Application {
 
                                 if (!explored.contains (Station.getName())){
                                     //calculate FN
-                                    Station.setGn(heuristic(Station.getX(), Station.getY(), goalX, goalY));
+                                    //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
+                                    Station.setGn(((heuristic(Station.getX(), Station.getY(), goalX, goalY)/0.621371 )/120 )*60+ Schedule(Station.getParent().getName(), Station.getName(),Station.getX(),Station.getY(),Station.getParent().getX(),Station.getParent().getY()));;
                                     if (Stringfrontier.contains(Station.getName()))  {
                                         for (int k = 0; k < Stringfrontier.size(); k++) {
                                             if (Stringfrontier.get(k).equals(Station.getName()) && frontier.get(k).getFn() > Station.getFn()) {
@@ -570,6 +574,117 @@ public static void altBFS(String from , double startX, double startY, String chi
 
     } //end heuristic
 
+    //--------------------------Schedule---------------------
+//to caculate the Schedule of arrival
+    public static double Schedule(String idCurrent , String idNext, double coordinateX, double coordinateY,double nextcordX,double nextcordY) {
+
+        //int sumM = 0;
+        //int sumB = 0;
+        double sum = 0;
+
+
+        int[] peakM = {180, 180, 180, 220, 180, 220};
+        int offpeakM = 420;
+        int peakB = 420;
+        int offpeakB = 600;
+        String IDcurrent, IDnext;
+        int MBcurrent, MBnext, Linecurrent, Linenext;
+        IDcurrent = idCurrent;
+        IDnext = idNext;
+        MBcurrent = Integer.parseInt(IDcurrent.charAt(0) + "");
+        Linecurrent = Integer.parseInt(IDcurrent.charAt(2) + "");
+        MBnext = Integer.parseInt(IDnext.charAt(0) + "");
+        Linenext = Integer.parseInt(IDnext.charAt(2) + "");
+
+        if (MBcurrent != MBnext) {
+            sum =((heuristic(coordinateX , coordinateY , nextcordX , nextcordY)/0.621371 )/120 )*60;
+        }//switching
+        else
+        if (MBcurrent == 1 && MBnext == 1) {
+            Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            if(Linenext ==Linecurrent) {
+                if (Linenext == 1 && Linecurrent == 1) {
+                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
+                        sum = peakM[0];
+                    }//peek
+                    else {
+                        sum = offpeakM;
+                    }//offpeak
+
+                }//line 1
+                else if (Linenext == 2 && Linecurrent == 2) {
+                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
+                        sum = peakM[1];
+                    }//peek
+                    else {
+                        sum = offpeakM;
+                    }//offpeak
+
+                }//line 2
+                else if (Linenext == 3 && Linecurrent == 3) {
+                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
+                        sum = peakM[2];
+                    }//peek
+                    else {
+                        sum = offpeakM;
+                    }//offpeak
+
+                }//line 3
+                else if (Linenext == 4 && Linecurrent == 4) {
+                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
+                        sum = peakM[3];
+                    }//peek
+                    else {
+                        sum = offpeakM;
+                    }//offpeak
+
+                }//line 4
+                else if (Linenext == 5 && Linecurrent == 5) {
+                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
+                        sum = peakM[4];
+                    }//peek
+                    else {
+                        sum = offpeakM;
+                    }//offpeak
+
+                }//line 5
+                else if (Linenext == 6 && Linecurrent == 6) {
+                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
+                        sum = peakM[5];
+                    }//peek
+                    else {
+                        sum = offpeakM;
+                    }//offpeak
+                }//line 6
+            }
+            else {
+                sum = 300;  // 5 min to switch between bus to metro and vise versa
+                }//switch between metros
+        } //both metro
+        else
+        if (MBcurrent == 2 && MBnext == 2) {
+            Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            if(Linenext == Linecurrent) {
+            if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
+                sum = peakB;
+            }//peek
+            else {
+                sum = offpeakB;
+            }//offpeak
+        }
+            else        //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
+            {sum =((heuristic(coordinateX , coordinateY , nextcordX , nextcordY)/0.621371 )/120 )*60;}//switch between buses
+
+        } //both bus
+
+        Log.d("time", idCurrent+"--"+ idNext+"-sed"+ sum / 60 + "");
+
+        return sum/60;
+
+
+    }
 
 
     //--------------------------AddToFrontier---------------------
@@ -827,7 +942,8 @@ class Station{
 
     public void setGn (double g) {
         gn = g;
-        double fn = Algorithm.heuristic(parent.getX(), parent.getY(), Double.parseDouble(this.xCoordinate),  Double.parseDouble(this.yCoordinate));
+        //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
+        double fn = ((Algorithm.heuristic(parent.getX(), parent.getY(), Double.parseDouble(this.xCoordinate),  Double.parseDouble(this.yCoordinate))/0.621371 )/120 )*60;
         gn += fn+parent.getGn();
     }
 

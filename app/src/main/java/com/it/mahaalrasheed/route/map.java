@@ -2,8 +2,10 @@ package com.it.mahaalrasheed.route;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -85,6 +87,8 @@ public class map extends AppCompatActivity
     private Button infoButton1;
     private Button infoButton2;
     static boolean DurFlag;
+
+
     static RelativeLayout frag;
 
     private OnInfoWindowElemTouchListener infoButtonListener;
@@ -187,9 +191,13 @@ public class map extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 section_label.setText("right");
+                left.setImageResource(R.mipmap.left);
                 swiping++;
-                if (swiping == 4)
-                    swiping = 1;
+                if (swiping == 3)
+                {
+                    right.setImageResource(R.mipmap.no_swip);
+                    swiping = 3;
+                }
 
                 testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
 
@@ -202,8 +210,11 @@ public class map extends AppCompatActivity
             public void onClick(View v) {
                 section_label.setText("left");
                 swiping--;
-                if (swiping == -1)
-                    swiping = 3;
+                right.setImageResource(R.mipmap.right);
+                if (swiping == 1)
+                {   left.setImageResource(R.mipmap.no_swip);
+                    swiping = 1;
+                }
 
 
                 testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
@@ -250,8 +261,17 @@ public class map extends AppCompatActivity
                     Fromlng = lng;
                     Fromlat = lat;
                 }
+if(Fromlng == Tolng && Fromlat == Tolat )
+    new AlertDialog.Builder(map.this)
+            .setMessage("The point you have chosen for 'From' is the same point in 'To'")
+            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-                test();
+                }
+            }).show();
+else
+    test();
             }
 
         }
@@ -275,6 +295,7 @@ public class map extends AppCompatActivity
     public void test() {
         frag.getLayoutParams().height = 300;
         swiping = 1;
+        left.setImageResource(R.mipmap.no_swip);
         section_label.setText("AStar");
         testroute.route(Fromlat, Fromlng, Tolat, Tolng, 1);
     }
@@ -434,7 +455,16 @@ public class map extends AppCompatActivity
                 Log.e("type", tempCoor1 + ":" + tempCoor2);
 
 
-                if (type1 == 1 && type2 == 1) {
+
+              /*  if (type1 == 2 && type2 == 2){
+                    // Getting URL to the Google Directions API
+                    String url = getDirectionsUrl(tempCoor1, tempCoor2);
+                    DownloadTask downloadTask = new DownloadTask();
+                    // Start downloading json data from Google Directions API
+                    downloadTask.execute(url);//not metro point*/
+ ///             }
+                //else
+             //   if (type1 == 1 && type2 == 1){
 
                     polylines.add(googleMap.addPolyline((new PolylineOptions())
                             .add(tempCoor1, tempCoor2)
@@ -451,7 +481,17 @@ public class map extends AppCompatActivity
 
 
                 }//end of else
+              //  }
+             /*  else
+                if ((type1 == 1 && type2 == 2 )|| (type1 == 2 && type2 == 1 )){
 
+                    polylines.add(googleMap.addPolyline((new PolylineOptions())
+                            .add(tempCoor1, tempCoor2)
+                            .width(10)
+                            .color(Color.GREEN)
+                            .geodesic(true)));
+                }
+*/
             }//end of for
 
 
@@ -550,7 +590,7 @@ public class map extends AppCompatActivity
                 realm.copyToRealmOrUpdate(n);
                 realm.commitTransaction();
                 myMenu.findItem(R.id.notifi).setEnabled(false);
-                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
+                myMenu.findItem(R.id.notifi).setIcon(R.mipmap.no_notification_);
             }
         }
     }
@@ -614,13 +654,12 @@ public class map extends AppCompatActivity
                             output = reader.readLine();
 
 
-                            Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
                             if (output.length() != 1) {
                                 //Check if there is an output from server
                                 notif = output;
                             } else if (output.length() == 1) {
                                 myMenu.findItem(R.id.notifi).setEnabled(false);
-                                myMenu.findItem(R.id.notifi).setIcon(R.drawable.no_notification_);
+                                myMenu.findItem(R.id.notifi).setIcon(R.mipmap.no_notification_);
                             }
 
 
@@ -870,7 +909,18 @@ public class map extends AppCompatActivity
                     from.setText(latat + "," + longt);
                 else
                     from.setText(Favorites.nameFav + "");
+                // Here action triggered after clicking the button
+                if(Tolat== Fromlat && Tolng == Fromlng )
+                    new AlertDialog.Builder(map.this)
+                            .setMessage("The point you have chosen for 'From' is the same point in 'To'")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
+                                }
+                            }).show();
+                else
+                Toast.makeText(getApplicationContext(), "The point is added", Toast.LENGTH_SHORT).show();
                 marker.remove();
 
                 Toast.makeText(getApplicationContext(), "from", Toast.LENGTH_SHORT).show();
@@ -893,6 +943,18 @@ public class map extends AppCompatActivity
                     to.setText(Favorites.nameFav + "");
                 Toast.makeText(getApplicationContext(), "to", Toast.LENGTH_SHORT).show();
                 marker.remove();
+                if(Tolat== Fromlat && Tolng == Fromlng )
+                    new AlertDialog.Builder(map.this)
+                            .setMessage("The point you have chosen for 'From' is the same point in 'To'")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
+
+                else
+                Toast.makeText(getApplicationContext(), "The point is added", Toast.LENGTH_SHORT).show();
 
                 test();
             }
@@ -916,8 +978,8 @@ public class map extends AppCompatActivity
                 relam.commitTransaction();
                 if (m != null)
                     m.remove();
-                // Here we can perform some action triggered after clicking the button
-                Toast.makeText(getApplicationContext(), "fav.", Toast.LENGTH_SHORT).show();
+                // Here action triggered after clicking the button
+                Toast.makeText(getApplicationContext(), "Successfully added to favorite", Toast.LENGTH_SHORT).show();
             }
         };
         this.infoButton.setOnTouchListener(infoButtonListener);

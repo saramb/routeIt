@@ -75,7 +75,6 @@ public class Splash extends AppCompatActivity {
                             output = reader.readLine();
                             Log.d("output", "output[" + "]" + ":" + output);
 
-                            Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
                             int i = 0;
                             //Check if there is an output from server
                             while (!output.equals("")) {

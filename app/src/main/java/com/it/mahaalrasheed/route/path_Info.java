@@ -11,6 +11,7 @@ public class path_Info extends AppCompatActivity {
     String[] itemname = new String[routeInfo.number];
     Integer[] imgid = new Integer[routeInfo.number];
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,9 +22,10 @@ public class path_Info extends AppCompatActivity {
             itemname[i]=routeInfo.stationName[i];
             if (routeInfo.Number[i]==1){
                 imgid[i]= R.mipmap.metro;
+
             }
             else
-                imgid[i]= R.mipmap.busicon;
+            {  imgid[i]= R.mipmap.busicon;}
         }
 
 

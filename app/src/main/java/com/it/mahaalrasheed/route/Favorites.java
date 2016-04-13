@@ -90,6 +90,7 @@ public class Favorites extends AppCompatActivity
 
         lv = (SwipeMenuListView) findViewById(R.id.listView);
         update();
+
 //////---search-----////
         mGoogleApiClient = new GoogleApiClient.Builder(Favorites.this)
                 .addApi(Places.GEO_DATA_API)
@@ -104,7 +105,7 @@ public class Favorites extends AppCompatActivity
                 BOUNDS_MOUNTAIN_VIEW, null);
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
         if (!mAutocompleteTextView.hasFocus()) {
-            mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.searchicon2, 0, 0, 0);
+            mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.searchicon2, 0, 0, 0);
             mAutocompleteTextView.setHint("Search");
 
         }
@@ -114,7 +115,7 @@ public class Favorites extends AppCompatActivity
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.searchicon2, 0, 0, 0);
+                    mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.searchicon2, 0, 0, 0);
                     mAutocompleteTextView.setHint("Search");
 
                 } else {
@@ -135,9 +136,10 @@ public class Favorites extends AppCompatActivity
                 SwipeMenuItem deleteItem = new SwipeMenuItem(
                         getApplicationContext());
                 // set item width
-                deleteItem.setWidth(dp2px(90));
+                deleteItem.setWidth(dp2px(30));
                 // set a icon
-                deleteItem.setIcon(android.R.drawable.ic_menu_delete);
+                //Rawan
+                deleteItem.setIcon(R.mipmap.pencil);
                 // add to menu
                 menu.addMenuItem(deleteItem);
             }
@@ -328,7 +330,7 @@ public class Favorites extends AppCompatActivity
 
             mAutocompleteTextView.setText(" ");
 
-            Toast.makeText(Favorites.this, "Correctly add favorite", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Successfully added to favorite", Toast.LENGTH_SHORT).show();
 
 
 

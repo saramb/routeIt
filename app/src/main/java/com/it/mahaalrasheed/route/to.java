@@ -70,7 +70,7 @@ public class to extends AppCompatActivity implements
                 BOUNDS_MOUNTAIN_VIEW, null);
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
         if(!mAutocompleteTextView.hasFocus()){
-            mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_name, 0, 0, 0);
+            mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.searchicon2, 0, 0, 0);
             mAutocompleteTextView.setHint("Search");
 
         }
@@ -78,7 +78,7 @@ public class to extends AppCompatActivity implements
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_name, 0, 0, 0);
+                    mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.searchicon2, 0, 0, 0);
                     mAutocompleteTextView.setHint("Search");
 
                 } else {

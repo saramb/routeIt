@@ -31,9 +31,8 @@ tools:showIn="@layout/app_bar_map">
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:id="@+id/autoCompleteTextView"
-        android:layout_gravity="center_horizontal"
-        android:background="#fcfafa"
-        android:singleLine="true"/>
+        android:background="#ffffff"
+        android:height="50dp" />
 
     <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/listView"

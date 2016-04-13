@@ -20,8 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:id="@+id/autoCompleteTextView"
-            android:layout_gravity="center_horizontal"
-            android:background="#fcfafa" />
+            android:background="#ffffff"
+            android:height="50dp" />
 
      <!--   <fragment
             android:id="@+id/place_autocomplete_fragment"

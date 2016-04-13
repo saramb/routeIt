@@ -37,7 +37,7 @@ public class Editfav extends AppCompatActivity {
                 items.setName(ed.getText().toString());
                 relam.copyToRealmOrUpdate(items);
                 relam.commitTransaction();
-                Toast.makeText(Editfav.this, "تم التعديل بنجاح", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Editfav.this, "Changes successfully added", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }) ;
@@ -47,7 +47,7 @@ public class Editfav extends AppCompatActivity {
              relam.beginTransaction();
              items.removeFromRealm();
              relam.commitTransaction();
-             Toast.makeText(Editfav.this, "تم الحذف بنجاح", Toast.LENGTH_SHORT).show();
+             Toast.makeText(Editfav.this, "Your Favorite has been succeefully deleted", Toast.LENGTH_SHORT).show();
              finish();
          }
      });

@@ -7,7 +7,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="80dp"
+    android:paddingTop="20dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.it.mahaalrasheed.route.map"
     tools:showIn="@layout/app_bar_aboutusnav">
@@ -15,16 +15,18 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:id="@+id/linearLayout2">
+        android:layout_height="170dp"
+        android:id="@+id/linearLayout2"
+        android:layout_alignParentEnd="true"
+        android:paddingBottom="20dp">
 
-        <TextView
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:text="“Want to arrive on time, avoid traffic, and reduce the stress of running late?  ROUTE IT provide the solution you need.”"
-            android:id="@+id/aboutus"
-            android:textSize="18dp"
-            android:textAlignment="center" />
+            android:layout_height="match_parent"
+            android:id="@+id/imageView"
+            android:src="@drawable/spsmall"
+            android:layout_alignBottom="@+id/linearLayout3"
+            android:layout_centerHorizontal="true" />
 
     </LinearLayout>
 
@@ -39,28 +41,49 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:text="People are always complaining about traffic and they try different ways to avoid it, specially in peak hours but they tend to fail. "
-            android:id="@+id/textView11"
-            android:textAlignment="center"
+            android:text="“Want to arrive on time, avoid traffic, and reduce the stress of running late?  ROUTE IT provide the solution you need.”"
+            android:id="@+id/aboutus"
             android:textSize="18dp"
-            android:elegantTextHeight="false" />
+            android:textAlignment="center"
+            android:paddingTop="10dp" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="80dp"
         android:layout_below="@+id/linearLayout3"
         android:layout_alignParentStart="true"
-        android:textAlignment="center">
+        android:textAlignment="center"
+        android:id="@+id/linearLayout">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="The idea behind &quot;ROUT IT&quot; is to solves these problems by providing algorithm that find the shortest route based on the congestion from your location to the destination. IT Only requires few clicks and Voila you have reached your destination on time! "
-            android:id="@+id/textView12"
+            android:layout_height="80dp"
+            android:text="People are always complaining about traffic and they try different ways to avoid it, specially in peak hours but they tend to fail. "
+            android:id="@+id/textView11"
+            android:textAlignment="center"
             android:textSize="18dp"
-            android:autoText="false"
-            android:textAlignment="center" />
+            android:elegantTextHeight="false" />
+
     </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="The idea behind &quot;ROUT IT&quot; is to solves these problems by providing algorithm that find the shortest route based on the congestion from your location to the destination. IT Only requires few clicks and Voila you have reached your destination on time! "
+        android:id="@+id/textView12"
+        android:textSize="18dp"
+        android:autoText="false"
+        android:textAlignment="center"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>
