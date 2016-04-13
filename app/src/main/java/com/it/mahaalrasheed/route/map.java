@@ -73,7 +73,7 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
     //test commit
-    public static final String ROOT_URL = "http://192.168.100.16/";
+    public static final String ROOT_URL = "http://192.168.1.69/";
 
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
@@ -84,7 +84,7 @@ public class map extends AppCompatActivity
     private Button infoButton;
     private Button infoButton1;
     private Button infoButton2;
-
+    static boolean DurFlag;
     static RelativeLayout frag;
 
     private OnInfoWindowElemTouchListener infoButtonListener;
@@ -415,7 +415,8 @@ public class map extends AppCompatActivity
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
         //to zoom the camera to the starting point
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Fromlat, Fromlng), 13));
-
+        Log.d("DUR: ", Algorithm.duration + "");
+        DurFlag=false;
         try {
 
             if (!polylines.isEmpty()) {
@@ -423,7 +424,6 @@ public class map extends AppCompatActivity
                     p.remove();
 
             }
-
 
             for (int j = 0; j < lineCoor.size() - 1; j++) {
                 int type1 = type.get(j);
@@ -443,10 +443,13 @@ public class map extends AppCompatActivity
                             .geodesic(true)));
                 } else {
                     // Getting URL to the Google Directions API
-                    String url = getDirectionsUrl(tempCoor1, tempCoor2);
+                    String url = getDirectionsUrl(tempCoor1, tempCoor2,1,0);
                     DownloadTask downloadTask = new DownloadTask();
                     // Start downloading json data from Google Directions API
                     downloadTask.execute(url);//not metro point
+
+
+
                 }//end of else
 
             }//end of for
@@ -457,6 +460,34 @@ public class map extends AppCompatActivity
         }
 
     }
+
+    public static String CalDuration(ArrayList<LatLng> lineCoor,int deptTime) {
+        Log.d("DUR: ", Algorithm.duration + "");
+        DurFlag=true;
+        try {
+
+            for (int j = 0; j < lineCoor.size() - 1; j++) {
+
+                LatLng tempCoor1 = lineCoor.get(j);
+                LatLng tempCoor2 = lineCoor.get(j + 1);
+                Log.e("type", tempCoor1 + ":" + tempCoor2);
+
+
+                    // Getting URL to the Google Directions API
+                    String url2 = getDirectionsUrl(tempCoor1, tempCoor2,2,deptTime);
+                    DownloadTask downloadTask2 = new DownloadTask();
+                    // Start downloading json data from Google Directions API
+                    downloadTask2.execute(url2);//not metro point
+
+            }//end of for
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Algorithm.duration;
+    }
+
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -640,8 +671,9 @@ public class map extends AppCompatActivity
 
     }
 
-
-    private static String getDirectionsUrl(LatLng origin, LatLng dest) {
+    static String url2;
+    static String rl2;
+    private static String getDirectionsUrl(LatLng origin, LatLng dest,int type,int deptTime) {
 
 // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
@@ -654,12 +686,16 @@ public class map extends AppCompatActivity
 
 // Building the parameters to the web service
         String parameters = str_origin + "&" + str_dest + "&" + sensor;
+        String parameters2 = str_origin + "&" + str_dest + "&" + deptTime;
 
 // Output format
         String output = "json";
-
+        String url="";
 // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+        if(type==1)
+        url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+        else if (type==2)
+        url="https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters2;
 
         return url;
     }

@@ -1,17 +1,21 @@
 package com.it.mahaalrasheed.route;
 
 import android.app.Application;
+import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
 public class Algorithm extends Application {
 
 //***  Decalring variables  ***
+    static String duration;
 
     // a frontier and explored array to mark which vertices have been visited while doing the algorithms
     static ArrayList<String> explored , Stringfrontier;
     static ArrayList<Station> frontier;
-
+    static int depT;
     // current matrix to be searched
     static private String[][] TempMatrix;
 
@@ -549,8 +553,12 @@ public static void altBFS(String from , double startX, double startY, String chi
     public static double heuristic (double coordinateX, double coordinateY,double goalcordX,double goalcordY) {
 
 
+        ArrayList<LatLng> durationCoor=new ArrayList<>();
+        durationCoor.add(new LatLng(coordinateX,coordinateY));
+        durationCoor.add(new LatLng(goalcordX,goalcordY));
 
-
+        map.CalDuration(durationCoor, depT);
+        Log.d("duration alg:", ParserTask.getDur() + "");
 
 
         return  3956*2*Math.asin (Math.sqrt ( Math.pow ( Math.sin ( (coordinateX-goalcordX)*3.14/180/2) ,2) +
