@@ -471,7 +471,7 @@ else
                             .width(10)
                             .color(Color.BLUE)
                             .geodesic(true)));
-                } else {
+               // } else {
                     // Getting URL to the Google Directions API
                     String url = getDirectionsUrl(tempCoor1, tempCoor2,1,0);
                     DownloadTask downloadTask = new DownloadTask();
@@ -480,7 +480,7 @@ else
 
 
 
-                }//end of else
+               // }//end of else
               //  }
              /*  else
                 if ((type1 == 1 && type2 == 2 )|| (type1 == 2 && type2 == 1 )){
