@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -48,8 +51,32 @@ public class notif extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(notif.this,android.R.layout.simple_list_item_activated_1,ArrContent);
         listView.setAdapter(adapter);
 
-        Intent intent=new Intent();
+
+//if there is a problem check this and delete menu !!!!!!!!!///
+
+
+        /*Intent intent=new Intent();
         intent.putExtra("id", id);
-        setResult(Activity.RESULT_OK,intent);
+        setResult(Activity.RESULT_OK,intent);*/
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.favorite_back, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+
+        if (item.getItemId()== R.id.back){
+            Intent intent= new Intent(this,map.class);
+            intent.putExtra("id", id);
+            setResult(Activity.RESULT_OK, intent);
+        }
+        return true;
+
     }
 }

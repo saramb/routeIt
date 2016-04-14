@@ -38,24 +38,50 @@ public class CustomListAdapter extends ArrayAdapter<String> {
 
         int line = routeInfo.linenumber[position];
         int color = 0;
-        if (line == 1)
-            color = Color.parseColor("#0000FF"); //blue
-        else if (line == 2)
-            color = Color.parseColor("#009900"); //green
-        else if (line == 3)
-            color = Color.parseColor("#FF8000"); //orange
-        else if (line == 4)
-            color = Color.parseColor("#9933FF"); //purple
-        else if (line == 5)
-            color = Color.parseColor("#FF0000"); //red
-        else if (line == 6)
-            color = Color.parseColor("#FFFF00"); //yellow
+
+        switch(line){
+            case 1:
+                if (routeInfo.Number[position]==1){
+                    color = Color.parseColor("#0000FF"); //blue
+                         }
+                else
+                {
+                    color = Color.parseColor("#0000FF"); //blue
+                }                break;
+            case 2:
+                if (routeInfo.Number[position]==1){
+                    color = Color.parseColor("#3F9415"); //green
+                                    }
+                else
+                {  color = Color.parseColor("#3F9415"); //green
+                }
+                break;
+            case 3:
+                if (routeInfo.Number[position]==1){
+                    color = Color.parseColor("#FF8000"); //orange
+                     }
+                else
+                {  color = Color.parseColor("#942A15"); //red
+                }
+                break;
+            case 4:
+                if (routeInfo.Number[position]==1){
+                    color = Color.parseColor("#9933FF"); //purple
+                }
+                else
+                {  color = Color.parseColor("#F2F274"); //yellow
+                }
+                break;
+            case 5:
+                color = Color.parseColor("#942A15"); //red
+                break;
+            case 6:
+                color = Color.parseColor("#F2F274"); //yellow
+                break;
+        }//end of switch
 
 
-
-
-        // int color = Color.parseColor("#AE6118"); //The color u want
-        imageView.setColorFilter(color);
+          imageView.setColorFilter(color);
         if (position == 0)
             extratxt.setText("Go to "+itemname[0]+" station");
         else if (position == itemname.length-1)

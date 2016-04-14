@@ -28,7 +28,7 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         numOfStation();
-        //testroute.RetrieveHours();
+        testroute.RetrieveHours();
 
         new Handler().postDelayed(new Runnable() {
             @Override

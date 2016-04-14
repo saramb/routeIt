@@ -1,6 +1,7 @@
 package com.it.mahaalrasheed.route;
 
 import android.util.Log;
+import android.widget.ListView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -56,10 +57,12 @@ public class testroute {
     static  String [][] Bline3_10=null;
     static  String [][] Bline4_1 = null;
     static  String [][] Bline4_2 = null;
+    public static String[] itemname = new String[routeInfo.number];
+    public static Integer[] imgid = new Integer[routeInfo.number];
 
 
-    static String AstarPath, BFSPath, AltBFSPath, DFSPath;
-    static String AstarcoorPath, AltBFScoorPath,BFScoorPath, DFScoorPath;
+    static String AstarPath, BFSPath, DFSPath;
+    static String AstarcoorPath,BFScoorPath, DFScoorPath;
     public static ArrayList<String> metroPeakHours = new ArrayList<String>();
     public static ArrayList<String> busPeakHours = new ArrayList<String>();
 
@@ -102,19 +105,16 @@ public class testroute {
                             //Reading the output in the string
                             output = reader.readLine();
                             Log.d("hours", output + "");
-                            while(output.indexOf(':')!= 0)
+                            while(output.charAt(0) == ':')
                             {metroPeakHours.add(output.substring(0, output.indexOf("/")));
                             output = output.substring(output.indexOf("/") + 1);}
 
-                            while(output.indexOf(':')!= 0)
-                            {metroPeakHours.add(output.substring(0, output.indexOf("/")));
-                                output = output.substring(output.indexOf("/") + 1);}
                             output = output.substring(output.indexOf(":") + 1);
-                            while(output.length()!= 0)
-                            {busPeakHours.add(output.substring(0, output.indexOf("/")));
+
+                            /* while(output.length()!= 0)
+                               {busPeakHours.add(output.substring(0, output.indexOf("/")));
                                 output = output.substring(output.indexOf("/") + 1);}
-
-
+*/
 
 
                         } catch (IOException e) {
@@ -227,9 +227,6 @@ public class testroute {
                                     temp = tempComp;
                                     tempLat =Double.parseDouble(tempCoor.substring(tempCoor.indexOf(":") + 1));
                                     tempLong =Double.parseDouble(tempCoor.substring(0,tempCoor.indexOf(":")));
-
-
-
                                 }
 
 
@@ -240,25 +237,13 @@ public class testroute {
 
                                 Log.d("BFS:", BFSPath + "");
                                 Log.d("BFScoor:", BFScoorPath + "");
-                                Log.d("AltBFS:", AltBFSPath + "");
-                                Log.d("AltBFScoor:", AltBFScoorPath + "");
+
 
                                 pathCoordinates(2, BFScoorPath, BFSPath);
                                 routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
-/*
-
-                                //DFS Algorithm
-                                String BFS = Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
-                                BFSPath = BFS.substring(0, BFS.indexOf('%'));
-                                BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
-                                Log.d("DFS:", DFSPath + "");
-                                Log.d("DFScoor:", DFScoorPath + "");
-                                pathCoordinates(2, BFScoorPath, BFSPath);
-                                routeInfo.startRouteInfo(BFSPath, lineCoorBFS);*/
                             }
 
                             else if (algorithmoption == 3){
-
                                 //DFS Algorithm
                                 String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 DFSPath = DFS.substring(0, DFS.indexOf('%'));
@@ -267,13 +252,14 @@ public class testroute {
                                 Log.d("DFScoor:", DFScoorPath + "");
                                 pathCoordinates(3, DFScoorPath, DFSPath);
                                 routeInfo.startRouteInfo(DFSPath, lineCoorDFS);
-
                             }
+
 
 
                             double sum = Double.parseDouble(testroute.distanceFrom) + Double.parseDouble(testroute.distanceTo);
                             double time = 15*(sum/15);
                             Log.d("sum", testroute.distanceFrom + "--" + testroute.distanceTo + "---" + time);
+
 
                             if (time > 30 )
                                 map.section_label.setText("You need a car to reach the first station");
