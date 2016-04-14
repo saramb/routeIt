@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
@@ -36,12 +35,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -73,7 +73,8 @@ import retrofit.client.Response;
 
 
 public class map extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
     //test commit
     public static final String ROOT_URL = "http://192.168.1.69/";
 
@@ -122,7 +123,12 @@ public class map extends AppCompatActivity
     static Marker marker, line;
     static Marker m;
     static LatLng riyadh = new LatLng(24.713552, 46.675296);
+    static LatLng current;
 
+    TextView txtOutputLat, txtOutputLon;
+    Location mLastLocation;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
 
     ImageButton left, right;
     static int swiping = 1;
@@ -134,22 +140,12 @@ public class map extends AppCompatActivity
     private GoogleApiClient client;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        //premission
-
-        LocationListener locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                lng = location.getLongitude();
-                lat = location.getLatitude();
-            }
-        };
-
-        //end permission
+        buildGoogleApiClient();
 
         frag = (RelativeLayout) findViewById(R.id.frag);
         left = (ImageButton) findViewById(R.id.swipeleft);
@@ -180,9 +176,9 @@ public class map extends AppCompatActivity
 
 
         DisplayMap();
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(riyadh, 10));
+        //zoom on riyadh
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(riyadh, 10));
 
-        //RetrieveNotifID();
         RetrieveNotifID();
 
 
@@ -192,8 +188,7 @@ public class map extends AppCompatActivity
                 section_label.setText("right");
                 left.setImageResource(R.mipmap.left);
                 swiping++;
-                if (swiping == 3)
-                {
+                if (swiping == 3) {
                     right.setImageResource(R.mipmap.no_swip);
                     swiping = 3;
                 }
@@ -210,8 +205,8 @@ public class map extends AppCompatActivity
                 section_label.setText("left");
                 swiping--;
                 right.setImageResource(R.mipmap.right);
-                if (swiping == 1)
-                {   left.setImageResource(R.mipmap.no_swip);
+                if (swiping == 1) {
+                    left.setImageResource(R.mipmap.no_swip);
                     swiping = 1;
                 }
 
@@ -260,17 +255,17 @@ public class map extends AppCompatActivity
                     Fromlng = lng;
                     Fromlat = lat;
                 }
-if(Fromlng == Tolng && Fromlat == Tolat )
-    new AlertDialog.Builder(map.this)
-            .setMessage("The point you have chosen for 'From' is the same point in 'To'")
-            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+                if (Fromlng == Tolng && Fromlat == Tolat)
+                    new AlertDialog.Builder(map.this)
+                            .setMessage("The point you have chosen for 'From' is the same point in 'To'")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
-                }
-            }).show();
-else
-    test();
+                                }
+                            }).show();
+                else
+                    test();
             }
 
         }
@@ -461,16 +456,16 @@ else
                     DownloadTask downloadTask = new DownloadTask();
                     // Start downloading json data from Google Directions API
                     downloadTask.execute(url);//not metro point*/
- ///             }
+                ///             }
                 //else
-             //   if (type1 == 1 && type2 == 1){
+                //   if (type1 == 1 && type2 == 1){
 
-                    polylines.add(googleMap.addPolyline((new PolylineOptions())
-                            .add(tempCoor1, tempCoor2)
-                            .width(10)
-                            .color(Color.BLUE)
-                            .geodesic(true)));
-              //  }
+                polylines.add(googleMap.addPolyline((new PolylineOptions())
+                        .add(tempCoor1, tempCoor2)
+                        .width(10)
+                        .color(Color.BLUE)
+                        .geodesic(true)));
+                //  }
              /*  else
                 if ((type1 == 1 && type2 == 2 )|| (type1 == 2 && type2 == 1 )){
 
@@ -641,7 +636,9 @@ else
     @Override
     protected void onStart() {
         super.onStart();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        mGoogleApiClient.connect();
+
+      /*  // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -656,7 +653,7 @@ else
                 // TODO: Make sure this auto-generated app deep link URI is correct.
                 Uri.parse("android-app://com.it.mahaalrasheed.route/http/host/path")
         );
-        AppIndex.AppIndexApi.start(client, viewAction);
+        AppIndex.AppIndexApi.start(client, viewAction);*/
     }
 
     public void RetrieveNotifID() {
@@ -832,7 +829,6 @@ else
         map = googleMap;
 
 
-
         final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout) findViewById(R.id.map_relative_layout);
 
         // MapWrapperLayout initialization
@@ -865,7 +861,7 @@ else
                 else
                     from.setText(Favorites.nameFav + "");
                 // Here action triggered after clicking the button
-                if(Tolat== Fromlat && Tolng == Fromlng )
+                if (Tolat == Fromlat && Tolng == Fromlng)
                     new AlertDialog.Builder(map.this)
                             .setMessage("The point you have chosen for 'From' is the same point in 'To'")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -875,7 +871,7 @@ else
                                 }
                             }).show();
                 else
-                Toast.makeText(getApplicationContext(), "The point is added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "The point is added", Toast.LENGTH_SHORT).show();
                 marker.remove();
 
             }
@@ -896,7 +892,7 @@ else
                 else
                     to.setText(Favorites.nameFav + "");
                 marker.remove();
-                if(Tolat== Fromlat && Tolng == Fromlng )
+                if (Tolat == Fromlat && Tolng == Fromlng)
                     new AlertDialog.Builder(map.this)
                             .setMessage("The point you have chosen for 'From' is the same point in 'To'")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -907,7 +903,7 @@ else
                             }).show();
 
                 else
-                Toast.makeText(getApplicationContext(), "The point is added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "The point is added", Toast.LENGTH_SHORT).show();
 
                 test();
             }
@@ -984,7 +980,7 @@ else
     public void onStop() {
         super.onStop();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        /*// ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
                 Action.TYPE_VIEW, // TODO: choose an action type.
@@ -996,9 +992,71 @@ else
                 // TODO: Make sure this auto-generated app deep link URI is correct.
                 Uri.parse("android-app://com.it.mahaalrasheed.route/http/host/path")
         );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
+        AppIndex.AppIndexApi.end(client, viewAction);*/
+        mGoogleApiClient.disconnect();
     }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(100); // Update location every second
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
+
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            lat = mLastLocation.getLatitude();
+            lng =mLastLocation.getLongitude();
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 15));
+
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        lat = location.getLatitude();
+        lng = location.getLongitude();
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 15));
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        buildGoogleApiClient();
+    }
+
+    synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mGoogleApiClient.disconnect();
+    }
+
 }
 
 
@@ -1032,6 +1090,5 @@ class DownloadTask extends AsyncTask<String, Void, String> {
         parserTask.execute(result);
 
     }
-
 
 }
