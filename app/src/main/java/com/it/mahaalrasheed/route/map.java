@@ -308,7 +308,7 @@ public class map extends AppCompatActivity
 
     public void test() {
         android.view.Display display = ((android.view.WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        frag.getLayoutParams().height = (int)(display.getHeight()*0.2);
+        frag.getLayoutParams().height = (int)(display.getHeight()*0.3);
         swiping = 1;
         left.setImageResource(R.mipmap.no_swip);
         section_label.setText("AStar");
