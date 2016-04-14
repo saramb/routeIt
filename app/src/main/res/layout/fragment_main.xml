@@ -166,8 +166,9 @@ tools:context="com.it.mahaalrasheed.swipe.MainActivity$PlaceholderFragment"
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:text="Tap for complete route"
-                android:textAlignment="center" />
+                android:text="Tap for complete routess"
+                android:textAlignment="center"
+                android:textSize="10dp" />
         </LinearLayout>
     </LinearLayout>
 
