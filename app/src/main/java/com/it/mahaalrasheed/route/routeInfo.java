@@ -94,7 +94,7 @@ public class routeInfo {
 
                                 }
                                 else
-                                {  map.imgid[i]= R.mipmap.busiconn;}
+                                {  map.imgid[i]= R.mipmap.busicon;}
                                 int line = routeInfo.linenumber[i];
                                 int color = 0;
 

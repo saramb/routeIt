@@ -26,7 +26,7 @@ public class path_Info extends AppCompatActivity {
 
             }
             else
-            {  imgid[i]= R.mipmap.busiconn;}
+            {  imgid[i]= R.mipmap.busicon;}
 
             if(i == 0 )
                 map.img1.setImageResource(imgid[i]);
