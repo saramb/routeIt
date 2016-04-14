@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -127,6 +128,18 @@ public class map extends AppCompatActivity
     ImageButton left, right;
     static int swiping = 1;
     static TextView section_label;
+    static ImageView img1;
+    static ImageView img2;
+    static ImageView img3;
+    static ImageView img4;
+    static ImageView img5;
+    static ImageView img6;
+    static ImageView img7;
+
+    public static String[] itemname = new String[100];
+    public static Integer[] imgid = new Integer[100];
+
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -155,6 +168,13 @@ public class map extends AppCompatActivity
         left = (ImageButton) findViewById(R.id.swipeleft);
         right = (ImageButton) findViewById(R.id.swiperight);
         section_label = (TextView) findViewById(R.id.section_label);
+        img1 = (ImageView) findViewById(R.id.imageView9);
+        img2 = (ImageView) findViewById(R.id.imageView8);
+        img3 = (ImageView) findViewById(R.id.imageView7);
+        img4 = (ImageView) findViewById(R.id.imageView6);
+        img5 = (ImageView) findViewById(R.id.imageView5);
+        img6 = (ImageView) findViewById(R.id.imageView4);
+        img7 = (ImageView) findViewById(R.id.imageView2);
 
         frag.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,7 +202,6 @@ public class map extends AppCompatActivity
         DisplayMap();
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(riyadh, 10));
 
-        //RetrieveNotifID();
         RetrieveNotifID();
 
 
@@ -297,6 +316,11 @@ else
         left.setImageResource(R.mipmap.no_swip);
         section_label.setText("AStar");
         testroute.route(Fromlat, Fromlng, Tolat, Tolng, 1);
+
+
+
+
+
     }
 
     public static int getPixelsFromDp(Context context, float dp) {

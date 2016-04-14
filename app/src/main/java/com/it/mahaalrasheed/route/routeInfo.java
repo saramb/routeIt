@@ -1,5 +1,6 @@
 package com.it.mahaalrasheed.route;
 
+import android.graphics.Color;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -32,11 +33,14 @@ public class routeInfo {
 
     public static ArrayList<Integer> startRouteInfo(String Path , ArrayList<LatLng> Coorline){
         linecoor = Coorline;
-        stationName(Path);
+        int c = stationName(Path);
+
+
+
         return type;
     }
 
-    static  public void stationName(String path){
+    static  public int stationName(String path){
 
         //Creating a RestAdapter
         final RestAdapter adapter = new RestAdapter.Builder()
@@ -81,6 +85,99 @@ public class routeInfo {
                                 path = path.substring(path.indexOf("|") + 1);
                             }
                             number = count;
+                            for( int i =0;i<number;i++){
+
+                                map.itemname[i]=stationName[i];
+
+                                if (routeInfo.Number[i]==1){
+                                    map.imgid[i]= R.mipmap.metro;
+
+                                }
+                                else
+                                {  map.imgid[i]= R.mipmap.busiconn;}
+                                int line = routeInfo.linenumber[i];
+                                int color = 0;
+
+                                switch(line){
+                                    case 1:
+                                        if (routeInfo.Number[i]==1){
+                                            color = Color.parseColor("#0000FF"); //blue
+                                        }
+                                        else
+                                        {
+                                            color = Color.parseColor("#0000FF"); //blue
+                                        }                break;
+                                    case 2:
+                                        if (routeInfo.Number[i]==1){
+                                            color = Color.parseColor("#3F9415"); //green
+                                        }
+                                        else
+                                        {  color = Color.parseColor("#3F9415"); //green
+                                        }
+                                        break;
+                                    case 3:
+                                        if (routeInfo.Number[i]==1){
+                                            color = Color.parseColor("#FF8000"); //orange
+                                        }
+                                        else
+                                        {  color = Color.parseColor("#942A15"); //red
+                                        }
+                                        break;
+                                    case 4:
+                                        if (routeInfo.Number[i]==1){
+                                            color = Color.parseColor("#9933FF"); //purple
+                                        }
+                                        else
+                                        {  color = Color.parseColor("#F2F274"); //yellow
+                                        }
+                                        break;
+                                    case 5:
+                                        color = Color.parseColor("#942A15"); //red
+                                        break;
+                                    case 6:
+                                        color = Color.parseColor("#F2F274"); //yellow
+                                        break;
+                                }//end of switch
+
+
+
+
+                                if(i == 0 ) {
+                                    map.img1.setImageResource(map.imgid[i]);
+                                    map.img1.setColorFilter(color);
+                                }
+                                else
+                                if(i == 1 ) {
+                                    map.img2.setImageResource(map.imgid[i]);
+                                    map.img2.setColorFilter(color);
+                                }
+                                else
+                                if(i == 2 ) {
+                                    map.img3.setImageResource(map.imgid[i]);
+                                    map.img3.setColorFilter(color);
+                                }
+                                else
+                                if(i == 3 ) {
+                                    map.img4.setImageResource(map.imgid[i]);
+                                    map.img4.setColorFilter(color);
+                                }
+                                else
+                                if(i == 4 ) {
+                                    map.img5.setImageResource(map.imgid[i]);
+                                    map.img5.setColorFilter(color);
+                                }
+                                else
+                                if(i == 5 ) {
+                                    map.img6.setImageResource(map.imgid[i]);
+                                    map.img6.setColorFilter(color);
+                                }
+                                else
+                                if(i == 6 ) {
+                                    map.img7.setImageResource(map.imgid[i]);
+                                    map.img7.setColorFilter(color);
+                                }
+
+                            }
                             map.PlotLine(linecoor,routeInfo.type);
                             count = 0;
                         } catch (IOException e) {
@@ -96,6 +193,7 @@ public class routeInfo {
                     }
                 }
         );
+        return number;
     }
 
 }

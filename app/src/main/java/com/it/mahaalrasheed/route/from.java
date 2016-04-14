@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,6 +41,7 @@ public class from extends AppCompatActivity implements
     int id;
     String[] array;
     ArrayAdapter addapter;
+
 
     ////////////////////// search ////////////////////
     private static final String LOG_TAG = "FromActivity";
@@ -177,4 +181,23 @@ public class from extends AppCompatActivity implements
         mPlaceArrayAdapter.setGoogleApiClient(null);
         Log.e(LOG_TAG, "Google Places API connection suspended.");
     }
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.from_back, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+
+        if (item.getItemId()== R.id.back){
+            Intent intent = new Intent(this, map.class);
+            startActivity(intent);
+        }
+        return true;
+
+    }
+
 }
