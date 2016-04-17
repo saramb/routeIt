@@ -34,9 +34,6 @@ public class routeInfo {
     public static ArrayList<Integer> startRouteInfo(String Path , ArrayList<LatLng> Coorline){
         linecoor = Coorline;
         int c = stationName(Path);
-
-
-
         return type;
     }
 

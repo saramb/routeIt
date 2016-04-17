@@ -8,8 +8,8 @@ import android.widget.ListView;
 public class path_Info extends AppCompatActivity {
 
     ListView list;
-    public static String[] itemname = new String[routeInfo.number];
-    public static Integer[] imgid = new Integer[routeInfo.number];
+    public  String[] itemname = new String[routeInfo.number];
+    public  Integer[] imgid = new Integer[routeInfo.number];
 
 
     @Override

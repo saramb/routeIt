@@ -1,7 +1,6 @@
 package com.it.mahaalrasheed.route;
 
 import android.util.Log;
-import android.widget.ListView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -73,6 +72,7 @@ public class testroute {
     static String IDcurrent, IDnext;
     static int MBcurrent, MBnext, Linecurrent, Linenext;
 
+    static int count=0;
 
     public static void RetrieveHours(){
 
@@ -182,27 +182,32 @@ public class testroute {
                             output = output.substring(output.indexOf("/") + 1);
                             distanceTo = output.substring(0);
 
+                            String fromname = map.from.getText().toString().toString();
+                            String toname = map.to.getText().toString().toString();
+                            Log.d("namme",fromname+""+toname+""+map.fromname.toString());
 
-
-
-                            if (algorithmoption == 1) {
+                            if (algorithmoption == 1 ) {
                                 //AStar Algorithm
+                                if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count++==0)){
                                 String aStar = Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 AstarPath = aStar.substring(0, aStar.indexOf('%'));
                                 AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
                                 Log.d("AStar:", AstarPath + "");
-                                Log.d("AStarcoor:", AstarcoorPath + "");
+                                Log.d("AStarcoor:", AstarcoorPath + "");}
                                 pathCoordinates(1, AstarcoorPath, AstarPath);
                                 routeInfo.startRouteInfo(AstarPath, lineCoorAstar);
 
-
                             }
 
-                            if (algorithmoption == 2) {
+                            if (algorithmoption ==2) {
 
+                                if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count++==1)){
+
+                                    Log.d("hh",fromCoorX +":"+fromCoorY+":"+toCoorX+":"+toCoorY);
                                 String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 BFSPath = BFS.substring(0,BFS.indexOf('%'));
                                 BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
+                                Log.d("BFScoor:", BFScoorPath + "");
 
                                 String temp =  BFSPath.substring(0, BFSPath.indexOf("|"));
                                 String tempBFSPath = BFSPath.substring(BFSPath.indexOf("|") + 1);
@@ -268,23 +273,24 @@ public class testroute {
                                 for(int i = 0 ; i < array.length; i++) {
                                     BFScoorPath +=  "|" + array[i];}*/
 
-                                BFScoorPath +=  "|"+toCoorX+":"+toCoorY +"|"+AltBFS.substring(AltBFS.indexOf('%') + 1);
+                                BFScoorPath = toCoorX+":"+toCoorY +"|"+AltBFS.substring(AltBFS.indexOf('%') + 1)+"|"+BFScoorPath;
 
                                 Log.d("BFS:", BFSPath + "");
-                                Log.d("BFScoor:", BFScoorPath + "");
+                                Log.d("BFScoor:", BFScoorPath + "");}
 
 
-                             //   pathCoordinates(2, BFScoorPath, BFSPath);
-                               // routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
+                              pathCoordinates(2, BFScoorPath, BFSPath);
+                                routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
                             }
 
-                            else if (algorithmoption == 3){
+                            if (algorithmoption == 3) {
                                 //DFS Algorithm
+                                if ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count++==2){
                                 String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 DFSPath = DFS.substring(0, DFS.indexOf('%'));
                                 DFScoorPath = DFS.substring(DFS.indexOf('%') + 1);
                                 Log.d("DFS:", DFSPath + "");
-                                Log.d("DFScoor:", DFScoorPath + "");
+                                Log.d("DFScoor:", DFScoorPath + "");}
                                 pathCoordinates(3, DFScoorPath, DFSPath);
                                 routeInfo.startRouteInfo(DFSPath, lineCoorDFS);
                             }

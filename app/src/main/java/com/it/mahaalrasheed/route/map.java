@@ -117,6 +117,8 @@ public class map extends AppCompatActivity
     ListView lv;
     String Locationname, page = "";
     public static String fromname = "From";
+    public static String toname = "To";
+
 
     Realm relam;
     FavoriteClass F;
@@ -267,7 +269,8 @@ public class map extends AppCompatActivity
                 from.setText(fromname);
             } else if (page.equals("to")) {
                 from.setText(fromname);
-                to.setText(Locationname);
+                toname = Locationname;
+                to.setText(toname);
                 Tolng = getIntent().getDoubleExtra("lng", 0);
                 Tolat = getIntent().getDoubleExtra("lat", 0);
                 if (Fromlat == 0 || Fromlng == 0) {
