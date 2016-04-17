@@ -27,6 +27,8 @@ public class Algorithm extends Application {
     public static double altLat=0;
     public static double altLong=0;
     public static boolean altFlag = true;
+    public static int count = 1;
+
 
 
 
@@ -567,8 +569,7 @@ public static void altBFS(String from , double startX, double startY, String chi
 //to caculate the Schedule of arrival
     public static double Schedule(String idCurrent , String idNext, double coordinateX, double coordinateY,double nextcordX,double nextcordY) {
 
-        //int sumM = 0;
-        //int sumB = 0;
+
         double sum = 0;
 
 
@@ -755,7 +756,8 @@ public static void altBFS(String from , double startX, double startY, String chi
 
         while ( goal.getParent()!=null) {
             goal = goal.getParent ();
-            path = goal.getName ()+"|"+path; }
+            path = goal.getName ()+"|"+path;
+        count++;}
         return path;
     }
 

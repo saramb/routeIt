@@ -77,7 +77,7 @@ public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
     //test commit
-    public static final String ROOT_URL = "http://192.168.1.69/";
+    public static final String ROOT_URL = "http://10.12.195.173/";
 
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
@@ -559,7 +559,7 @@ public class map extends AppCompatActivity
         // check if the request code is same as what is passed  here it is 1
         if (requestCode == 1) {
             //If the result is returned correctly
-            if (resultCode == Activity.RESULT_OK) {
+         if (resultCode == Activity.RESULT_OK) {
                 String message = data.getStringExtra("id");
                 notifID = Integer.parseInt(message + "");
 
@@ -573,7 +573,7 @@ public class map extends AppCompatActivity
                 realm.commitTransaction();
                 myMenu.findItem(R.id.notifi).setEnabled(false);
                 myMenu.findItem(R.id.notifi).setIcon(R.mipmap.no_notification_);
-            }
+           }
         }
     }
 

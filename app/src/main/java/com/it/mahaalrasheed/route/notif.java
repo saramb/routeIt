@@ -29,7 +29,7 @@ public class notif extends AppCompatActivity {
         content=getIntent().getExtras().getString("content");
         ArrContent=new ArrayList<String>();
         id="0";
-        content = content.substring(1,content.length());
+        content = content.substring(1, content.length());
         length = content.length();
 
         for(int i=0;i<length;i++) {
@@ -52,18 +52,20 @@ public class notif extends AppCompatActivity {
         listView.setAdapter(adapter);
 
 
-//if there is a problem check this and delete menu !!!!!!!!!///
+        callBack();
 
-
-        /*Intent intent=new Intent();
-        intent.putExtra("id", id);
-        setResult(Activity.RESULT_OK,intent);*/
     }
+
+public void callBack(){
+    Intent intent=new Intent(this,map.class);
+    intent.putExtra("id", id);
+    setResult(Activity.RESULT_OK, intent);
+}
 
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.favorite_back, menu);
+        menuInflater.inflate(R.menu.notification_back, menu);
         return true;
     }
 
@@ -72,9 +74,9 @@ public class notif extends AppCompatActivity {
     {
 
         if (item.getItemId()== R.id.back){
-            Intent intent= new Intent(this,map.class);
-            intent.putExtra("id", id);
-            setResult(Activity.RESULT_OK, intent);
+            callBack();
+            finish();
+
         }
         return true;
 
