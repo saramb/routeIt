@@ -67,8 +67,7 @@ public class path_Info extends AppCompatActivity {
     {
 
         if (item.getItemId()== R.id.back){
-            Intent intent = new Intent(this, map.class);
-            startActivity(intent);
+           finish();
         }
         return true;
 

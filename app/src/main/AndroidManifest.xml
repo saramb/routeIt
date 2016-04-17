@@ -58,7 +58,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".path_Info" />
+        <activity android:name=".path_Info"
+            android:label=""/>
         <activity android:name=".Editfav"
             android:label="Edit Favorite"
             ></activity>

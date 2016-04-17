@@ -73,8 +73,9 @@ public class Editfav extends AppCompatActivity {
     {
 
         if (item.getItemId()== R.id.back){
-            Intent intent = new Intent(this, Favorites.class);
-        startActivityForResult(intent, 1);
+            finish();
+           /* Intent intent = new Intent(this, Favorites.class);
+        startActivityForResult(intent, 1);*/
         }
         return true;
 

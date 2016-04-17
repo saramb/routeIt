@@ -248,30 +248,11 @@ public class testroute {
 
                                 Log.d("BFS1:", BFSPath + "");
                                 Log.d("BFScoor1:", BFScoorPath + "");
+
                                 String AltBFS = Algorithm.BFS(Algorithm.altID, toId, Algorithm.altLat, Algorithm.altLong, Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
 
                                 BFSPath += "|" + AltBFS.substring(0,AltBFS.indexOf('%'))+"|"+toId;
 
-                                /*String tempCoorpath = AltBFS.substring(AltBFS.indexOf('%') + 1);
-
-                                Log.d("AltBFS:", AltBFS + "");
-                                Log.d("AltBFS:", tempCoorpath + "");
-
-                                String [] array = new String [Algorithm.count];
-                                int j = 0 ;
-                                while(tempCoorpath.indexOf("|")!=-1 ){
-                                    array[j++]= tempCoorpath.substring(0,tempCoorpath.indexOf("|"));
-                                    tempCoorpath = tempCoorpath.substring(tempCoorpath.indexOf("|")+1);
-                                }
-                                array[j]= tempCoorpath;
-
-                                for(int i = 0 ; i < array.length/2; i++){
-                                    String tempi = array[i];
-                                    array[i] = array[array.length-i-1];
-                                    array[array.length-i-1] = tempi; }
-
-                                for(int i = 0 ; i < array.length; i++) {
-                                    BFScoorPath +=  "|" + array[i];}*/
 
                                 BFScoorPath = toCoorX+":"+toCoorY +"|"+AltBFS.substring(AltBFS.indexOf('%') + 1)+"|"+BFScoorPath;
 
@@ -279,7 +260,7 @@ public class testroute {
                                 Log.d("BFScoor:", BFScoorPath + "");}
 
 
-                              pathCoordinates(2, BFScoorPath, BFSPath);
+                                pathCoordinates(2, BFScoorPath, BFSPath);
                                 routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
                             }
 
