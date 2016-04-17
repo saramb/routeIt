@@ -1,7 +1,11 @@
 package com.it.mahaalrasheed.route;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 
@@ -50,5 +54,23 @@ public class path_Info extends AppCompatActivity {
         CustomListAdapter adapter = new CustomListAdapter(this, itemname, imgid);
         list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
+    }
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.path_info_back, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+
+        if (item.getItemId()== R.id.back){
+            Intent intent = new Intent(this, map.class);
+            startActivity(intent);
+        }
+        return true;
+
     }
 }
