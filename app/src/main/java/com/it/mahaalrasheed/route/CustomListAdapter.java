@@ -24,6 +24,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     }
 
     public View getView(int position,View view,ViewGroup parent) {
+
         LayoutInflater inflater=context.getLayoutInflater();
         View rowView=inflater.inflate(R.layout.mylist, null,true);
 
@@ -36,12 +37,12 @@ public class CustomListAdapter extends ArrayAdapter<String> {
 
         imageView.setImageResource(imgid[position]);
 
-        int line = routeInfo.linenumber[position];
+        int line = routeInfo.linenumber.get(position);
         int color = 0;
 
         switch(line){
             case 1:
-                if (routeInfo.Number[position]==1){
+                if (routeInfo.Number.get(position)==1){
                     color = Color.parseColor("#0000FF"); //blue
                          }
                 else
@@ -49,7 +50,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
                     color = Color.parseColor("#0000FF"); //blue
                 }                break;
             case 2:
-                if (routeInfo.Number[position]==1){
+                if (routeInfo.Number.get(position)==1){
                     color = Color.parseColor("#3F9415"); //green
                                     }
                 else
@@ -57,7 +58,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
                 }
                 break;
             case 3:
-                if (routeInfo.Number[position]==1){
+                if (routeInfo.Number.get(position)==1){
                     color = Color.parseColor("#FF8000"); //orange
                      }
                 else
@@ -65,7 +66,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
                 }
                 break;
             case 4:
-                if (routeInfo.Number[position]==1){
+                if (routeInfo.Number.get(position)==1){
                     color = Color.parseColor("#9933FF"); //purple
                 }
                 else
@@ -80,8 +81,8 @@ public class CustomListAdapter extends ArrayAdapter<String> {
                 break;
         }//end of switch
 
+        imageView.setColorFilter(color);
 
-          imageView.setColorFilter(color);
         if (position == 0)
             extratxt.setText("Go to "+itemname[0]+" station");
         else if (position == itemname.length-1)
@@ -91,5 +92,5 @@ public class CustomListAdapter extends ArrayAdapter<String> {
 
         return rowView;
 
-    };
+    }
 }

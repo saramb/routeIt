@@ -23,4 +23,5 @@
 
     <include layout="@layout/content_favorites" />
 
+
 </android.support.design.widget.CoordinatorLayout>

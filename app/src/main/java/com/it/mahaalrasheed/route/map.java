@@ -9,12 +9,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
@@ -36,7 +33,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -77,64 +73,15 @@ public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
     //test commit
-    public static final String ROOT_URL = "http://10.12.195.173/";
-
+    public static final String ROOT_URL = "http://192.168.1.65/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
-    double latat = 0, longt = 0;
-    public GoogleMap map;
 
-    private ViewGroup infoWindow;
     private Button infoButton;
     private Button infoButton1;
     private Button infoButton2;
-
-
-    static RelativeLayout frag;
-
-    private OnInfoWindowElemTouchListener infoButtonListener;
-    private OnInfoWindowElemTouchListener infoButtonListener1;
-    private OnInfoWindowElemTouchListener infoButtonListener2;
-
-    static ArrayList<Polyline> polylines = new ArrayList<Polyline>();
-
-    static GoogleMap googleMap;
-    static double Tolng, Fromlng, lng;
-    static double Tolat, Fromlat, lat;
     static Button from, to;
-    Location location;
-    MapFragment fm;
-    LocationManager locationManager;
-    String provider;
-    static int notifID;
-    String notif = "";
-    Realm realm;
-    Menu myMenu;
-    private Map<Marker, MetroStation> spots = new HashMap<>();
-    ;
-    private static MetroStation[] SPOTS_ARRAY;
-    private BottomSheetBehavior mBottomSheetBehavior;
     ListView lv;
-    String Locationname, page = "";
-    public static String fromname = "From";
-    public static String toname = "To";
-
-
-    Realm relam;
-    FavoriteClass F;
-    int id;
-    static Marker marker, line;
-    static Marker m;
-    static LatLng riyadh = new LatLng(24.713552, 46.675296);
-    static LatLng current;
-
-    TextView txtOutputLat, txtOutputLon;
-    Location mLastLocation;
-    private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
-
-    ImageButton left, right;
-    static int swiping = 1;
     static TextView section_label;
     static ImageView img1;
     static ImageView img2;
@@ -143,25 +90,64 @@ public class map extends AppCompatActivity
     static ImageView img5;
     static ImageView img6;
     static ImageView img7;
+    ImageButton left, right;
+    static RelativeLayout frag;
+
+    private OnInfoWindowElemTouchListener infoButtonListener;
+    private OnInfoWindowElemTouchListener infoButtonListener1;
+    private OnInfoWindowElemTouchListener infoButtonListener2;
+
+    static ArrayList<Polyline> polylines = new ArrayList<Polyline>();
+    static GoogleMap map;
+    private ViewGroup infoWindow;
+    static double Tolng, Fromlng, lng,latat;
+    static double Tolat, Fromlat, lat,longt;
+    Location location;
+    MapFragment fm;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+
+    String provider,notif,Locationname, page;
+    static int notifID;
+    public static String fromname = "From";
+    public static String toname = "To";
+    static Marker m;
+
+    Menu myMenu;
+
+    private Map<Marker, MetroStation> spots = new HashMap<>();
+    private static MetroStation[] SPOTS_ARRAY;
+
+    Realm relam;
+    FavoriteClass F;
+    int id;
+    static int swiping = 1;
 
     public static String[] itemname = new String[100];
     public static Integer[] imgid = new Integer[100];
-
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        DisplayMap();
         buildGoogleApiClient();
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        lv = (ListView) findViewById(R.id.list);
+        from = (Button) findViewById(R.id.frombutton);
+        to = (Button) findViewById(R.id.tobutton);
         frag = (RelativeLayout) findViewById(R.id.frag);
         left = (ImageButton) findViewById(R.id.swipeleft);
         right = (ImageButton) findViewById(R.id.swiperight);
@@ -181,66 +167,6 @@ public class map extends AppCompatActivity
                 startActivity(intent);
             }
         });
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-
-        lv = (ListView) findViewById(R.id.list);
-        from = (Button) findViewById(R.id.frombutton);
-        to = (Button) findViewById(R.id.tobutton);
-
-
-        DisplayMap();
-        //zoom on riyadh
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(riyadh, 10));
-
-        RetrieveNotifID();
-
-
-        right.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                section_label.setText("right");
-                left.setImageResource(R.mipmap.left);
-                swiping++;
-                if (swiping == 3) {
-                    right.setImageResource(R.mipmap.no_swip);
-                    swiping = 3;
-                }
-
-                testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
-
-
-            }
-        });
-
-        left.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                section_label.setText("left");
-                swiping--;
-                right.setImageResource(R.mipmap.right);
-                if (swiping == 1) {
-                    left.setImageResource(R.mipmap.no_swip);
-                    swiping = 1;
-                }
-
-
-                testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
-
-
-            }
-        });
-
-        from = (Button) findViewById(R.id.frombutton);
-        to = (Button) findViewById(R.id.tobutton);
 
         from.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,6 +184,36 @@ public class map extends AppCompatActivity
             }
         });
 
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                section_label.setText("right");
+                left.setImageResource(R.mipmap.left);
+                swiping++;
+                if (swiping == 3) {
+                    right.setImageResource(R.mipmap.no_swip);
+                    swiping = 3;
+                }
+                testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
+            }
+        });
+
+        left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                section_label.setText("left");
+                swiping--;
+                right.setImageResource(R.mipmap.right);
+                if (swiping == 1) {
+                    left.setImageResource(R.mipmap.no_swip);
+                    swiping = 1;
+                }
+                testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
+            }
+        });
+
+        RetrieveNotifID();
+
         page = getIntent().getStringExtra("page");
         Locationname = getIntent().getStringExtra("name");
 
@@ -270,9 +226,9 @@ public class map extends AppCompatActivity
             } else if (page.equals("to")) {
                 from.setText(fromname);
                 toname = Locationname;
-                to.setText(toname);
                 Tolng = getIntent().getDoubleExtra("lng", 0);
                 Tolat = getIntent().getDoubleExtra("lat", 0);
+                to.setText(toname);
                 if (Fromlat == 0 || Fromlng == 0) {
                     from.setText("Current Location");
                     Fromlng = lng;
@@ -293,21 +249,12 @@ public class map extends AppCompatActivity
 
         }
 
-
         // draw marker when clicked on specific favorite location
         if (Favorites.latFav != 0) {
-            latat = Favorites.latFav;
-            longt = Favorites.lngFav;
-            m = googleMap.addMarker(new MarkerOptions().position(new LatLng(Favorites.latFav, Favorites.lngFav)));
+            m = map.addMarker(new MarkerOptions().position(new LatLng(Favorites.latFav, Favorites.lngFav)));
         }
-        onMapReady(googleMap);
-
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        onMapReady(map);
     }
-
 
     public void test() {
         android.view.Display display = ((android.view.WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -316,11 +263,6 @@ public class map extends AppCompatActivity
         left.setImageResource(R.mipmap.no_swip);
         section_label.setText("AStar");
         testroute.route(Fromlat, Fromlng, Tolat, Tolng, 1);
-
-
-
-
-
     }
 
     public static int getPixelsFromDp(Context context, float dp) {
@@ -329,56 +271,21 @@ public class map extends AppCompatActivity
     }
 
     public void DisplayMap() {
-
         //!!!!!!!!!!Map part start
         // Getting Google Play availability status
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getBaseContext());
-
         // Showing status
         if (status != ConnectionResult.SUCCESS) { // Google Play Services are not available
             int requestCode = 10;
             Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, this, requestCode);
             dialog.show();
-
         } else { // Google Play Services are available
-
             // Getting reference to the SupportMapFragment of activity_main.xml
             fm = (MapFragment) getFragmentManager().findFragmentById(R.id.fragment);
-
             // Getting GoogleMap object from the fragment
-            googleMap = fm.getMap();
-
-            // Enabling MyLocation Layer of Google Map
-            //googleMap.setMyLocationEnabled(true);
-
-            // Getting LocationManager object from System Service LOCATION_SERVICE
-            locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-            // Creating a criteria object to retrieve provider
-            Criteria criteria = new Criteria();
-
-            // Getiting the name of the best provider
-            provider = locationManager.getBestProvider(criteria, true);
-
-
-            // Getting Current Location
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            location = locationManager.getLastKnownLocation(provider);
-
-
+            map = fm.getMap();
         } //!!!!!!!!!!Map part end
-
     }
-
 
     private void PlotStation() {
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
@@ -432,11 +339,11 @@ public class map extends AppCompatActivity
                             }
 
                             for (int k = 0; k < i; k++) {
-                                Marker marker = googleMap.addMarker(new MarkerOptions()
+                                 m = map.addMarker(new MarkerOptions()
                                         .position(SPOTS_ARRAY[k].getPosition())
                                         .title("Title")
                                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_metro)));
-                                spots.put(marker, SPOTS_ARRAY[k]);
+                                spots.put(m, SPOTS_ARRAY[k]);
 
                             }
 
@@ -458,14 +365,13 @@ public class map extends AppCompatActivity
     public static void PlotLine(ArrayList<LatLng> lineCoor, ArrayList<Integer> type) {
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
         //to zoom the camera to the starting point
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Fromlat, Fromlng), 13));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Fromlat, Fromlng), 15));
 
         try {
 
             if (!polylines.isEmpty()) {
                 for (Polyline p : polylines)
                     p.remove();
-
             }
 
 
@@ -474,10 +380,6 @@ public class map extends AppCompatActivity
                 int type2 = type.get(j + 1);
                 LatLng tempCoor1 = lineCoor.get(j);
                 LatLng tempCoor2 = lineCoor.get(j + 1);
-                Log.e("type", type1 + ":" + type2);
-                Log.e("type", tempCoor1 + ":" + tempCoor2);
-
-
 
               /*  if (type1 == 2 && type2 == 2){
                     // Getting URL to the Google Directions API
@@ -489,7 +391,7 @@ public class map extends AppCompatActivity
                 //else
                 //   if (type1 == 1 && type2 == 1){
 
-                polylines.add(googleMap.addPolyline((new PolylineOptions())
+                polylines.add(map.addPolyline((new PolylineOptions())
                         .add(tempCoor1, tempCoor2)
                         .width(10)
                         .color(Color.BLUE)
@@ -543,7 +445,6 @@ public class map extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the notification button
-
         //noinspection SimplifiableIfStatement
         if (item.getItemId() == R.id.notifi) { //if user press the notification icon on the menu bar, go to  activity
             Intent intent = new Intent(this, notif.class);
@@ -551,7 +452,6 @@ public class map extends AppCompatActivity
             startActivityForResult(intent, 1);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -565,15 +465,14 @@ public class map extends AppCompatActivity
          if (resultCode == Activity.RESULT_OK) {
                 String message = data.getStringExtra("id");
                 notifID = Integer.parseInt(message + "");
-
                 Notification n = new Notification();
                 n.setID(notifID);
                 n.setPk(0);
-                Realm realm = Realm.getInstance(getApplicationContext());
+                relam = Realm.getInstance(getApplicationContext());
                 //Update realm object with the new notification id
-                realm.beginTransaction();
-                realm.copyToRealmOrUpdate(n);
-                realm.commitTransaction();
+                relam .beginTransaction();
+                relam.copyToRealmOrUpdate(n);
+                relam.commitTransaction();
                 myMenu.findItem(R.id.notifi).setEnabled(false);
                 myMenu.findItem(R.id.notifi).setIcon(R.mipmap.no_notification_);
            }
@@ -603,6 +502,18 @@ public class map extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void RetrieveNotifID() {
+        //retrieve realm content
+        relam = Realm.getInstance(getApplicationContext());
+        List<Notification> itemNot = relam.allObjects(Notification.class);
+
+        //store all returned content from realm
+        if (itemNot.size() != 0)
+            notifID = itemNot.get(0).getID();
+        RetrieveNotif(notifID);
+
     }
 
     private void RetrieveNotif(int notifID) {
@@ -647,7 +558,6 @@ public class map extends AppCompatActivity
                                 myMenu.findItem(R.id.notifi).setIcon(R.mipmap.no_notification_);
                             }
 
-
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -661,42 +571,6 @@ public class map extends AppCompatActivity
                 }
         );
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-
-      /*  // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "map Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.it.mahaalrasheed.route/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);*/
-    }
-
-    public void RetrieveNotifID() {
-        //retrieve realm content
-        realm = Realm.getInstance(getApplicationContext());
-        List<Notification> itemNot = realm.allObjects(Notification.class);
-
-        //store all returned content from realm
-        if (itemNot.size() != 0)
-            notifID = itemNot.get(0).getID();
-        RetrieveNotif(notifID);
-
-    }
-
 
     private static String getDirectionsUrl(LatLng origin, LatLng dest) {
 
@@ -719,95 +593,6 @@ public class map extends AppCompatActivity
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
         return url;
-    }
-
-    private final int SPLASH_DISPLAY_LENGTH = 1200;
-    static int arraySize[] = new int[30];
-
-    public static void numOfStation() {
-        //Here we will handle the http request to retrieve from mysql db
-        //Creating a RestAdapter
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(ROOT_URL) //Setting the Root URL
-                .build(); //Finally building the adapter
-
-        //Creating object for our interface
-        routeAPI api = adapter.create(routeAPI.class);
-
-        //Defining the method  RetrieveNotif of our interface
-        api.numOfStation(
-
-                //Passing the values
-                "1",
-                //Creating an anonymous callback
-                new Callback<Response>() {
-                    @Override
-                    public void success(Response result, Response response) {
-                        //On success we will read the server's output using bufferedreader
-
-                        //Creating a bufferedreader object
-                        BufferedReader reader = null;
-
-                        //An string to store output from the server
-                        String output = "";
-
-                        try {
-                            //Initializing buffered reader
-                            reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
-
-                            //Reading the output in the string
-                            output = reader.readLine();
-                            Log.d("output", "output[" + "]" + ":" + output);
-
-                            int i = 0;
-                            //Check if there is an output from server
-                            while (!output.equals("")) {
-                                arraySize[i] = Integer.parseInt(output.substring(0, output.indexOf("/"))) + 1;
-                                Log.d("arraySize", "arraySize[" + i + "]" + ":" + arraySize[i]);
-                                i++;
-                                output = output.substring(output.indexOf("/") + 1);
-                            }
-                            testroute.Mline1 = new String[arraySize[0]][arraySize[0]];
-                            testroute.Mline2 = new String[arraySize[1]][arraySize[1]];
-                            testroute.Mline3 = new String[arraySize[2]][arraySize[2]];
-                            testroute.Mline4 = new String[arraySize[3]][arraySize[3]];
-                            testroute.Mline5 = new String[arraySize[4]][arraySize[4]];
-                            testroute.Mline6 = new String[arraySize[5]][arraySize[5]];
-                            testroute.Bline2_1 = new String[arraySize[6]][arraySize[6]];
-                            testroute.Bline2_2 = new String[arraySize[7]][arraySize[7]];
-                            testroute.Bline2_3 = new String[arraySize[8]][arraySize[8]];
-                            testroute.Bline2_4 = new String[arraySize[9]][arraySize[9]];
-                            testroute.Bline2_5 = new String[arraySize[10]][arraySize[10]];
-                            testroute.Bline2_6 = new String[arraySize[11]][arraySize[11]];
-                            testroute.Bline2_7 = new String[arraySize[12]][arraySize[12]];
-                            testroute.Bline2_8 = new String[arraySize[13]][arraySize[13]];
-                            testroute.Bline2_9 = new String[arraySize[14]][arraySize[14]];
-                            testroute.Bline2_10 = new String[arraySize[15]][arraySize[15]];
-                            testroute.Bline3_1 = new String[arraySize[16]][arraySize[16]];
-                            testroute.Bline3_2 = new String[arraySize[17]][arraySize[17]];
-                            testroute.Bline3_3 = new String[arraySize[18]][arraySize[18]];
-                            testroute.Bline3_4 = new String[arraySize[19]][arraySize[19]];
-                            testroute.Bline3_5 = new String[arraySize[20]][arraySize[20]];
-                            testroute.Bline3_6 = new String[arraySize[21]][arraySize[21]];
-                            testroute.Bline3_7 = new String[arraySize[22]][arraySize[22]];
-                            testroute.Bline3_8 = new String[arraySize[23]][arraySize[23]];
-                            testroute.Bline3_9 = new String[arraySize[24]][arraySize[24]];
-                            testroute.Bline3_10 = new String[arraySize[25]][arraySize[25]];
-                            testroute.Bline4_1 = new String[arraySize[26]][arraySize[26]];
-                            testroute.Bline4_2 = new String[arraySize[27]][arraySize[27]];
-                            testroute.link();
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        //If any error occured displaying the error as toast
-                    }
-                }
-        );
     }
 
     /**
@@ -854,23 +639,21 @@ public class map extends AppCompatActivity
 
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-
+    public void onMapReady(final GoogleMap googleMap) {
 
         final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout) findViewById(R.id.map_relative_layout);
 
         // MapWrapperLayout initialization
         // 39 - default marker height
         // 20 - offset between the default InfoWindow bottom edge and it's content bottom edge
-        mapWrapperLayout.init(map, getPixelsFromDp(this, 39 + 20));
+        mapWrapperLayout.init(googleMap, getPixelsFromDp(this, 39 + 20));
 
         // We want to reuse the info window for all the markers,
         // so let's create only one class member instance
-        this.infoWindow = (ViewGroup) getLayoutInflater().inflate(R.layout.activity_map_wrapper_layout, null);
-        this.infoButton = (Button) infoWindow.findViewById(R.id.button);
-        this.infoButton1 = (Button) infoWindow.findViewById(R.id.button2);
-        this.infoButton2 = (Button) infoWindow.findViewById(R.id.button3);
+        infoWindow = (ViewGroup) getLayoutInflater().inflate(R.layout.activity_map_wrapper_layout, null);
+        infoButton = (Button) infoWindow.findViewById(R.id.button);
+        infoButton1 = (Button) infoWindow.findViewById(R.id.button2);
+        infoButton2 = (Button) infoWindow.findViewById(R.id.button3);
 
         // Setting custom OnTouchListener which deals with the pressed state
         // so it shows up
@@ -880,13 +663,15 @@ public class map extends AppCompatActivity
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
                 // Here we can perform some action triggered after clicking the button
-                if (m != null)
-                    m.remove();
+
+               // if (m != null)
+                  //  m.remove();
 
                 Fromlat = latat;
                 Fromlng = longt;
+
                 if (Favorites.nameFav.equals(""))
-                    from.setText(latat + "," + longt);
+                    from.setText(Fromlat + "," + Fromlng);
                 else
                     from.setText(Favorites.nameFav + "");
                 // Here action triggered after clicking the button
@@ -901,8 +686,8 @@ public class map extends AppCompatActivity
                             }).show();
                 else
                     Toast.makeText(getApplicationContext(), "The point is added", Toast.LENGTH_SHORT).show();
-                marker.remove();
 
+                marker.remove();
             }
         };
 
@@ -912,15 +697,16 @@ public class map extends AppCompatActivity
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
                 // Here we can perform some action triggered after clicking the button
-                if (m != null)
-                    m.remove();
+               // if (m != null)
+                  //  m.remove();
+
                 Tolat = latat;
                 Tolng = longt;
+
                 if (Favorites.nameFav.equals(""))
-                    to.setText(latat + "," + longt);
+                    to.setText(Tolat + "," + Tolng);
                 else
                     to.setText(Favorites.nameFav + "");
-                marker.remove();
                 if (Tolat == Fromlat && Tolng == Fromlng)
                     new AlertDialog.Builder(map.this)
                             .setMessage("The point you have chosen for 'From' is the same point in 'To'")
@@ -934,6 +720,7 @@ public class map extends AppCompatActivity
                 else
                     Toast.makeText(getApplicationContext(), "The point is added", Toast.LENGTH_SHORT).show();
 
+                marker.remove();
                 test();
             }
         };
@@ -943,6 +730,9 @@ public class map extends AppCompatActivity
                 getResources().getDrawable(R.drawable.cast_ic_notification_2)) {
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
+
+                //if (m != null)
+                   // m.remove();
 
                 F = new FavoriteClass();
                 F.setId((Favorites.id)++);
@@ -954,18 +744,19 @@ public class map extends AppCompatActivity
                 relam.beginTransaction();
                 relam.copyToRealmOrUpdate(F);
                 relam.commitTransaction();
-                if (m != null)
-                    m.remove();
+
                 // Here action triggered after clicking the button
                 Toast.makeText(getApplicationContext(), "Successfully added to favorite", Toast.LENGTH_SHORT).show();
+
+                marker.remove();
+
             }
         };
-        this.infoButton.setOnTouchListener(infoButtonListener);
-        this.infoButton1.setOnTouchListener(infoButtonListener1);
-        this.infoButton2.setOnTouchListener(infoButtonListener2);
+        infoButton.setOnTouchListener(infoButtonListener);
+        infoButton1.setOnTouchListener(infoButtonListener1);
+        infoButton2.setOnTouchListener(infoButtonListener2);
 
-
-        map.setInfoWindowAdapter(new InfoWindowAdapter() {
+        googleMap.setInfoWindowAdapter(new InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
                 return null;
@@ -974,12 +765,9 @@ public class map extends AppCompatActivity
             @Override
             public View getInfoContents(Marker marker) {
                 // Setting up the infoWindow with current's marker info
-
                 infoButtonListener.setMarker(marker);
                 infoButtonListener1.setMarker(marker);
                 infoButtonListener2.setMarker(marker);
-                //infoButtonListener1.setMarker(marker);
-
                 // We must call this to set the current marker and infoWindow references
                 // to the MapWrapperLayout
                 mapWrapperLayout.setMarkerWithInfoWindow(marker, infoWindow);
@@ -990,39 +778,30 @@ public class map extends AppCompatActivity
         googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                if (marker != null)
-                    marker.remove();
-                marker = map.addMarker(new MarkerOptions().position(latLng));
+
+                if (m != null)
+                    m.remove();
+
+                m = googleMap.addMarker(new MarkerOptions().position(latLng));
 
                 latat = latLng.latitude;
                 longt = latLng.longitude;
 
             }
         });  //end on click
-
         //PlotStation();
-
-
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
-        /*// ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "map Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.it.mahaalrasheed.route/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);*/
         mGoogleApiClient.disconnect();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -1044,14 +823,12 @@ public class map extends AppCompatActivity
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
-
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+        location = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
-        if (mLastLocation != null) {
-            lat = mLastLocation.getLatitude();
-            lng =mLastLocation.getLongitude();
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 15));
-
+        if (location != null) {
+            lat = location.getLatitude();
+            lng = location.getLongitude();
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 15));
         }
     }
 
@@ -1064,7 +841,6 @@ public class map extends AppCompatActivity
     public void onLocationChanged(Location location) {
         lat = location.getLatitude();
         lng = location.getLongitude();
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 15));
     }
 
     @Override
@@ -1079,7 +855,6 @@ public class map extends AppCompatActivity
                 .addApi(LocationServices.API)
                 .build();
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -1087,7 +862,6 @@ public class map extends AppCompatActivity
     }
 
 }
-
 
 class DownloadTask extends AsyncTask<String, Void, String> {
 
@@ -1112,12 +886,9 @@ class DownloadTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-
         ParserTask parserTask = new ParserTask();
-
 // Invokes the thread for parsing the JSON data
         parserTask.execute(result);
 
     }
-
 }

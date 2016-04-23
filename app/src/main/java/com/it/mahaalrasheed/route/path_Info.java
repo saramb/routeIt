@@ -1,6 +1,5 @@
 package com.it.mahaalrasheed.route;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -15,22 +14,19 @@ public class path_Info extends AppCompatActivity {
     public  String[] itemname = new String[routeInfo.number];
     public  Integer[] imgid = new Integer[routeInfo.number];
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_path__info);
 
-
         for( int i =0;i<routeInfo.number;i++){
-            itemname[i]=routeInfo.stationName[i];
+            itemname[i]=routeInfo.stationName.get(i);
 
-            if (routeInfo.Number[i]==1){
+            if (routeInfo.Number.get(i)==1)
                 imgid[i]= R.mipmap.metro;
-
-            }
             else
-            {  imgid[i]= R.mipmap.busicon;}
+            imgid[i]= R.mipmap.busicon;
 
             if(i == 0 )
                 map.img1.setImageResource(imgid[i]);
@@ -49,10 +45,8 @@ public class path_Info extends AppCompatActivity {
 
         }
 
-
-
-        CustomListAdapter adapter = new CustomListAdapter(this, itemname, imgid);
         list = (ListView) findViewById(R.id.list);
+        CustomListAdapter adapter = new CustomListAdapter(this, itemname, imgid);
         list.setAdapter(adapter);
     }
     public boolean onCreateOptionsMenu(Menu menu)

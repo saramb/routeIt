@@ -22,9 +22,9 @@ public class Notification extends RealmObject {
     public int getID() {
         return ID;
     }
+
     public void setID(int ID) {
         this.ID = ID;
     }
-
 
 }

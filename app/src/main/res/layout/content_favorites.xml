@@ -6,39 +6,30 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 app:layout_behavior="@string/appbar_scrolling_view_behavior"
 tools:context="com.it.mahaalrasheed.route.map"
-tools:showIn="@layout/app_bar_map">
+tools:showIn="@layout/app_bar_favorites">
 
 
 <LinearLayout
-    android:id="@+id/map"
-    android:layout_width="match_parent"
     android:orientation="vertical"
-    android:visibility="visible"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_alignParentStart="true"
-    android:weightSum="1"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    >
-    <!--<fragment
-        android:id="@+id/place_autocomplete_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="74dp"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        />-->
+    android:focusableInTouchMode="true">
 
     <AutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:id="@+id/autoCompleteTextView"
-        android:background="#ffffff"
-        android:height="50dp" />
+        android:background="#ffffff" />
 
     <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="30dp" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/autoCompleteTextView"
+        android:paddingTop="20dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:layout_alignParentStart="true" />
 
 </LinearLayout>
 </RelativeLayout>

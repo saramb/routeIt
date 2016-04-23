@@ -13,14 +13,11 @@ public class Algorithm extends Application {
     // a frontier and explored array to mark which vertices have been visited while doing the algorithms
     static ArrayList<String> explored , Stringfrontier;
     static ArrayList<Station> frontier;
-
     // current matrix to be searched
     static private String[][] TempMatrix;
-
     //capacity of each line
     static public int [] capacity= {531, 245, 245, 262, 242, 200};
     static public int [] capacity2=   {0,35,40,35};
-    public static String walk = "";
     //First station (Source Station)
     static Station newStation, Station;
     public static String altID="";
@@ -29,12 +26,8 @@ public class Algorithm extends Application {
     public static boolean altFlag = true;
     public static int count = 1;
 
-
-
-
-
     //--------------------------Astar algorithm---------------------
-//Perform A star algorithm
+    //Perform A star algorithm
     public static String Astar(String from, String to,  double StartX,double StartY, double GoalX, double GoalY){
 
         // explored arraylist to mark which vertices have been visited while doing the A*
@@ -48,22 +41,17 @@ public class Algorithm extends Application {
         double startX= StartX;
         double startY= StartY;
 
-
         //Extraction of Source station
         Extraction(from,startX,startY);
-
-
 
         while (true) {
 
             //remove from the head of the frontier
             removeFromFrontier();
 
-
             //if current station is the destination station
-            if (newStation.getName().equals(to)) {
+            if (newStation.getName().equals(to))
                 return path(newStation)+"%"+coorPath(newStation);
-            }
 
             else {
                 //add to the explored
@@ -98,7 +86,6 @@ public class Algorithm extends Application {
                             else
                                 //add to the  of frontier
                                 AddToFrontier(Station);
-
                         }
                     }////1)if the station is in the same line of the current station
 
@@ -131,7 +118,6 @@ public class Algorithm extends Application {
                                 else
                                     //add to the  of frontier
                                     AddToFrontier(Station);
-
                             }
                         }////2.1)if the station is in different street of the current station
 
@@ -183,23 +169,18 @@ public class Algorithm extends Application {
     // --------------------------BFS algorithm---------------------
     // Perform BFS algorithm
     public static String BFS(String from, String to, double StartX, double StartY, double GoalX, double GoalY) {
-
-        // explored arraylist to mark which vertices have been visited while
-        // doing the A*
-        explored = new ArrayList<String>();
         // frontier arraylist to mark which vertices have been visited while
         // doing the A*
         frontier = new ArrayList<Station>();
         Stringfrontier = new ArrayList<String>();
+        explored = new ArrayList<String>();
 
-        double goalX = GoalX;
-        double goalY = GoalY;
         double startX = StartX;
         double startY = StartY;
 
-        if (from.equals(to)) {
-            return to + "%" + GoalX + ":" + GoalY;
-        }
+       // if (from.equals(to)) {
+          //  return to + "%" + GoalX + ":" + GoalY;
+        //}
 
         // Extraction of Source station
         Extraction(from, startX, startY);
@@ -209,11 +190,13 @@ public class Algorithm extends Application {
             // remove from the head of the frontier
             removeFromFrontier();
 
-            // add to the explored
-            explored.add(newStation.getName());
-            System.out.println(newStation.getName());
+            //if current station is the destination station
+                if (newStation.getName().equals(to))
+                    return path(newStation)+"%"+coorPath(newStation);
 
-            // locate the station to its matrix
+
+
+                // locate the station to its matrix
             assignMatrix(newStation.getName().charAt(0) + "", newStation.getLine(), newStation.getStreet());
 
             for (int i = 0; i < TempMatrix.length; i++) {
@@ -289,7 +272,6 @@ public class Algorithm extends Application {
                                 externals = externals.substring(externals.indexOf(",") + 1);
                             }
 
-
                             Extract(id, x, y, newStation);
                             //ALT
                             if(altFlag){
@@ -320,7 +302,6 @@ public class Algorithm extends Application {
 public static void altBFS(String from , double startX, double startY, String child,String visitedChild){
 
     Extraction(from, startX, startY);
-
 
     while (true) {
 
@@ -414,7 +395,6 @@ public static void altBFS(String from , double startX, double startY, String chi
                         }
                         //ALT
 
-
                     } // end for
 
                 } // 2.2)if the station is in different line of the
@@ -425,8 +405,8 @@ public static void altBFS(String from , double startX, double startY, String chi
 }// end BFS
 // end BFS
 
-                //--------------------------DFS algorithm---------------------
-//Perform A star algorithm
+    //--------------------------DFS algorithm---------------------
+    //Perform A star algorithm
 
     public static String DFS(String from, String to,  double StartX,double StartY, double GoalX, double GoalY){
 
@@ -435,21 +415,14 @@ public static void altBFS(String from , double startX, double startY, String chi
         // frontier arraylist to mark which vertices have been visited while doing the A*
         frontier =new ArrayList<Station>();
         ArrayList<Station> Queuefrontier =new ArrayList<Station>();
-
         Stringfrontier = new ArrayList <String>();
 
-        double goalX = GoalX;
-        double goalY = GoalY;
+
         double startX= StartX;
         double startY= StartY;
 
-
-
-
         //Extraction of Source station
         Extraction(from,startX,startY);
-
-
 
         while (true) {
 
@@ -569,10 +542,7 @@ public static void altBFS(String from , double startX, double startY, String chi
 //to caculate the Schedule of arrival
     public static double Schedule(String idCurrent , String idNext, double coordinateX, double coordinateY,double nextcordX,double nextcordY) {
 
-
         double sum = 0;
-
-
         int[] peakM = {180, 180, 180, 220, 180, 220};
         int offpeakM = 420;
         int peakB = 420;
@@ -673,7 +643,6 @@ public static void altBFS(String from , double startX, double startY, String chi
 
         return sum/60;
 
-
     }
 
 
@@ -719,7 +688,6 @@ public static void altBFS(String from , double startX, double startY, String chi
 
     }
 
-
     //perform extraction of station
     public static void Extract(String from, double startX, double startY, Station parent) {
 
@@ -731,7 +699,6 @@ public static void altBFS(String from , double startX, double startY, String chi
             String s = streetNumber +""+ from.charAt(5) ;
             streetNumber = Integer.parseInt(s);
         }
-
         if(from.charAt(0)=='1')
             Station = new Station (capacity[lineFrom-1],lineFrom,stationNumber,parent, startXY);
         else
@@ -748,12 +715,10 @@ public static void altBFS(String from , double startX, double startY, String chi
         }
         return commas;}
 
-
     //--------------------------path---------------------
     // to find the path from source to destination
     public static String path ( Station goal ){
         String path = goal.getName();
-
         while ( goal.getParent()!=null) {
             goal = goal.getParent ();
             path = goal.getName ()+"|"+path;
@@ -765,15 +730,14 @@ public static void altBFS(String from , double startX, double startY, String chi
     // to find the path from source to destination
     public static String coorPath ( Station goal ){
         String path = goal.getX()+":"+goal.getY();
-
         while ( goal.getParent()!=null) {
             goal = goal.getParent ();
             path = path +"|"+ goal.getX()+":" + goal.getY(); }
         return path;
     }
+
     //--------------------------assignMatrix---------------------
     //locate the station to its matrix
-
     public static void assignMatrix(String line,int link, int street){
 
         switch(line){
@@ -873,17 +837,11 @@ public static void altBFS(String from , double startX, double startY, String chi
 
     }
 
-
 }//end class Test
-
-
-
-
 
 //--------------------------Station class---------------------
 //class for each station
 class Station{
-
 
     int capacity, line, stationNumber,street;
     String name;
@@ -894,7 +852,6 @@ class Station{
 
     //constructers
     public Station (int capacity, int line, int stationNumber,Station parent, String xy) {
-
         this.capacity = capacity;
         this.line = line;
         this.stationNumber = stationNumber;
@@ -903,10 +860,9 @@ class Station{
         this.parent = parent;
         xCoordinate = xy.substring (0, xy.indexOf(":"));
         yCoordinate = xy.substring (xy.indexOf(":")+1);
-
     }
-    public Station (int capacity, int line, int street, int stationNumber,Station parent, String xy) {
 
+    public Station (int capacity, int line, int street, int stationNumber,Station parent, String xy) {
         this.capacity = capacity;
         this.line = line;
         this.stationNumber = stationNumber;
@@ -915,14 +871,12 @@ class Station{
         this.parent = parent;
         xCoordinate = xy.substring (0, xy.indexOf(":"));
         yCoordinate = xy.substring (xy.indexOf(":")+1);
-
     }
 
     //toString
     @Override
     public String toString() {
-        return xCoordinate+"||"+yCoordinate;
-    }
+        return xCoordinate+"||"+yCoordinate;}
 
     //getters
     public double getFn () {
@@ -935,14 +889,11 @@ class Station{
         gn = g;
         //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
         double fn = ((Algorithm.heuristic(parent.getX(), parent.getY(), Double.parseDouble(this.xCoordinate),  Double.parseDouble(this.yCoordinate))/0.621371 )/120 )*60;
-        gn += fn+parent.getGn();
-    }
-
-    public int getCapacity () {
-        return capacity; }
+        gn += fn+parent.getGn();}
 
     public String getName () {
         return name; }
+
     public void  setName(String n ){
         name = n;}
 
@@ -964,7 +915,4 @@ class Station{
     public double getY () {
         return Double.parseDouble(yCoordinate); }
 
-    public void incFN (double value) {
-        fn += value;
-    }
 }//end of class station

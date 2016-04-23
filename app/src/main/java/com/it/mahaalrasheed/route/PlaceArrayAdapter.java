@@ -27,7 +27,6 @@ public class PlaceArrayAdapter
     private AutocompleteFilter mPlaceFilter;
     private LatLngBounds mBounds;
     private ArrayList<PlaceAutocomplete> mResultList;
-
     /**
      * Constructor
      *
@@ -115,7 +114,6 @@ public class PlaceArrayAdapter
                 }
                 return results;
             }
-
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (results != null && results.count > 0) {

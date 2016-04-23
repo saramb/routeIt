@@ -11,7 +11,7 @@ tools:context="com.it.mahaalrasheed.swipe.MainActivity$PlaceholderFragment"
     android:background="#ffffff">
 
     <ImageButton
-        android:layout_width="10dp"
+        android:layout_width="20dp"
         android:layout_height="wrap_content"
         android:id="@+id/swiperight"
         android:src="@mipmap/right"
@@ -23,14 +23,14 @@ tools:context="com.it.mahaalrasheed.swipe.MainActivity$PlaceholderFragment"
     android:id="@+id/section_label"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-        android:text="RouteIt"
+        android:text=""
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textSize="14dp"
+        android:textSize="13dp"
         android:maxLength="70" />
 
     <ImageButton
-        android:layout_width="10dp"
+        android:layout_width="20dp"
         android:layout_height="wrap_content"
         android:id="@+id/swipeleft"
         android:src="@mipmap/left"
@@ -169,6 +169,7 @@ tools:context="com.it.mahaalrasheed.swipe.MainActivity$PlaceholderFragment"
                 android:text="Tap for complete routess"
                 android:textAlignment="center"
                 android:textSize="10dp" />
+
         </LinearLayout>
     </LinearLayout>
 

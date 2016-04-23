@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,10 +34,8 @@ public class notif extends AppCompatActivity {
         for(int i=0;i<length;i++) {
 
             if (content.indexOf("-") != -1 && content.indexOf("*") != -1 ) {
-
                 id = content.substring(0, content.indexOf("-"));
                 ArrContent.add(content.substring(content.indexOf("-") + 1, content.indexOf("*")));
-
                 if (!content.substring(content.indexOf("*") +1).equals(""))
                     content = content.substring(content.indexOf("*") + 1);
                 else
@@ -51,17 +48,15 @@ public class notif extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(notif.this,android.R.layout.simple_list_item_activated_1,ArrContent);
         listView.setAdapter(adapter);
 
-
         callBack();
 
     }
 
-public void callBack(){
-    Intent intent=new Intent(this,map.class);
-    intent.putExtra("id", id);
-    setResult(Activity.RESULT_OK, intent);
-}
-
+    public void callBack(){
+        Intent intent=new Intent(this,map.class);
+        intent.putExtra("id", id);
+        setResult(Activity.RESULT_OK, intent);
+    }
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater menuInflater = getMenuInflater();
@@ -72,13 +67,10 @@ public void callBack(){
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-
         if (item.getItemId()== R.id.back){
             callBack();
             finish();
-
         }
         return true;
-
     }
 }
