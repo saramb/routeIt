@@ -4,7 +4,6 @@ package com.it.mahaalrasheed.route;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -60,13 +59,10 @@ public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<Str
 
 // Fetching i-th route
             List<HashMap<String, String>> path = result.get(i);
-            Log.d("path :" ,path+"");
 
 // Fetching all the points in i-th route
             for(int j=0;j <path.size();j++){
                 HashMap<String,String> point = path.get(j);
-                //Log.d("point :" ,point+"");
-                Log.d("j 0:" ,j+""+map.DurFlag);
 
                 if(j==0){ // Get duration from the list
                     Log.d("j 0:" ,"");
@@ -87,19 +83,16 @@ public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<Str
 
                 points.add(position);
             }
-            if(map.DurFlag==false) {
+
 // Adding all the points in the route to LineOptions
-                lineOptions.addAll(points);
-                lineOptions.width(8);
-                lineOptions.color(Color.RED);
-            }
+            lineOptions.addAll(points);
+            lineOptions.width(8);
+            lineOptions.color(Color.RED);
+
         }
 
-if(map.DurFlag==false&&lineOptions!=null){
+
 // Drawing polyline in the Google Map for the i-th route
         polylines.add( map.googleMap.addPolyline(lineOptions));
-    }}
-    public static String getDur(){
-        return Algorithm.duration;
     }
 }

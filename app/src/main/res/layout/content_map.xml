@@ -23,7 +23,6 @@
             android:weightSum="1"
             >
 
-
             <fragment
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,11 +34,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="#f1eeee"
-                android:weightSum="1">
+                android:weightSum="1"
+                android:paddingRight="10dp"
+                android:paddingLeft="15dp">
 
                 <Button
                     android:layout_width="150dp"
                     android:layout_height="50dp"
+
                     android:text="From"
                     android:id="@+id/frombutton"
                     android:layout_marginLeft="4dp"
@@ -56,11 +58,11 @@
                     android:layout_height="50dp"
                     android:text="To"
                     android:id="@+id/tobutton"
-                    android:layout_marginRight="2dp"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="35dp"
                     android:background="@color/purple"
                     android:textColor="#FFFFFF"
-                    />
+                    android:layout_gravity="center_horizontal"/>
 
             </TableRow>
 

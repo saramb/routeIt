@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -23,9 +22,6 @@ public class testroute {
     static ArrayList<LatLng> lineCoorAstar = new ArrayList<LatLng>();
     static ArrayList<LatLng> lineCoorBFS = new ArrayList<LatLng>();
     static ArrayList<LatLng> lineCoorDFS = new ArrayList<LatLng>();
-
-
-
     static  String  fromId , toId, withen;
     static  String fromCoorX,toCoorX,fromCoorY,toCoorY,distanceTo,distanceFrom;
     static  String [][] Mline1 = null;
@@ -56,82 +52,9 @@ public class testroute {
     static  String [][] Bline3_10=null;
     static  String [][] Bline4_1 = null;
     static  String [][] Bline4_2 = null;
-
-
-    static String AstarPath, BFSPath, AltBFSPath, DFSPath;
-    static String AstarcoorPath, AltBFScoorPath,BFScoorPath, DFScoorPath;
-    public static ArrayList<String> metroPeakHours = new ArrayList<String>();
-    public static ArrayList<String> busPeakHours = new ArrayList<String>();
-
-    public static int[] peakM = {180, 180, 180, 220, 180, 220};
-    public static int offpeakM = 420;
-    public static int peakB = 420;
-    public static int offpeakB = 600;
-    static String IDcurrent, IDnext;
-    static int MBcurrent, MBnext, Linecurrent, Linenext;
-
-
-    public static void RetrieveHours(){
-
-        //Here we will handle the http request to retrieve Metro coordinates from mysql db
-        //Creating a RestAdapter
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(ROOT_URL) //Setting the Root URL
-                .build(); //Finally building the adapter
-
-        //Creating object for our interface
-        routeAPI api = adapter.create(routeAPI.class);
-        //Defining the method PlotStation of our interface
-        api.RetrieveHours(
-                "1",
-                //Creating an anonymous callback
-                new Callback<Response>() {
-                    @Override
-                    public void success(Response result, Response response) {
-                        //On success we will read the server's output using buffered reader
-                        //Creating a buffered reader object
-                        BufferedReader reader = null;
-
-                        //An string to store output from the server
-                        String output = "";
-
-                        try {
-                            //Initializing buffered reader
-                            reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
-
-                            //Reading the output in the string
-                            output = reader.readLine();
-                            Log.d("hours", output + "");
-                            while(output.indexOf(':')!= 0)
-                            {metroPeakHours.add(output.substring(0, output.indexOf("/")));
-                            output = output.substring(output.indexOf("/") + 1);}
-
-                            while(output.indexOf(':')!= 0)
-                            {metroPeakHours.add(output.substring(0, output.indexOf("/")));
-                                output = output.substring(output.indexOf("/") + 1);}
-                            output = output.substring(output.indexOf(":") + 1);
-                            while(output.length()!= 0)
-                            {busPeakHours.add(output.substring(0, output.indexOf("/")));
-                                output = output.substring(output.indexOf("/") + 1);}
-
-
-
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-
-                }
-        );
-    }
-
+    static String AstarPath, BFSPath, DFSPath;
+    static String AstarcoorPath,BFScoorPath, DFScoorPath;
+    static int count=0;
 
     public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2, final int algorithmoption){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
@@ -139,7 +62,6 @@ public class testroute {
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(ROOT_URL) //Setting the Root URL
                 .build(); //Finally building the adapter
-
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
         //Defining the method PlotStation of our interface
@@ -162,10 +84,8 @@ public class testroute {
                         try {
                             //Initializing buffered reader
                             reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
-
                             //Reading the output in the string
                             output = reader.readLine();
-                            Log.d("output", output + "");
                             fromId = output.substring(0, output.indexOf("/"));
                             output = output.substring(output.indexOf("/") + 1);
                             fromCoorX = output.substring(0, output.indexOf("/"));
@@ -182,44 +102,53 @@ public class testroute {
                             output = output.substring(output.indexOf("/") + 1);
                             distanceTo = output.substring(0);
 
+                            String fromname = map.from.getText().toString().toString();
+                            String toname = map.to.getText().toString().toString();
 
-
-
-                            if (algorithmoption == 1) {
+                            if (algorithmoption == 1 ) {
                                 //AStar Algorithm
+                                if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count++==0)){
                                 String aStar = Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 AstarPath = aStar.substring(0, aStar.indexOf('%'));
                                 AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
-                                Log.d("AStar:", AstarPath + "");
-                                Log.d("AStarcoor:", AstarcoorPath + "");
-                                pathCoordinates(1, AstarcoorPath, AstarPath);
+                                Log.d("AStar:", AstarPath + "");}
+                                pathCoordinates(1, AstarcoorPath);
                                 routeInfo.startRouteInfo(AstarPath, lineCoorAstar);
-
-
                             }
 
-                            if (algorithmoption == 2) {
+                            if (algorithmoption ==2) {
 
+                                if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count++==1)){
                                 String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 BFSPath = BFS.substring(0,BFS.indexOf('%'));
                                 BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
+                                Log.d("BFS:", BFSPath + "");
 
                                 String temp =  BFSPath.substring(0, BFSPath.indexOf("|"));
                                 String tempBFSPath = BFSPath.substring(BFSPath.indexOf("|") + 1);
+
+                                String tempcoor =  BFScoorPath.substring(0, BFScoorPath.indexOf("|"));
                                 String tempBFScoorPath = BFScoorPath.substring(BFScoorPath.indexOf("|") + 1);
-                                double tempLat= Double.parseDouble(tempBFScoorPath.substring(0, tempBFScoorPath.indexOf(":")));
-                                double tempLong= Double.parseDouble(tempBFScoorPath.substring(tempBFScoorPath.indexOf(":")+1,tempBFScoorPath.indexOf("|")));
+
+                                double tempLat= Double.parseDouble(tempcoor.substring(0, tempcoor.indexOf(":")));
+                                double tempLong= Double.parseDouble(tempcoor.substring(tempcoor.indexOf(":")+1));
+
                                 String tempChild = "";
 
                                 while (tempBFSPath.indexOf("|")!=-1){
-
-                                 String tempComp= tempBFSPath.substring(0,tempBFSPath.indexOf("|"));
+                                    //first child
+                                    String tempComp= tempBFSPath.substring(0,tempBFSPath.indexOf("|"));
                                     String tempCoor = tempBFScoorPath.substring(0,tempBFScoorPath.indexOf("|"));
-                                   tempBFSPath = tempBFSPath.substring(tempBFSPath.indexOf("|")+1);
+
+                                    tempBFSPath = tempBFSPath.substring(tempBFSPath.indexOf("|")+1);
                                     tempBFScoorPath = tempBFScoorPath.substring(tempBFScoorPath.indexOf("|")+1);
 
                                  if(tempComp.charAt(0) != temp.charAt(0) || tempComp.charAt(2) != temp.charAt(2))
-                                 {   Algorithm.altID =  tempComp;
+                                 {
+                                     Algorithm.altID =  tempComp;
+                                     Algorithm.altLat =  Double.parseDouble(tempCoor.substring(0, tempCoor.indexOf(":")));
+                                     Algorithm.altLong =  Double.parseDouble(tempCoor.substring(tempCoor.indexOf(":")+1));
+
                                      Algorithm.altBFS(temp,tempLat,tempLong,tempComp,tempChild);
                                      tempBFSPath="";
                                  }
@@ -227,53 +156,30 @@ public class testroute {
                                     temp = tempComp;
                                     tempLat =Double.parseDouble(tempCoor.substring(tempCoor.indexOf(":") + 1));
                                     tempLong =Double.parseDouble(tempCoor.substring(0,tempCoor.indexOf(":")));
-
-
-
                                 }
 
+                                String AltBFS = Algorithm.BFS(Algorithm.altID, toId, Algorithm.altLat, Algorithm.altLong, Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
 
-                                Log.d("ALT:","ID:"+ Algorithm.altID + " LAT: "+Algorithm.altLat+" Long: "+Algorithm.altLong);
-                                String AltBFS= Algorithm.BFS(Algorithm.altID, toId, Algorithm.altLat, Algorithm.altLong, Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 BFSPath += "|" + AltBFS.substring(0,AltBFS.indexOf('%'))+"|"+toId;
-                                BFScoorPath +=  "|" + AltBFS.substring(AltBFS.indexOf('%') + 1)+"|"+toCoorX+":"+toCoorY;
+                                BFScoorPath = toCoorX+":"+toCoorY +"|"+AltBFS.substring(AltBFS.indexOf('%') + 1)+"|"+BFScoorPath;}
 
-                                Log.d("BFS:", BFSPath + "");
-                                Log.d("BFScoor:", BFScoorPath + "");
-                                Log.d("AltBFS:", AltBFSPath + "");
-                                Log.d("AltBFScoor:", AltBFScoorPath + "");
-
-                                pathCoordinates(2, BFScoorPath, BFSPath);
+                                pathCoordinates(2, BFScoorPath);
                                 routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
-/*
-
-                                //DFS Algorithm
-                                String BFS = Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
-                                BFSPath = BFS.substring(0, BFS.indexOf('%'));
-                                BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
-                                Log.d("DFS:", DFSPath + "");
-                                Log.d("DFScoor:", DFScoorPath + "");
-                                pathCoordinates(2, BFScoorPath, BFSPath);
-                                routeInfo.startRouteInfo(BFSPath, lineCoorBFS);*/
                             }
 
-                            else if (algorithmoption == 3){
-
+                            if (algorithmoption == 3) {
                                 //DFS Algorithm
+                                if ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count++==2){
                                 String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 DFSPath = DFS.substring(0, DFS.indexOf('%'));
                                 DFScoorPath = DFS.substring(DFS.indexOf('%') + 1);
-                                Log.d("DFS:", DFSPath + "");
-                                Log.d("DFScoor:", DFScoorPath + "");
-                                pathCoordinates(3, DFScoorPath, DFSPath);
+                                Log.d("DFS:", DFSPath + "");}
+                                pathCoordinates(3, DFScoorPath);
                                 routeInfo.startRouteInfo(DFSPath, lineCoorDFS);
-
                             }
-
 
                             double sum = Double.parseDouble(testroute.distanceFrom) + Double.parseDouble(testroute.distanceTo);
                             double time = 15*(sum/15);
-                            Log.d("sum", testroute.distanceFrom + "--" + testroute.distanceTo + "---" + time);
 
                             if (time > 30 )
                                 map.section_label.setText("You need a car to reach the first station");
@@ -296,73 +202,8 @@ public class testroute {
         );
     }
 
-    public static String Time(String path) {
-
-        int sumM = 0;
-        int sumB = 0;
-
-        int[] peakM = {180, 180, 180, 220, 180, 220};
-        int offpeakM = 420;
-        int peakB = 420;
-        int offpeakB = 600;
-        String IDcurrent, IDnext;
-        int MBcurrent, MBnext, Linecurrent, Linenext;
-
-        boolean flag = true;
-
-        while (flag) {
-            if (path.indexOf("|") != -1 ) {
-                IDcurrent = path.substring(0, path.indexOf("|"));
-                path = path.substring(path.indexOf("|") + 1);
-                if (!(path.length()<=8))
-                    IDnext = path.substring(0, path.indexOf("|"));
-                else
-                    IDnext = path;
-            } else {
-                IDcurrent = path;
-                flag = false;
-                break;
-            }
-
-            MBcurrent = Integer.parseInt(IDcurrent.charAt(0) + "");
-            Linecurrent = Integer.parseInt(IDcurrent.charAt(2) + "");
-            MBnext = Integer.parseInt(IDnext.charAt(0) + "");
-            Linenext = Integer.parseInt(IDnext.charAt(2) + "");
-
-            if (MBcurrent == 1 && MBnext == 1) {
-
-                if (Linecurrent == Linenext) {
-                    Calendar c = Calendar.getInstance();
-                    int hour = c.get(Calendar.HOUR_OF_DAY);
-                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {//peek
-                        sumM += peakM[Linecurrent-1];
-                    } else {
-                        sumM += offpeakM;
-                    }
-                } else {
-                    sumM += 300;
-                }
-            } else if (MBcurrent == 2 && MBnext == 2) {
-
-                Calendar c = Calendar.getInstance();
-                int hour = c.get(Calendar.HOUR_OF_DAY);
-                if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {//peek
-                    sumB += peakB;
-                } else {
-                    sumB += offpeakB;
-                }
-            } else {
-                sumB = 300;
-            }
-        }//while
-        Log.d("time",sumB / 60 + sumM / 60+"");
-        return sumB / 60 + sumM / 60+"";
-
-    }
-
     public static  void link(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
-
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
                 .setEndpoint(ROOT_URL) //Setting the Root URL
@@ -390,21 +231,14 @@ public class testroute {
 
                             //Reading the output in the string
                             output = reader.readLine();
-                            Log.d("output",output);
                             boolean flag = true;
                             while (flag) {
                                 fromId = output.substring(0, output.indexOf("/"));
-
                                 output = output.substring(output.indexOf("/") + 1);
                                 toId = output.substring(0, output.indexOf("/"));
-
-
                                 output = output.substring(output.indexOf("/") + 1);
                                 withen = output.substring(0, output.indexOf("/"));
-
                                 output = output.substring(output.indexOf("/") + 1);
-
-
                                 fromCoorX = output.substring(0, output.indexOf("/"));
                                 output = output.substring(output.indexOf("/") + 1);
                                 fromCoorY = output.substring(0, output.indexOf("/"));
@@ -416,13 +250,10 @@ public class testroute {
                                 if (output.length() == 0) {
                                     flag = false;
                                 }
-
                                 String firstType = fromId.charAt(0) + "";
-                                System.out.println("firstType"+firstType+"");
                                 String secondType = toId.charAt(0) + "";
                                 int firstline = Integer.parseInt(fromId.charAt(2) + "");
                                 int secondline = Integer.parseInt(toId.charAt(2) + "");
-
                                 String s1 = fromId.substring(fromId.indexOf(".", 4) + 1);
                                 int station1 = Integer.parseInt(s1);
                                 station1 = station1 - 1;
@@ -430,11 +261,7 @@ public class testroute {
                                 int station2 = Integer.parseInt(s2);
                                 station2 = station2 - 1;
 
-
-                                //  String StStationFrom = fromId.substring(fromId.indexOf(".", 2) + 1, fromId.indexOf(".", 3));
-                                //  String StStationTo = toId.substring(toId.indexOf(".", 2) + 1, toId.indexOf(".", 3));
                                 String StStationFrom = fromId.charAt(4) + "";
-
                                 if (fromId.charAt(5) != '.')
                                     StStationFrom = StStationFrom + fromId.charAt(5) + "";
 
@@ -480,9 +307,6 @@ public class testroute {
                                 }
 
                             }//while
-
-
-
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -721,7 +545,6 @@ public class testroute {
         if (line == 2) {
             if (StStationFrom.equals("1")) {
                 Bline2_1[station1][station2] = tocoor;
-               // Bline2_1[station2][station1] = fromcoor;
             } else if (StStationFrom.equals("2")) {
                 Bline2_2[station1][station2] = tocoor;
             } else if (StStationFrom.equals("3")) {
@@ -784,9 +607,7 @@ public class testroute {
         }
     }
 
-
-
-    public static void pathCoordinates(int type ,String coorPath, String Path){
+    public static void pathCoordinates(int type ,String coorPath){
         String coordeinates = coorPath;
         boolean flag1 = true;
         String coor="";

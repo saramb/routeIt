@@ -42,4 +42,5 @@ public class FavoriteClass extends RealmObject {
     public void setLng(double lng) {
         this.lng = lng;
     }
+
 }

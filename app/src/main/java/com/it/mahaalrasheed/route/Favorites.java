@@ -2,6 +2,7 @@ package com.it.mahaalrasheed.route;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,8 +10,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -60,15 +62,15 @@ public class Favorites extends AppCompatActivity
     static double latFav = 0.0;
     static double lngFav = 0.0;
     static String nameFav = "";
+    Calendar calendar;
+
     ////////////////////// search ////////////////////
-    private static final String LOG_TAG = "FromActivity";
     private static final int GOOGLE_API_CLIENT_ID = 0;
     private AutoCompleteTextView mAutocompleteTextView;
     private GoogleApiClient mGoogleApiClient;
     private PlaceArrayAdapter mPlaceArrayAdapter;
     LatLngBounds BOUNDS_MOUNTAIN_VIEW;
     ////////////////////////////////////////
-    Calendar calendar;
 
 
     @Override
@@ -89,9 +91,10 @@ public class Favorites extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         lv = (SwipeMenuListView) findViewById(R.id.listView);
+
         update();
 
-//////---search-----////
+        //////---search-----////
         mGoogleApiClient = new GoogleApiClient.Builder(Favorites.this)
                 .addApi(Places.GEO_DATA_API)
                 .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
@@ -136,9 +139,11 @@ public class Favorites extends AppCompatActivity
                 SwipeMenuItem deleteItem = new SwipeMenuItem(
                         getApplicationContext());
                 // set item width
+                Drawable image = getResources().getDrawable(R.mipmap.pencil);
+                //image.setBounds(80, 80, 100, 100);
+
                 deleteItem.setWidth(dp2px(30));
                 // set a icon
-                //Rawan
                 deleteItem.setIcon(R.mipmap.pencil);
                 // add to menu
                 menu.addMenuItem(deleteItem);
@@ -154,11 +159,9 @@ public class Favorites extends AppCompatActivity
 
                 switch (index) {
                     case 0:
-
                         Intent n = new Intent(Favorites.this, Editfav.class);
                         n.putExtra("id", position);
                         startActivity(n);
-                        finish();
                         break;
                 }
                 return false;
@@ -247,7 +250,6 @@ public class Favorites extends AppCompatActivity
             Intent intent = new Intent(this, aboutusnav.class);
             startActivity(intent);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -268,11 +270,10 @@ public class Favorites extends AppCompatActivity
                 array.add(i, item.get(i).getName());
         }
 
-
-
     addapter=new ArrayAdapter(Favorites.this, android.R.layout.simple_list_item_1, array);
 
     lv.setAdapter(addapter);
+
     lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
 
     {
@@ -286,7 +287,7 @@ public class Favorites extends AppCompatActivity
         startActivity(n);
         finish();
     }
-    }
+                              }
 
     ); }
 
@@ -297,28 +298,22 @@ public class Favorites extends AppCompatActivity
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
-            Log.i(LOG_TAG, "Selected: " + item.description);
             PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
                     .getPlaceById(mGoogleApiClient, placeId);
             placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-            Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
         }
     };
 
     private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
         @Override
         public void onResult(PlaceBuffer places) {
-            if (!places.getStatus().isSuccess()) {
-                Log.e(LOG_TAG, "Place query did not complete. Error: " +
-                        places.getStatus().toString());
+            if (!places.getStatus().isSuccess())
                 return;
-            }
+            else {
             // Selecting the first object buffer.
             final Place place = places.get(0);
-
             F = new FavoriteClass();
             F.setId((int) Calendar.getInstance().getTimeInMillis());
-            Log.d("idtest", id + "");
             F.setLat(place.getLatLng().latitude);
             F.setLng(place.getLatLng().longitude);
             F.setName(place.getName().toString());
@@ -327,31 +322,21 @@ public class Favorites extends AppCompatActivity
             relam.copyToRealmOrUpdate(F);
             relam.commitTransaction();
 
-
             mAutocompleteTextView.setText(" ");
 
             Toast.makeText(getApplicationContext(), "Successfully added to favorite", Toast.LENGTH_SHORT).show();
 
-
-
-
-
-            update();
+            update();}
         }
     };
 
     @Override
     public void onConnected(Bundle bundle) {
         mPlaceArrayAdapter.setGoogleApiClient(mGoogleApiClient);
-        Log.i(LOG_TAG, "Google Places API connected.");
-
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(LOG_TAG, "Google Places API connection failed with error code: "
-                + connectionResult.getErrorCode());
-
         Toast.makeText(this,
                 "Google Places API connection failed with error code:" +
                         connectionResult.getErrorCode(),
@@ -361,7 +346,6 @@ public class Favorites extends AppCompatActivity
     @Override
     public void onConnectionSuspended(int i) {
         mPlaceArrayAdapter.setGoogleApiClient(null);
-        Log.e(LOG_TAG, "Google Places API connection suspended.");
     }
 
 
@@ -376,5 +360,21 @@ public class Favorites extends AppCompatActivity
         calendar.set(Calendar.MONTH, monthOfYear);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
+    }
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.favorite_back, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if (item.getItemId()== R.id.back){
+            Intent intent = new Intent(this, map.class);
+            startActivity(intent);
+        }
+        return true;
     }
 }

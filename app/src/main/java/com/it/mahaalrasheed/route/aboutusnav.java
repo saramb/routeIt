@@ -8,8 +8,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-
 
 public class aboutusnav extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,6 +53,10 @@ public class aboutusnav extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+        else
+        if (item.getItemId()== R.id.back){
+            finish();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -81,4 +86,12 @@ public class aboutusnav extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.about_back, menu);
+        return true;
+    }
+
 }

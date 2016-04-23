@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -21,14 +20,12 @@ public class Splash extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 1200;
     static int arraySize [] =new int[30];
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
         numOfStation();
-        //testroute.RetrieveHours();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -53,7 +50,6 @@ public class Splash extends AppCompatActivity {
 
         //Defining the method  RetrieveNotif of our interface
         api.numOfStation(
-
                 //Passing the values
                 "1",
                 //Creating an anonymous callback
@@ -73,13 +69,11 @@ public class Splash extends AppCompatActivity {
 
                             //Reading the output in the string
                             output = reader.readLine();
-                            Log.d("output", "output[" + "]" + ":" + output);
 
                             int i = 0;
                             //Check if there is an output from server
                             while (!output.equals("")) {
                                 arraySize[i] = Integer.parseInt(output.substring(0, output.indexOf("/"))) + 1;
-                                Log.d("arraySize", "arraySize[" + i + "]" + ":" + arraySize[i]);
                                 i++;
                                 output = output.substring(output.indexOf("/") + 1);
                             }
