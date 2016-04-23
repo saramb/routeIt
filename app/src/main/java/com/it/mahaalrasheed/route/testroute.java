@@ -107,61 +107,70 @@ public class testroute {
 
                             if (algorithmoption == 1 ) {
                                 //AStar Algorithm
-                                if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count++==0)){
+                                if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==0)){
                                 String aStar = Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 AstarPath = aStar.substring(0, aStar.indexOf('%'));
                                 AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
-                                Log.d("AStar:", AstarPath + "");}
+                                Log.d("AStar:", AstarPath + "");
+                                    count++;
+                                }
                                 pathCoordinates(1, AstarcoorPath);
                                 routeInfo.startRouteInfo(AstarPath, lineCoorAstar);
                             }
 
                             if (algorithmoption ==2) {
 
-                                if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count++==1)){
+                                if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==1)){
                                 String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
-                                BFSPath = BFS.substring(0,BFS.indexOf('%'));
+                                    BFSPath = BFS.substring(0,BFS.indexOf('%'));
                                 BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
                                 Log.d("BFS:", BFSPath + "");
+                                    count++;
+                                    if (BFSPath.indexOf("|")==-1 ){
+                                        BFSPath+="|"+ toId;
+                                        BFScoorPath= toCoorX+":"+toCoorY+"|"+ BFScoorPath;
+                                    }
+                                    else {
+                                        String temp = BFSPath.substring(0, BFSPath.indexOf("|"));
+                                        String tempBFSPath = BFSPath.substring(BFSPath.indexOf("|") + 1);
 
-                                String temp =  BFSPath.substring(0, BFSPath.indexOf("|"));
-                                String tempBFSPath = BFSPath.substring(BFSPath.indexOf("|") + 1);
+                                        String tempcoor = BFScoorPath.substring(0, BFScoorPath.indexOf("|"));
+                                        String tempBFScoorPath = BFScoorPath.substring(BFScoorPath.indexOf("|") + 1);
 
-                                String tempcoor =  BFScoorPath.substring(0, BFScoorPath.indexOf("|"));
-                                String tempBFScoorPath = BFScoorPath.substring(BFScoorPath.indexOf("|") + 1);
+                                        double tempLat = Double.parseDouble(tempcoor.substring(0, tempcoor.indexOf(":")));
+                                        double tempLong = Double.parseDouble(tempcoor.substring(tempcoor.indexOf(":") + 1));
 
-                                double tempLat= Double.parseDouble(tempcoor.substring(0, tempcoor.indexOf(":")));
-                                double tempLong= Double.parseDouble(tempcoor.substring(tempcoor.indexOf(":")+1));
+                                        String tempChild = "";
 
-                                String tempChild = "";
+                                        while (tempBFSPath.indexOf("|") != -1) {
+                                            //first child
+                                            String tempComp = tempBFSPath.substring(0, tempBFSPath.indexOf("|"));
+                                            String tempCoor = tempBFScoorPath.substring(0, tempBFScoorPath.indexOf("|"));
 
-                                while (tempBFSPath.indexOf("|")!=-1){
-                                    //first child
-                                    String tempComp= tempBFSPath.substring(0,tempBFSPath.indexOf("|"));
-                                    String tempCoor = tempBFScoorPath.substring(0,tempBFScoorPath.indexOf("|"));
+                                            tempBFSPath = tempBFSPath.substring(tempBFSPath.indexOf("|") + 1);
+                                            tempBFScoorPath = tempBFScoorPath.substring(tempBFScoorPath.indexOf("|") + 1);
 
-                                    tempBFSPath = tempBFSPath.substring(tempBFSPath.indexOf("|")+1);
-                                    tempBFScoorPath = tempBFScoorPath.substring(tempBFScoorPath.indexOf("|")+1);
+                                            if (tempComp.charAt(0) != temp.charAt(0) || tempComp.charAt(2) != temp.charAt(2)) {
+                                                Algorithm.altID = tempComp;
+                                                Algorithm.altLat = Double.parseDouble(tempCoor.substring(0, tempCoor.indexOf(":")));
+                                                Algorithm.altLong = Double.parseDouble(tempCoor.substring(tempCoor.indexOf(":") + 1));
 
-                                 if(tempComp.charAt(0) != temp.charAt(0) || tempComp.charAt(2) != temp.charAt(2))
-                                 {
-                                     Algorithm.altID =  tempComp;
-                                     Algorithm.altLat =  Double.parseDouble(tempCoor.substring(0, tempCoor.indexOf(":")));
-                                     Algorithm.altLong =  Double.parseDouble(tempCoor.substring(tempCoor.indexOf(":")+1));
-
-                                     Algorithm.altBFS(temp,tempLat,tempLong,tempComp,tempChild);
-                                     tempBFSPath="";
-                                 }
-                                    tempChild = temp;
-                                    temp = tempComp;
-                                    tempLat =Double.parseDouble(tempCoor.substring(tempCoor.indexOf(":") + 1));
-                                    tempLong =Double.parseDouble(tempCoor.substring(0,tempCoor.indexOf(":")));
-                                }
-
-                                String AltBFS = Algorithm.BFS(Algorithm.altID, toId, Algorithm.altLat, Algorithm.altLong, Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                                                Algorithm.altBFS(temp, tempLat, tempLong, tempComp, tempChild);
+                                                tempBFSPath = "";
+                                            }
+                                            tempChild = temp;
+                                            temp = tempComp;
+                                            tempLat = Double.parseDouble(tempCoor.substring(tempCoor.indexOf(":") + 1));
+                                            tempLong = Double.parseDouble(tempCoor.substring(0, tempCoor.indexOf(":")));
+                                        }
+                                    if ( Algorithm.altLat !=0 && Algorithm.altLong!=0){
+                                        String AltBFS = Algorithm.BFS(Algorithm.altID, toId, Algorithm.altLat, Algorithm.altLong, Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
 
                                 BFSPath += "|" + AltBFS.substring(0,AltBFS.indexOf('%'))+"|"+toId;
-                                BFScoorPath = toCoorX+":"+toCoorY +"|"+AltBFS.substring(AltBFS.indexOf('%') + 1)+"|"+BFScoorPath;}
+                                BFScoorPath = toCoorX+":"+toCoorY +"|"+AltBFS.substring(AltBFS.indexOf('%') + 1)+"|"+BFScoorPath;}}}
+                                else{
+                                    BFSPath += "|"+toId;
+                                 BFScoorPath = toCoorX+":"+toCoorY+"|"+BFScoorPath;}
 
                                 pathCoordinates(2, BFScoorPath);
                                 routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
@@ -169,13 +178,15 @@ public class testroute {
 
                             if (algorithmoption == 3) {
                                 //DFS Algorithm
-                                if ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count++==2){
+                                if ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==2){
                                 String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 DFSPath = DFS.substring(0, DFS.indexOf('%'));
                                 DFScoorPath = DFS.substring(DFS.indexOf('%') + 1);
                                 Log.d("DFS:", DFSPath + "");}
                                 pathCoordinates(3, DFScoorPath);
                                 routeInfo.startRouteInfo(DFSPath, lineCoorDFS);
+                                count++;
+
                             }
 
                             double sum = Double.parseDouble(testroute.distanceFrom) + Double.parseDouble(testroute.distanceTo);

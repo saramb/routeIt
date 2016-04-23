@@ -43,11 +43,11 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         switch(line){
             case 1:
                 if (routeInfo.Number.get(position)==1){
-                    color = Color.parseColor("#0000FF"); //blue
+                    color = Color.parseColor("#212AB5"); //blue
                          }
                 else
                 {
-                    color = Color.parseColor("#0000FF"); //blue
+                    color = Color.parseColor("#212AB5"); //blue
                 }                break;
             case 2:
                 if (routeInfo.Number.get(position)==1){
@@ -62,7 +62,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
                     color = Color.parseColor("#FF8000"); //orange
                      }
                 else
-                {  color = Color.parseColor("#942A15"); //red
+                {  color = Color.parseColor("#e62e00"); //red
                 }
                 break;
             case 4:
@@ -74,7 +74,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
                 }
                 break;
             case 5:
-                color = Color.parseColor("#942A15"); //red
+                color = Color.parseColor("#e62e00"); //red
                 break;
             case 6:
                 color = Color.parseColor("#F2F274"); //yellow

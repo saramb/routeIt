@@ -339,7 +339,7 @@ public class Favorites extends AppCompatActivity
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Toast.makeText(this,
                 "Google Places API connection failed with error code:" +
-                        connectionResult.getErrorCode(),
+                        connectionResult.getErrorCode()+"shahad",
                 Toast.LENGTH_LONG).show();
     }
 

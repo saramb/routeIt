@@ -10,8 +10,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
@@ -73,7 +75,7 @@ public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
     //test commit
-    public static final String ROOT_URL = "http://192.168.1.65/";
+    public static final String ROOT_URL = "http://192.168.100.20:8080/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
 
@@ -89,7 +91,7 @@ public class map extends AppCompatActivity
     static ImageView img4;
     static ImageView img5;
     static ImageView img6;
-    static ImageView img7;
+    static ImageView img7,next1,next2 ,next3 ,next4,next5 ,next6 ;
     ImageButton left, right;
     static RelativeLayout frag;
 
@@ -130,6 +132,16 @@ public class map extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
+        Boolean isInternetPresent = cd.isConnectingToInternet(); // true or false
+
+        if (!isInternetPresent)
+            showInternetDisabledAlertToUser();
+
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            showGPSDisabledAlertToUser();
 
         DisplayMap();
         buildGoogleApiClient();
@@ -159,6 +171,13 @@ public class map extends AppCompatActivity
         img5 = (ImageView) findViewById(R.id.imageView5);
         img6 = (ImageView) findViewById(R.id.imageView4);
         img7 = (ImageView) findViewById(R.id.imageView2);
+
+        next1 = (ImageView) findViewById(R.id.next1);
+        next2 = (ImageView) findViewById(R.id.next2);
+        next3 = (ImageView) findViewById(R.id.next8);
+        next4 = (ImageView) findViewById(R.id.next3);
+        next5 = (ImageView) findViewById(R.id.next4);
+        next6 = (ImageView) findViewById(R.id.next6);
 
         frag.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,6 +281,7 @@ public class map extends AppCompatActivity
         swiping = 1;
         left.setImageResource(R.mipmap.no_swip);
         section_label.setText("AStar");
+        testroute.count =0;
         testroute.route(Fromlat, Fromlng, Tolat, Tolng, 1);
     }
 
@@ -285,6 +305,71 @@ public class map extends AppCompatActivity
             // Getting GoogleMap object from the fragment
             map = fm.getMap();
         } //!!!!!!!!!!Map part end
+    }
+
+    //maha
+    private void showGPSDisabledAlertToUser(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Enable",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(callGPSSettingIntent);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("No",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    public void showInternetDisabledAlertToUser(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("There is no internet connection on your device. Would you like to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Enable",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_SETTINGS);
+                                startActivity(callGPSSettingIntent);
+                                check();
+
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("No",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+    static Boolean isInternetPresent;
+
+    public void check(){
+        ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
+        isInternetPresent = cd.isConnectingToInternet();
+        if(!isInternetPresent){
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    check();
+                }
+            }, 10);
+        }
+        else
+        {
+            return;}
     }
 
     private void PlotStation() {
@@ -339,7 +424,7 @@ public class map extends AppCompatActivity
                             }
 
                             for (int k = 0; k < i; k++) {
-                                 m = map.addMarker(new MarkerOptions()
+                                m = map.addMarker(new MarkerOptions()
                                         .position(SPOTS_ARRAY[k].getPosition())
                                         .title("Title")
                                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_metro)));
@@ -860,7 +945,6 @@ public class map extends AppCompatActivity
         super.onDestroy();
         mGoogleApiClient.disconnect();
     }
-
 }
 
 class DownloadTask extends AsyncTask<String, Void, String> {

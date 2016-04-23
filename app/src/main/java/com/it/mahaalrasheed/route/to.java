@@ -173,13 +173,11 @@ public class to extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-
         if (item.getItemId()== R.id.back){
             Intent intent = new Intent(this, map.class);
             startActivity(intent);
         }
         return true;
-
     }
 
     }
