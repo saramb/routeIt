@@ -10,6 +10,39 @@ android:paddingTop="@dimen/activity_vertical_margin"
 tools:context="com.it.mahaalrasheed.swipe.MainActivity$PlaceholderFragment"
     android:background="#ffffff">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:id="@+id/linearLayout4"
+        android:orientation="vertical"
+
+        android:layout_toEndOf="@+id/swipeleft">
+
+        <TextView
+            android:id="@+id/duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="13dp"
+            android:maxLength="70"
+            android:autoText="false"
+            android:layout_marginLeft="5dp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/section_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:maxLength="70"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="5dp" />
+
+    </LinearLayout>
+
     <ImageButton
         android:layout_width="20dp"
         android:layout_height="wrap_content"
@@ -18,16 +51,6 @@ tools:context="com.it.mahaalrasheed.swipe.MainActivity$PlaceholderFragment"
         android:background="#ffffff"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
-
-    <TextView
-    android:id="@+id/section_label"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-        android:text=""
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="13dp"
-        android:maxLength="70" />
 
     <ImageButton
         android:layout_width="20dp"

@@ -33,6 +33,7 @@ public class Algorithm extends Application {
     public static double altLong=0;
     public static boolean altFlag = true;
     public static int count = 1;
+    public static double totalTime = 0;
 
     //--------------------------Astar algorithm---------------------
     //Perform A star algorithm
@@ -80,8 +81,8 @@ public class Algorithm extends Application {
                         if (!explored.contains (Station.getName())){
                             //calculate FN
                             //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
-                            Station.setGn(((heuristic(Station.getX(), Station.getY(), goalX, goalY)/0.621371 )/120 )*60+ Schedule(Station.getParent().getName(), Station.getName(),Station.getX(),Station.getY(),Station.getParent().getX(),Station.getParent().getY()));;
-                            Station.setGn(0);
+                            Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
+                            Station.setGn(((heuristic(Station.getX(), Station.getY(), goalX, goalY) / 0.621371) / 120) * 60 + Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));;
                             if (Stringfrontier.contains(Station.getName()))  {
                                 for (int k = 0; k < Stringfrontier.size(); k++) {
                                     if (Stringfrontier.get(k).equals(Station.getName()) && frontier.get(k).getFn() > Station.getFn()) {
@@ -111,31 +112,8 @@ public class Algorithm extends Application {
                             if (!explored.contains (Station.getName())){
                                 //calculate FN
                                 //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
-                                ArrayList<LatLng> durationCoor=new ArrayList<>();
-                                durationCoor.add(new LatLng(Station.getX(), Station.getY()));
-                                durationCoor.add(new LatLng(goalX, goalY));
-
-                                //Log.d("Duration:Aster", durationCoor + "");
-                                //double r= map.CalDuration(durationCoor, 1, goalX, goalY);
-                                try {
-                                   double d= DurationC(durationCoor);
-                                    Log.d("Dw",d+"");//not metro point
-                                }catch (Exception e){
-                                    Log.d("Dw",e+"ex");//not metro point
-
-                                }
-                                // CalcDuration c=new CalcDuration();
-                                // return c.CalcDuration(url2);
-                                Log.d("DU", map.DU + "");
-                                //check();
-                                Log.d("DU1",map.DU+"");
-
-                                //Log.d("CalDuration", dur + "");
-                                //Log.d("acces", getDu() + "");
-                               Log.d("Duration:AsterAfter", map.DU + "");
-                                Station.setGn(((map.DU / 0.621371) / 120) * 60 + Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));;
-                                //Station.setGn(((Duration(Station.getX(), Station.getY(), goalX, goalY)/0.621371 )/120 )*60+ Schedule(Station.getParent().getName(), Station.getName(),Station.getX(),Station.getY(),Station.getParent().getX(),Station.getParent().getY()));;
-
+                                Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
+                                Station.setGn(((heuristic(Station.getX(), Station.getY(), goalX, goalY) / 0.621371) / 120) * 60 + Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
                                 if (Stringfrontier.contains(Station.getName()))  {
                                     for (int k = 0; k < Stringfrontier.size(); k++) {
                                         if (Stringfrontier.get(k).equals(Station.getName()) && frontier.get(k).getFn() > Station.getFn()) {
@@ -144,7 +122,6 @@ public class Algorithm extends Application {
                                             frontier.add(k, Station);
                                         }
                                     }
-
                                 }
                                 else
                                     //add to the  of frontier
@@ -172,7 +149,8 @@ public class Algorithm extends Application {
                                 if (!explored.contains (Station.getName())){
                                     //calculate FN
                                     //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
-                                    //Station.setGn(((/0.621371 )/120 )*60+ Schedule(Station.getParent().getName(), Station.getName(),Station.getX(),Station.getY(),Station.getParent().getX(),Station.getParent().getY()));;
+                                    Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
+                                    Station.setGn(((heuristic(Station.getX(), Station.getY(), goalX, goalY)/0.621371 )/120 )*60+ Schedule(Station.getParent().getName(), Station.getName(),Station.getX(),Station.getY(),Station.getParent().getX(),Station.getParent().getY()));;
                                     if (Stringfrontier.contains(Station.getName()))  {
                                         for (int k = 0; k < Stringfrontier.size(); k++) {
                                             if (Stringfrontier.get(k).equals(Station.getName()) && frontier.get(k).getFn() > Station.getFn()) {
@@ -200,7 +178,6 @@ public class Algorithm extends Application {
 
     public static double DurationC(ArrayList<LatLng> durationCoor){
         double heu=0;
-        Log.d("Dw",durationCoor+"");//not metro point
 
         try{
         for (int j = 0; j < durationCoor.size() - 1; j++) {
@@ -213,13 +190,9 @@ public class Algorithm extends Application {
 
             // Getting URL to the Google Directions API
             String url2 = map.getDirectionsUrl(tempCoor1, tempCoor2, 2, 1);
-            Log.d("Ddata",url2+"|||||||||||||||||||||||");//not metro point
 
-            //DownloadTask downloadTask2 = new DownloadTask();
             // Start downloading json data from Google Directions API
-            //downloadTask2.delegate= this;
             String data = map.downloadUrl(url2);
-            Log.d("Ddata",data+"eeee|||||||||||||||||||||||");//not metro point
             //------------------
             JSONObject jObject;
             List<List<HashMap<String, String>>> routes = null;
@@ -235,33 +208,20 @@ public class Algorithm extends Application {
             // ---------------------
 // Traversing through all the routes
             for(int l=0;l<routes.size();l++){
-// Fetching i-th route
                 List<HashMap<String, String>> path = routes.get(l);
-                //Log.d("path :" ,path+"");
 
-// Fetching all the points in i-th route
-                // for(int k=0;k <path.size();k++){
                 HashMap<String,String> point = path.get(0);
                 Log.d("point :" ,point+"");
 
-                //if(k==0){ // Get duration from the list
-
-                // if(map.DurFlag==true){
-                //  Log.d("durationparse:", (String)point.get("duration")+ "");
-                //  Algorithm.duration += (String)point.get("duration");
                 String durat = (String)point.get("duration");
                 Log.d("point :", path.get(1) + "" + path.get(path.size() - 1));
                 heu=Double.parseDouble(durat.substring(0,durat.indexOf(" ")));
                 Log.d("heu", heu + "");
                 map.DU=heu;
-                // break;
-                //Algorithm.Astar(testroute.fromId, testroute.toId, Double.parseDouble(testroute.fromCoorX), Double.parseDouble(testroute.fromCoorY), Double.parseDouble(testroute.toCoorX), Double.parseDouble(testroute.toCoorY));
-                //}//}
+
             }
 
-            //--------------------
 
-            //Log.d("D",downloadTask2.execute(url2)+"");//not metro point
         }}catch (Exception e){}
 
         return heu;
@@ -281,9 +241,7 @@ public class Algorithm extends Application {
         double startX = StartX;
         double startY = StartY;
 
-       // if (from.equals(to)) {
-          //  return to + "%" + GoalX + ":" + GoalY;
-        //}
+
 
         // Extraction of Source station
         Extraction(from, startX, startY);
@@ -317,7 +275,8 @@ public class Algorithm extends Application {
 
 
                     if (!explored.contains(Station.getName()) && !Stringfrontier.contains(Station.getName()))
-                        AddToFrontier(Station);
+                        Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
+                    AddToFrontier(Station);
 
                 } //// 1)if the station is in the same line of the current
                 //// station
@@ -352,7 +311,8 @@ public class Algorithm extends Application {
                             return path(newStation)+"%"+coorPath(newStation);
 
                         if (!explored.contains(Station.getName()) && !Stringfrontier.contains(Station.getName()))
-                            // add to the of frontier
+                            Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
+                        // add to the of frontier
                             AddToFrontier(Station);
 
                         // 2.2)if the station is in different line of the
@@ -388,7 +348,10 @@ public class Algorithm extends Application {
 
                             if (!explored.contains(Station.getName())
                                     && !Stringfrontier.contains(Station.getName()))
-                                // add to the of frontier
+
+                                Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
+
+                            // add to the of frontier
                                 AddToFrontier(Station);
 
                         } // end for
@@ -400,7 +363,7 @@ public class Algorithm extends Application {
         } // end while
     }// end BFS
 
-public static void altBFS(String from , double startX, double startY, String child,String visitedChild){
+public static double altBFS(String from , double startX, double startY, String child,String visitedChild){
 
     Extraction(from, startX, startY);
 
@@ -431,7 +394,7 @@ public static void altBFS(String from , double startX, double startY, String chi
                     altLat = Station.getX();
                     altLong = Station.getY();
                     altFlag = false;
-                    return;
+                    return Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY());
                 }
                 //ALT
 
@@ -461,7 +424,7 @@ public static void altBFS(String from , double startX, double startY, String chi
                         altLat=x;
                         altLong = y;
                         altFlag = false;
-                        return;
+                        return Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY());
                     }
                     //ALT
 
@@ -491,7 +454,7 @@ public static void altBFS(String from , double startX, double startY, String chi
                             altLat=x;
                             altLong = y;
                             altFlag = false;
-                            return;
+                            return Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY());
 
                         }
                         //ALT
@@ -553,7 +516,8 @@ public static void altBFS(String from , double startX, double startY, String chi
                         else // bus station
                             Station = new Station(capacity2[newStation.getLine()-1],newStation.getLine(),newStation.getStreet(),i+1,newStation, TempMatrix[newStation.getStationNumber()-1][i]);
                         if (!explored.contains (Station.getName()) && !Stringfrontier.contains(Station.getName()))
-                            Queuefrontier.add(0,Station);
+                            Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
+                        Queuefrontier.add(0,Station);
 
                     }////1)if the station is in the same line of the current station
 
@@ -569,7 +533,8 @@ public static void altBFS(String from , double startX, double startY, String chi
                             double y = Double.parseDouble(externals.substring(externals.indexOf(":")+1));
                             Extract(id,x,y, newStation);
                             if (!explored.contains (Station.getName()) && !Stringfrontier.contains(Station.getName()))
-                                Queuefrontier.add(0, Station);
+                                Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
+                            Queuefrontier.add(0, Station);
                         } ////2.1)if the station is in different street of the current station
 
                         //2.2)if the station is in different line of the current station
@@ -587,10 +552,11 @@ public static void altBFS(String from , double startX, double startY, String chi
                                     y = Double.parseDouble(externals.substring(externals.indexOf(":")+1,externals.indexOf(",")));
                                     externals = externals.substring(externals.indexOf(",")+1);}
 
-                                Extract(id,x,y, newStation);
+                                Extract(id, x, y, newStation);
 
-                                if (!explored.contains (Station.getName()) && !Stringfrontier.contains(Station.getName()))
-                                    Queuefrontier.add(0,Station);
+                                if (!explored.contains(Station.getName()) && !Stringfrontier.contains(Station.getName()))
+                                    Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
+                                Queuefrontier.add(0,Station);
 
                             }//end for
                         }//2.2)if the station is in different line of the current station
@@ -737,7 +703,19 @@ public static void altBFS(String from , double startX, double startY, String chi
             Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             if (Linenext == Linecurrent) {
+                ArrayList<LatLng> durationCoor=new ArrayList<>();
+                durationCoor.add(new LatLng(coordinateX, coordinateY));
+                durationCoor.add(new LatLng(nextcordX, nextcordY));
 
+
+                try {
+                    double d= DurationC(durationCoor);
+                    sum=d;
+                    Log.d("Dw",d+"");//not metro point
+                }catch (Exception e){
+                    Log.d("Dw",e+"ex");//not metro point
+
+                }
             /*    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
                     sum = peakB;
                 }//peek
@@ -833,9 +811,11 @@ public static void altBFS(String from , double startX, double startY, String chi
     public static String path ( Station goal ){
         String path = goal.getName();
         while ( goal.getParent()!=null) {
+            totalTime+= goal.getTime();
             goal = goal.getParent ();
             path = goal.getName ()+"|"+path;
-        count++;}
+        count++;
+       }
         return path;
     }
 
@@ -963,7 +943,7 @@ class Station{
     String xCoordinate, yCoordinate;
     double fn = 0;
     double gn = 0;
-
+double totalTime =0 ;
     //constructers
     public Station (int capacity, int line, int stationNumber,Station parent, String xy) {
         this.capacity = capacity;
@@ -1033,5 +1013,13 @@ class Station{
         fn += value;
     }
 
+    public double getTime(){
+        return totalTime;
+    }
+
+    public void setTime(double time){
+        totalTime = time ;
+
+    }
 
 }//end of class station

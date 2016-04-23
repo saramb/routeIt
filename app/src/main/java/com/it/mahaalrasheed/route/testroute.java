@@ -108,10 +108,13 @@ public class testroute {
                             if (algorithmoption == 1 ) {
                                 //AStar Algorithm
                                 if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==0)){
+                                    Algorithm.totalTime = 0;
                                 String aStar = Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 AstarPath = aStar.substring(0, aStar.indexOf('%'));
                                 AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
-                                Log.d("AStar:", AstarPath + "");
+                                    Log.d("AStarTime:", Algorithm.totalTime + "");
+
+                                    Log.d("AStar:", AstarPath + "");
                                     count++;
                                 }
                                 pathCoordinates(1, AstarcoorPath);
@@ -121,7 +124,9 @@ public class testroute {
                             if (algorithmoption ==2) {
 
                                 if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==1)){
-                                String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                                    Algorithm.totalTime = 0;
+
+                                    String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                     BFSPath = BFS.substring(0,BFS.indexOf('%'));
                                 BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
                                 Log.d("BFS:", BFSPath + "");
@@ -155,7 +160,7 @@ public class testroute {
                                                 Algorithm.altLat = Double.parseDouble(tempCoor.substring(0, tempCoor.indexOf(":")));
                                                 Algorithm.altLong = Double.parseDouble(tempCoor.substring(tempCoor.indexOf(":") + 1));
 
-                                                Algorithm.altBFS(temp, tempLat, tempLong, tempComp, tempChild);
+                                                Algorithm.totalTime = Algorithm.altBFS(temp, tempLat, tempLong, tempComp, tempChild);
                                                 tempBFSPath = "";
                                             }
                                             tempChild = temp;
@@ -165,6 +170,7 @@ public class testroute {
                                         }
                                     if ( Algorithm.altLat !=0 && Algorithm.altLong!=0){
                                         String AltBFS = Algorithm.BFS(Algorithm.altID, toId, Algorithm.altLat, Algorithm.altLong, Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                                         Algorithm.BFS( fromId,Algorithm.altID,Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Algorithm.altLat, Algorithm.altLong);
 
                                 BFSPath += "|" + AltBFS.substring(0,AltBFS.indexOf('%'))+"|"+toId;
                                 BFScoorPath = toCoorX+":"+toCoorY +"|"+AltBFS.substring(AltBFS.indexOf('%') + 1)+"|"+BFScoorPath;}}}
@@ -179,7 +185,8 @@ public class testroute {
                             if (algorithmoption == 3) {
                                 //DFS Algorithm
                                 if ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==2){
-                                String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                                    Algorithm.totalTime = 0;
+                                    String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 DFSPath = DFS.substring(0, DFS.indexOf('%'));
                                 DFScoorPath = DFS.substring(DFS.indexOf('%') + 1);
                                 Log.d("DFS:", DFSPath + "");}
@@ -197,6 +204,9 @@ public class testroute {
 
                             else
                                 map.section_label.setText("You need to walk "+Math.round(time)+" minutes to reach the first station");
+
+                            map.duration.setText("Time: "+Math.round(Algorithm.totalTime)+" minutes");
+                            Log.d("Time",Math.round(Algorithm.totalTime)+" minutes");
 
                         } catch (IOException e) {
                             e.printStackTrace();

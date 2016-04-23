@@ -78,7 +78,7 @@ public class map extends AppCompatActivity
 
 
     //test commit
-    public static final String ROOT_URL = "http://192.168.1.65/";
+    public static final String ROOT_URL = "http://192.168.100.20:8080/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
 
@@ -87,7 +87,7 @@ public class map extends AppCompatActivity
     private Button infoButton2;
     static Button from, to;
     ListView lv;
-    static TextView section_label;
+    static TextView section_label,duration;
     static ImageView img1;
     static ImageView img2;
     static ImageView img3;
@@ -172,6 +172,7 @@ public class map extends AppCompatActivity
         left = (ImageButton) findViewById(R.id.swipeleft);
         right = (ImageButton) findViewById(R.id.swiperight);
         section_label = (TextView) findViewById(R.id.section_label);
+        duration = (TextView) findViewById(R.id.duration);
         img1 = (ImageView) findViewById(R.id.imageView9);
         img2 = (ImageView) findViewById(R.id.imageView8);
         img3 = (ImageView) findViewById(R.id.imageView7);
@@ -285,7 +286,7 @@ public class map extends AppCompatActivity
 
     public void test() {
         android.view.Display display = ((android.view.WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        frag.getLayoutParams().height = (int)(display.getHeight()*0.3);
+        frag.getLayoutParams().height = (int)(display.getHeight()*0.2);
         swiping = 1;
         left.setImageResource(R.mipmap.no_swip);
         section_label.setText("AStar");
