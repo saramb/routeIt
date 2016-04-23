@@ -1,7 +1,11 @@
 package com.it.mahaalrasheed.route;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -71,21 +75,29 @@ public class to extends AppCompatActivity implements
                 BOUNDS_MOUNTAIN_VIEW, null);
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
         if(!mAutocompleteTextView.hasFocus()){
-            mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.searchicon2, 0, 0, 0);
-            mAutocompleteTextView.setHint("Search");
+            Drawable image = getResources().getDrawable(R.mipmap.ic_launcher);
+            image.setBounds(12, 0, 80, 68);
+            mAutocompleteTextView.setCompoundDrawables(image, null, null, null);
+           // mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds( R.mipmap.searchicon2, 0, 0, 0);
+            mAutocompleteTextView.setHint("  Search");
 
         }
         mAutocompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.searchicon2, 0, 0, 0);
-                    mAutocompleteTextView.setHint("Search");
+                    Drawable image = getResources().getDrawable(R.mipmap.ic_launcher);
+                    image.setBounds(12, 0, 80, 68);
+                    mAutocompleteTextView.setCompoundDrawables(image, null, null, null);
+                    // mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds( R.mipmap.searchicon2, 0, 0, 0);
+                    mAutocompleteTextView.setHint("  Search");
 
                 } else {
                     //Assign your image again to the view, otherwise it will always be gone even if the text is 0 again.
-                    mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    mAutocompleteTextView.setHint("");
+                    Drawable image = getResources().getDrawable(R.mipmap.ic_launcher);
+                    image.setBounds(12, 0, 80, 68);
+                    mAutocompleteTextView.setCompoundDrawables(image, null, null, null);
+                    mAutocompleteTextView.setHint("  ");
 
                 }
             }

@@ -1,10 +1,17 @@
 package com.it.mahaalrasheed.route;
 
 import android.app.Application;
+import android.os.Handler;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 
 public class Algorithm extends Application {
 
@@ -13,6 +20,7 @@ public class Algorithm extends Application {
     // a frontier and explored array to mark which vertices have been visited while doing the algorithms
     static ArrayList<String> explored , Stringfrontier;
     static ArrayList<Station> frontier;
+    static int depT;
     // current matrix to be searched
     static private String[][] TempMatrix;
     //capacity of each line
@@ -42,7 +50,7 @@ public class Algorithm extends Application {
         double startY= StartY;
 
         //Extraction of Source station
-        Extraction(from,startX,startY);
+        Extraction(from, startX, startY);
 
         while (true) {
 
@@ -73,7 +81,7 @@ public class Algorithm extends Application {
                             //calculate FN
                             //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
                             Station.setGn(((heuristic(Station.getX(), Station.getY(), goalX, goalY)/0.621371 )/120 )*60+ Schedule(Station.getParent().getName(), Station.getName(),Station.getX(),Station.getY(),Station.getParent().getX(),Station.getParent().getY()));;
-
+                            Station.setGn(0);
                             if (Stringfrontier.contains(Station.getName()))  {
                                 for (int k = 0; k < Stringfrontier.size(); k++) {
                                     if (Stringfrontier.get(k).equals(Station.getName()) && frontier.get(k).getFn() > Station.getFn()) {
@@ -103,7 +111,30 @@ public class Algorithm extends Application {
                             if (!explored.contains (Station.getName())){
                                 //calculate FN
                                 //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
-                                Station.setGn(((heuristic(Station.getX(), Station.getY(), goalX, goalY)/0.621371 )/120 )*60+ Schedule(Station.getParent().getName(), Station.getName(),Station.getX(),Station.getY(),Station.getParent().getX(),Station.getParent().getY()));;
+                                ArrayList<LatLng> durationCoor=new ArrayList<>();
+                                durationCoor.add(new LatLng(Station.getX(), Station.getY()));
+                                durationCoor.add(new LatLng(goalX, goalY));
+
+                                //Log.d("Duration:Aster", durationCoor + "");
+                                //double r= map.CalDuration(durationCoor, 1, goalX, goalY);
+                                try {
+                                   double d= DurationC(durationCoor);
+                                    Log.d("Dw",d+"");//not metro point
+                                }catch (Exception e){
+                                    Log.d("Dw",e+"ex");//not metro point
+
+                                }
+                                // CalcDuration c=new CalcDuration();
+                                // return c.CalcDuration(url2);
+                                Log.d("DU", map.DU + "");
+                                //check();
+                                Log.d("DU1",map.DU+"");
+
+                                //Log.d("CalDuration", dur + "");
+                                //Log.d("acces", getDu() + "");
+                               Log.d("Duration:AsterAfter", map.DU + "");
+                                Station.setGn(((map.DU / 0.621371) / 120) * 60 + Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));;
+                                //Station.setGn(((Duration(Station.getX(), Station.getY(), goalX, goalY)/0.621371 )/120 )*60+ Schedule(Station.getParent().getName(), Station.getName(),Station.getX(),Station.getY(),Station.getParent().getX(),Station.getParent().getY()));;
 
                                 if (Stringfrontier.contains(Station.getName()))  {
                                     for (int k = 0; k < Stringfrontier.size(); k++) {
@@ -141,7 +172,7 @@ public class Algorithm extends Application {
                                 if (!explored.contains (Station.getName())){
                                     //calculate FN
                                     //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
-                                    Station.setGn(((heuristic(Station.getX(), Station.getY(), goalX, goalY)/0.621371 )/120 )*60+ Schedule(Station.getParent().getName(), Station.getName(),Station.getX(),Station.getY(),Station.getParent().getX(),Station.getParent().getY()));;
+                                    //Station.setGn(((/0.621371 )/120 )*60+ Schedule(Station.getParent().getName(), Station.getName(),Station.getX(),Station.getY(),Station.getParent().getX(),Station.getParent().getY()));;
                                     if (Stringfrontier.contains(Station.getName()))  {
                                         for (int k = 0; k < Stringfrontier.size(); k++) {
                                             if (Stringfrontier.get(k).equals(Station.getName()) && frontier.get(k).getFn() > Station.getFn()) {
@@ -165,6 +196,78 @@ public class Algorithm extends Application {
         } // end while
 
     }//end A*
+
+
+    public static double DurationC(ArrayList<LatLng> durationCoor){
+        double heu=0;
+        Log.d("Dw",durationCoor+"");//not metro point
+
+        try{
+        for (int j = 0; j < durationCoor.size() - 1; j++) {
+
+            LatLng tempCoor1 = durationCoor.get(j);
+            LatLng tempCoor2 = durationCoor.get(j + 1);
+            Log.d("type", tempCoor1 + ":" + tempCoor2);
+            String tem1=tempCoor1+"";
+            String tem2=tempCoor2+"";
+
+            // Getting URL to the Google Directions API
+            String url2 = map.getDirectionsUrl(tempCoor1, tempCoor2, 2, 1);
+            Log.d("Ddata",url2+"|||||||||||||||||||||||");//not metro point
+
+            //DownloadTask downloadTask2 = new DownloadTask();
+            // Start downloading json data from Google Directions API
+            //downloadTask2.delegate= this;
+            String data = map.downloadUrl(url2);
+            Log.d("Ddata",data+"eeee|||||||||||||||||||||||");//not metro point
+            //------------------
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+
+            jObject = new JSONObject(data);
+            DirectionsJSONParser parser = new DirectionsJSONParser();
+
+            // Starts parsing data
+            routes = parser.parse(jObject);
+            Log.d("innnn:",routes+"/n"+routes.size());
+
+            // ---------------------
+// Traversing through all the routes
+            for(int l=0;l<routes.size();l++){
+// Fetching i-th route
+                List<HashMap<String, String>> path = routes.get(l);
+                //Log.d("path :" ,path+"");
+
+// Fetching all the points in i-th route
+                // for(int k=0;k <path.size();k++){
+                HashMap<String,String> point = path.get(0);
+                Log.d("point :" ,point+"");
+
+                //if(k==0){ // Get duration from the list
+
+                // if(map.DurFlag==true){
+                //  Log.d("durationparse:", (String)point.get("duration")+ "");
+                //  Algorithm.duration += (String)point.get("duration");
+                String durat = (String)point.get("duration");
+                Log.d("point :", path.get(1) + "" + path.get(path.size() - 1));
+                heu=Double.parseDouble(durat.substring(0,durat.indexOf(" ")));
+                Log.d("heu", heu + "");
+                map.DU=heu;
+                // break;
+                //Algorithm.Astar(testroute.fromId, testroute.toId, Double.parseDouble(testroute.fromCoorX), Double.parseDouble(testroute.fromCoorY), Double.parseDouble(testroute.toCoorX), Double.parseDouble(testroute.toCoorY));
+                //}//}
+            }
+
+            //--------------------
+
+            //Log.d("D",downloadTask2.execute(url2)+"");//not metro point
+        }}catch (Exception e){}
+
+        return heu;
+    }
+
+
 
     // --------------------------BFS algorithm---------------------
     // Perform BFS algorithm
@@ -194,9 +297,7 @@ public class Algorithm extends Application {
                 if (newStation.getName().equals(to))
                     return path(newStation)+"%"+coorPath(newStation);
 
-
-
-                // locate the station to its matrix
+            // locate the station to its matrix
             assignMatrix(newStation.getName().charAt(0) + "", newStation.getLine(), newStation.getStreet());
 
             for (int i = 0; i < TempMatrix.length; i++) {
@@ -523,21 +624,27 @@ public static void altBFS(String from , double startX, double startY, String chi
         a.set(one, a.get(two));
         a.set(two, temp);
     }
-
     //--------------------------heuristic---------------------
 //to caculate the heuristic
     public static double heuristic (double coordinateX, double coordinateY,double goalcordX,double goalcordY) {
 
-
         return  3956*2*Math.asin (Math.sqrt ( Math.pow ( Math.sin ( (coordinateX-goalcordX)*3.14/180/2) ,2) +
-
-
                 Math.cos (coordinateX*3.14/180) * Math.cos(goalcordY*3.14/180) *
-
-                        Math.pow (Math.sin ( (coordinateY- goalcordY) *3.14/180/2), 2) ));
+                Math.pow (Math.sin ( (coordinateY- goalcordY) *3.14/180/2), 2) ));
 
     } //end heuristic
+    static double dur;
 
+    //-----------------------duration---------------------
+    public static double Duration (String dura){
+        if(!dura.equals("")){
+         dur=Double.parseDouble(dura.substring(0,dura.indexOf(" ")));
+        //Log.d("HDuration", duration + "");
+        //dur=duration;
+        Log.d("Duration", dur + "");}else Log.d("Duration", dur + "");
+
+        return dur;
+    }
     //--------------------------Schedule---------------------
 //to caculate the Schedule of arrival
     public static double Schedule(String idCurrent , String idNext, double coordinateX, double coordinateY,double nextcordX,double nextcordY) {
@@ -557,10 +664,12 @@ public static void altBFS(String from , double startX, double startY, String chi
         Linenext = Integer.parseInt(IDnext.charAt(2) + "");
 
         if (MBcurrent != MBnext) {
+            //if metro and bus ==> time =5min
             sum =((heuristic(coordinateX , coordinateY , nextcordX , nextcordY)/0.621371 )/120 )*60;
         }//switching
         else
         if (MBcurrent == 1 && MBnext == 1) {
+            //both metro
             Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             if(Linenext ==Linecurrent) {
@@ -624,27 +733,31 @@ public static void altBFS(String from , double startX, double startY, String chi
         } //both metro
         else
         if (MBcurrent == 2 && MBnext == 2) {
+            //if both busses take duration from duration_in_traffic
             Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
-            if(Linenext == Linecurrent) {
-            if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
-                sum = peakB;
-            }//peek
-            else {
-                sum = offpeakB;
-            }//offpeak
-        }
+            if (Linenext == Linecurrent) {
+
+            /*    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
+                    sum = peakB;
+                }//peek
+                else {
+                    sum = offpeakB;
+                }//offpeak*/
+            }
             else        //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
-            {sum =((heuristic(coordinateX , coordinateY , nextcordX , nextcordY)/0.621371 )/120 )*60;}//switch between buses
+            {
+                //if different lines
+                  sum =((heuristic(coordinateX , coordinateY , nextcordX , nextcordY)/0.621371 )/120 )*60;
+                }//switch between buses
 
-        } //both bus
+            } //both bus
 
-        Log.d("time", idCurrent+"--"+ idNext+"-sed"+ sum / 60 + "");
+            Log.d("time", idCurrent + "--" + idNext + "-sed" + sum / 60 + "");
 
-        return sum/60;
+            return sum / 60;
 
     }
-
 
     //--------------------------AddToFrontier---------------------
 //add to the  of frontier
@@ -837,6 +950,7 @@ public static void altBFS(String from , double startX, double startY, String chi
 
     }
 
+
 }//end class Test
 
 //--------------------------Station class---------------------
@@ -914,5 +1028,10 @@ class Station{
 
     public double getY () {
         return Double.parseDouble(yCoordinate); }
+
+    public void incFN (double value) {
+        fn += value;
+    }
+
 
 }//end of class station

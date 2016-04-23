@@ -193,6 +193,7 @@ public class Favorites extends AppCompatActivity
             public void onMenuClose(int position) {
             }
         });
+        update();
 
     }
 
@@ -270,26 +271,33 @@ public class Favorites extends AppCompatActivity
                 array.add(i, item.get(i).getName());
         }
 
-    addapter=new ArrayAdapter(Favorites.this, android.R.layout.simple_list_item_1, array);
+        addapter=new ArrayAdapter(Favorites.this, android.R.layout.simple_list_item_1, array);
 
-    lv.setAdapter(addapter);
+        lv.setAdapter(addapter);
 
-    lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
 
-    {
-        @Override
-        public void onItemClick (AdapterView < ? > parent, View view,int position, long id){
-        Intent n = new Intent(Favorites.this, map.class);
-        FavoriteClass F = relam.allObjects(FavoriteClass.class).get(position);
-        latFav = F.getLat();
-        lngFav = F.getLng();
-        nameFav = F.getName();
-        startActivity(n);
-        finish();
+                                  {
+                                      @Override
+                                      public void onItemClick (AdapterView < ? > parent, View view,int position, long id){
+                                          Intent n = new Intent(Favorites.this, map.class);
+                                          FavoriteClass F = relam.allObjects(FavoriteClass.class).get(position);
+                                          latFav = F.getLat();
+                                          lngFav = F.getLng();
+                                          nameFav = F.getName();
+                                          startActivity(n);
+                                          finish();
+                                      }
+                                  }
+
+        ); }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        update();
     }
-                              }
-
-    ); }
 
 
     private AdapterView.OnItemClickListener mAutocompleteClickListener
@@ -310,23 +318,24 @@ public class Favorites extends AppCompatActivity
             if (!places.getStatus().isSuccess())
                 return;
             else {
-            // Selecting the first object buffer.
-            final Place place = places.get(0);
-            F = new FavoriteClass();
-            F.setId((int) Calendar.getInstance().getTimeInMillis());
-            F.setLat(place.getLatLng().latitude);
-            F.setLng(place.getLatLng().longitude);
-            F.setName(place.getName().toString());
+                // Selecting the first object buffer.
+                final Place place = places.get(0);
+                F = new FavoriteClass();
+                F.setId((int) Calendar.getInstance().getTimeInMillis());
+                F.setLat(place.getLatLng().latitude);
+                F.setLng(place.getLatLng().longitude);
+                F.setName(place.getName().toString());
 
-            relam.beginTransaction();
-            relam.copyToRealmOrUpdate(F);
-            relam.commitTransaction();
+                relam.beginTransaction();
+                relam.copyToRealmOrUpdate(F);
+                relam.commitTransaction();
 
-            mAutocompleteTextView.setText(" ");
+                mAutocompleteTextView.setText(" ");
 
-            Toast.makeText(getApplicationContext(), "Successfully added to favorite", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Successfully added to favorite", Toast.LENGTH_SHORT).show();
 
-            update();}
+                update();
+            }
         }
     };
 

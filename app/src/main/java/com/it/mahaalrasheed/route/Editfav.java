@@ -1,5 +1,8 @@
 package com.it.mahaalrasheed.route;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -18,6 +21,7 @@ public class Editfav extends AppCompatActivity {
     int id ;
     FavoriteClass items;
     EditText ed;
+    String str;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,28 +36,40 @@ public class Editfav extends AppCompatActivity {
         relam = Realm.getInstance(getApplicationContext());
         items= relam.allObjects(FavoriteClass.class).get(id);
         ed.setText(items.getName().toString());
+        str=ed.getText().toString();
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                relam.beginTransaction();
-                items.setName(ed.getText().toString());
-                relam.copyToRealmOrUpdate(items);
-                relam.commitTransaction();
-                Toast.makeText(Editfav.this, "Changes successfully added", Toast.LENGTH_SHORT).show();
-                finish();
+                if(!(str.equals(ed.getText().toString())))
+                {
+                    relam.beginTransaction();
+                    items.setName(ed.getText().toString());
+                    relam.copyToRealmOrUpdate(items);
+                    relam.commitTransaction();
+                    Toast.makeText(Editfav.this, "Changes successfully added", Toast.LENGTH_SHORT).show();
+                    finish();
+
+                }else
+                    Toast.makeText(Editfav.this, "There is no changes to save", Toast.LENGTH_SHORT).show();
+
+
             }
         }) ;
-     del.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-             relam.beginTransaction();
-             items.removeFromRealm();
-             relam.commitTransaction();
-             Toast.makeText(Editfav.this, "Your Favorite has been succeefully deleted", Toast.LENGTH_SHORT).show();
-             finish();
-         }
-     });
+        del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                relam.beginTransaction();
+                items.removeFromRealm();
+                relam.commitTransaction();
+                Toast.makeText(Editfav.this, "Your Favorite has been succeefully deleted", Toast.LENGTH_SHORT).show();
+                finish();
+
+
+            }
+        });
 
     }
 

@@ -10,10 +10,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
@@ -74,8 +72,10 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
+
     //test commit
-    public static final String ROOT_URL = "http://192.168.100.20:8080/";
+    public static final String ROOT_URL = "http://192.168.1.65/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
 
@@ -93,6 +93,9 @@ public class map extends AppCompatActivity
     static ImageView img6;
     static ImageView img7,next1,next2 ,next3 ,next4,next5 ,next6 ;
     ImageButton left, right;
+    static boolean DurFlag;
+
+
     static RelativeLayout frag;
 
     private OnInfoWindowElemTouchListener infoButtonListener;
@@ -145,6 +148,8 @@ public class map extends AppCompatActivity
 
         DisplayMap();
         buildGoogleApiClient();
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
+        //premission
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -424,7 +429,7 @@ public class map extends AppCompatActivity
                             }
 
                             for (int k = 0; k < i; k++) {
-                                m = map.addMarker(new MarkerOptions()
+                                 m = map.addMarker(new MarkerOptions()
                                         .position(SPOTS_ARRAY[k].getPosition())
                                         .title("Title")
                                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_metro)));
@@ -459,7 +464,6 @@ public class map extends AppCompatActivity
                     p.remove();
             }
 
-
             for (int j = 0; j < lineCoor.size() - 1; j++) {
                 int type1 = type.get(j);
                 int type2 = type.get(j + 1);
@@ -476,12 +480,22 @@ public class map extends AppCompatActivity
                 //else
                 //   if (type1 == 1 && type2 == 1){
 
-                polylines.add(map.addPolyline((new PolylineOptions())
-                        .add(tempCoor1, tempCoor2)
-                        .width(10)
-                        .color(Color.BLUE)
-                        .geodesic(true)));
-                //  }
+                    polylines.add(map.addPolyline((new PolylineOptions())
+                            .add(tempCoor1, tempCoor2)
+                            .width(10)
+                            .color(Color.BLUE)
+                            .geodesic(true)));
+               // } else {
+                    // Getting URL to the Google Directions API
+                    //String url = getDirectionsUrl(tempCoor1, tempCoor2,1,0);
+                    //DownloadTask downloadTask = new DownloadTask();
+                    // Start downloading json data from Google Directions API
+                   // downloadTask.execute(url);//not metro point
+
+
+
+               // }//end of else
+              //  }
              /*  else
                 if ((type1 == 1 && type2 == 2 )|| (type1 == 2 && type2 == 1 )){
 
@@ -499,6 +513,37 @@ public class map extends AppCompatActivity
             e.printStackTrace();
         }
 
+    }
+static         double DU=0;
+
+    public static double CalDuration(ArrayList<LatLng> lineCoor,int deptTime,double goalX,double goalY) {
+        DurFlag=false;
+        Log.d("DurFlag: ",DurFlag + "");
+
+        try {
+
+            for (int j = 0; j < lineCoor.size() - 1; j++) {
+
+                LatLng tempCoor1 = lineCoor.get(j);
+                LatLng tempCoor2 = lineCoor.get(j + 1);
+                Log.e("type", tempCoor1 + ":" + tempCoor2);
+                String tem1=tempCoor1+"";
+                String tem2=tempCoor2+"";
+
+                // Getting URL to the Google Directions API
+                String url2 = getDirectionsUrl(tempCoor1, tempCoor2, 2, deptTime);
+                DownloadTask downloadTask2 = new DownloadTask();
+                // Start downloading json data from Google Directions API
+                //downloadTask2.delegate= this;
+
+                Log.d("D",downloadTask2.execute(url2)+"");//not metro point
+            }}catch (Exception e){}
+               // CalcDuration c=new CalcDuration();
+               // return c.CalcDuration(url2);
+        DU=Algorithm.Duration("");
+        //check();
+        Log.d("DU",DU+"");
+        return DU;
     }
 
     @Override
@@ -657,7 +702,9 @@ public class map extends AppCompatActivity
         );
     }
 
-    private static String getDirectionsUrl(LatLng origin, LatLng dest) {
+    static String url2;
+    static String rl2;
+    public static String getDirectionsUrl(LatLng origin, LatLng dest,int type,int deptTime) {
 
 // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
@@ -670,12 +717,16 @@ public class map extends AppCompatActivity
 
 // Building the parameters to the web service
         String parameters = str_origin + "&" + str_dest + "&" + sensor;
+        String parameters2 = str_origin + "&" + str_dest + "&" + deptTime+"&"+"key=AIzaSyAnD0zTSJWDgBJLNXzMPbTd7x_RTjeiqiA";
 
 // Output format
         String output = "json";
-
+        String url="";
 // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+        if(type==1)
+        url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+        else if (type==2)
+        url="https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters2;
 
         return url;
     }
@@ -715,6 +766,8 @@ public class map extends AppCompatActivity
             br.close();
 
         } catch (Exception e) {
+            Log.d("Ddata",e+"||eeeee|||||||||||||||||||||");//not metro point
+
         } finally {
             iStream.close();
             urlConnection.disconnect();
@@ -889,9 +942,9 @@ public class map extends AppCompatActivity
         mGoogleApiClient.connect();
     }
 
+
     @Override
     public void onConnected(Bundle bundle) {
-
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(100); // Update location every second
@@ -945,9 +998,20 @@ public class map extends AppCompatActivity
         super.onDestroy();
         mGoogleApiClient.disconnect();
     }
-}
 
-class DownloadTask extends AsyncTask<String, Void, String> {
+}
+class DownloadTask extends AsyncTask<String, Void, String>  implements AsyncResponse{
+    public AsyncResponse delegate = null;
+
+    @Override
+    public void processFinish(String output) {
+        Log.d("dod", output + "");
+        //delegate.processFinish(output);
+
+        map.DU=Algorithm.Duration(output);
+        Log.d("ood", map.DU+"");
+        //Log.d("Duration:CalDuration",  Algorithm.Duration(output)+ "");
+    }
 
     // Downloading data in non-ui thread
     @Override

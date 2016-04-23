@@ -1,8 +1,10 @@
 package com.it.mahaalrasheed.route;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -69,21 +71,28 @@ public class from extends AppCompatActivity implements
                 BOUNDS_MOUNTAIN_VIEW, null);
         mAutocompleteTextView.setAdapter(mPlaceArrayAdapter);
         if(!mAutocompleteTextView.hasFocus()){
-            mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.searchicon2, 0, 0, 0);
-            mAutocompleteTextView.setHint("Search");
+            Drawable image = getResources().getDrawable(R.mipmap.ic_launcher);
+            image.setBounds(12, 0, 80, 68);
+            mAutocompleteTextView.setCompoundDrawables(image, null, null, null);
+            // mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds( R.mipmap.searchicon2, 0, 0, 0);
+            mAutocompleteTextView.setHint("  Search");
 
         }
         mAutocompleteTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.searchicon2, 0, 0, 0);
-                    mAutocompleteTextView.setHint("Search");
+                    Drawable image = getResources().getDrawable(R.mipmap.ic_launcher);
+                    image.setBounds(12, 0, 80, 68);
+                    mAutocompleteTextView.setCompoundDrawables(image, null, null, null);
+                    // mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds( R.mipmap.searchicon2, 0, 0, 0);
+                    mAutocompleteTextView.setHint("  Search");
+
 
                 } else {
                     //Assign your image again to the view, otherwise it will always be gone even if the text is 0 again.
                     mAutocompleteTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    mAutocompleteTextView.setHint("");
+                    mAutocompleteTextView.setHint("  ");
 
                 }
             }
@@ -96,6 +105,8 @@ public class from extends AppCompatActivity implements
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
+            Log.i("s", "Selected: " + item.description);
+            Log.i("s", "Fetching details for ID: " + item.placeId);
             PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
                     .getPlaceById(mGoogleApiClient, placeId);
             placeResult.setResultCallback(mUpdatePlaceDetailsCallback);

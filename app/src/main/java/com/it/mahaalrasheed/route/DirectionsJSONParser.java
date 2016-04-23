@@ -1,6 +1,8 @@
 package com.it.mahaalrasheed.route;
 
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -20,7 +22,7 @@ public class DirectionsJSONParser {
         JSONArray jRoutes = null;
         JSONArray jLegs = null;
         JSONArray jSteps = null;
-
+        JSONObject jDuration = null;
         try {
 
             jRoutes = jObject.getJSONArray("routes");
@@ -28,10 +30,15 @@ public class DirectionsJSONParser {
 /** Traversing all routes */
             for(int i=0;i<jRoutes.length();i++){
                 jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray("legs");
-                List path = new ArrayList<HashMap<String, String>>();
+                List<HashMap<String, String>> path = new ArrayList<HashMap<String, String>>();
 
 /** Traversing all legs */
                 for(int j=0;j<jLegs.length();j++){
+                    /** Getting duration from the json data */
+                    jDuration = ((JSONObject) jLegs.get(j)).getJSONObject("duration");
+                    HashMap<String, String> hmDuration = new HashMap<String, String>();
+                    hmDuration.put("duration",jDuration.getString("text") );
+                    path.add(hmDuration);
                     jSteps = ( (JSONObject)jLegs.get(j)).getJSONArray("steps");
 
 /** Traversing all steps */
@@ -48,6 +55,7 @@ public class DirectionsJSONParser {
                             path.add(hm);
                         }
                     }
+
                     routes.add(path);
                 }
             }
