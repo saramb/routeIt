@@ -15,6 +15,9 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
@@ -75,9 +78,11 @@ import retrofit.client.Response;
 public class map extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
+
     //test commit
-    public static final String ROOT_URL = "http://192.168.1.65/";
-    //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
+    public static final String ROOT_URL = "http://192.168.100.20:8080/";
+    //public static final String ROOT_URL = "http://rawan.16mb.com/Route-it/";
 
 
     private Button infoButton;
@@ -139,6 +144,8 @@ public class map extends AppCompatActivity
 
         DisplayMap();
         buildGoogleApiClient();
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
+        //premission
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -345,7 +352,7 @@ public class map extends AppCompatActivity
                             }
 
                             for (int k = 0; k < i; k++) {
-                                 m = map.addMarker(new MarkerOptions()
+                                m = map.addMarker(new MarkerOptions()
                                         .position(SPOTS_ARRAY[k].getPosition())
                                         .title("Title")
                                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_metro)));
@@ -396,17 +403,17 @@ public class map extends AppCompatActivity
                 //else
                 //   if (type1 == 1 && type2 == 1){
 
-                    polylines.add(googleMap.addPolyline((new PolylineOptions())
+                    polylines.add(map.addPolyline((new PolylineOptions())
                             .add(tempCoor1, tempCoor2)
                             .width(10)
                             .color(Color.BLUE)
                             .geodesic(true)));
                // } else {
                     // Getting URL to the Google Directions API
-                    String url = getDirectionsUrl(tempCoor1, tempCoor2,1,0);
-                    DownloadTask downloadTask = new DownloadTask();
+                    //String url = getDirectionsUrl(tempCoor1, tempCoor2,1,0);
+                    //DownloadTask downloadTask = new DownloadTask();
                     // Start downloading json data from Google Directions API
-                    downloadTask.execute(url);//not metro point
+                   // downloadTask.execute(url);//not metro point
 
 
 
@@ -429,6 +436,37 @@ public class map extends AppCompatActivity
             e.printStackTrace();
         }
 
+    }
+static         double DU=0;
+
+    public static double CalDuration(ArrayList<LatLng> lineCoor,int deptTime,double goalX,double goalY) {
+        DurFlag=false;
+        Log.d("DurFlag: ",DurFlag + "");
+
+        try {
+
+            for (int j = 0; j < lineCoor.size() - 1; j++) {
+
+                LatLng tempCoor1 = lineCoor.get(j);
+                LatLng tempCoor2 = lineCoor.get(j + 1);
+                Log.e("type", tempCoor1 + ":" + tempCoor2);
+                String tem1=tempCoor1+"";
+                String tem2=tempCoor2+"";
+
+                // Getting URL to the Google Directions API
+                String url2 = getDirectionsUrl(tempCoor1, tempCoor2, 2, deptTime);
+                DownloadTask downloadTask2 = new DownloadTask();
+                // Start downloading json data from Google Directions API
+                //downloadTask2.delegate= this;
+
+                Log.d("D",downloadTask2.execute(url2)+"");//not metro point
+            }}catch (Exception e){}
+               // CalcDuration c=new CalcDuration();
+               // return c.CalcDuration(url2);
+        DU=Algorithm.Duration("");
+        //check();
+        Log.d("DU",DU+"");
+        return DU;
     }
 
     @Override
@@ -587,44 +625,9 @@ public class map extends AppCompatActivity
         );
     }
 
-    private static String getDirectionsUrl(LatLng origin, LatLng dest) {
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "map Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.it.mahaalrasheed.route/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    public void RetrieveNotifID() {
-        //retrieve realm content
-        realm = Realm.getInstance(getApplicationContext());
-        List<Notification> itemNot = realm.allObjects(Notification.class);
-
-        //store all returned content from realm
-        if (itemNot.size() != 0)
-            notifID = itemNot.get(0).getID();
-        RetrieveNotif(notifID);
-
-    }
-
     static String url2;
     static String rl2;
-    private static String getDirectionsUrl(LatLng origin, LatLng dest,int type,int deptTime) {
+    public static String getDirectionsUrl(LatLng origin, LatLng dest,int type,int deptTime) {
 
 // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
@@ -637,7 +640,7 @@ public class map extends AppCompatActivity
 
 // Building the parameters to the web service
         String parameters = str_origin + "&" + str_dest + "&" + sensor;
-        String parameters2 = str_origin + "&" + str_dest + "&" + deptTime;
+        String parameters2 = str_origin + "&" + str_dest + "&" + deptTime+"&"+"key=AIzaSyAnD0zTSJWDgBJLNXzMPbTd7x_RTjeiqiA";
 
 // Output format
         String output = "json";
@@ -649,96 +652,6 @@ public class map extends AppCompatActivity
         url="https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters2;
 
         return url;
-    }
-
-    private final int SPLASH_DISPLAY_LENGTH = 1200;
-    static int arraySize[] = new int[30];
-
-    public static void numOfStation() {
-        //Here we will handle the http request to retrieve from mysql db
-        //Creating a RestAdapter
-        RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(ROOT_URL) //Setting the Root URL
-                .build(); //Finally building the adapter
-
-        //Creating object for our interface
-        routeAPI api = adapter.create(routeAPI.class);
-
-        //Defining the method  RetrieveNotif of our interface
-        api.numOfStation(
-
-                //Passing the values
-                "1",
-                //Creating an anonymous callback
-                new Callback<Response>() {
-                    @Override
-                    public void success(Response result, Response response) {
-                        //On success we will read the server's output using bufferedreader
-                        //Creating a bufferedreader object
-                        BufferedReader reader = null;
-
-                        //An string to store output from the server
-                        String output = "";
-
-                        try {
-                            //Initializing buffered reader
-                            reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
-
-                            //Reading the output in the string
-                            output = reader.readLine();
-                            Log.d("output", "output[" + "]" + ":" + output);
-
-                            //Toast.makeText(getApplicationContext(), output + "", Toast.LENGTH_LONG).show();
-                            int i = 0;
-                            //Check if there is an output from server
-                            while (!output.equals("")) {
-                                arraySize[i] = Integer.parseInt(output.substring(0, output.indexOf("/"))) + 1;
-                                Log.d("arraySize", "arraySize[" + i + "]" + ":" + arraySize[i]);
-                                i++;
-                                output = output.substring(output.indexOf("/") + 1);
-                            }
-                            testroute.Mline1 = new String[arraySize[0]][arraySize[0]];
-                            testroute.Mline2 = new String[arraySize[1]][arraySize[1]];
-                            testroute.Mline3 = new String[arraySize[2]][arraySize[2]];
-                            testroute.Mline4 = new String[arraySize[3]][arraySize[3]];
-                            testroute.Mline5 = new String[arraySize[4]][arraySize[4]];
-                            testroute.Mline6 = new String[arraySize[5]][arraySize[5]];
-                            testroute.Bline2_1 = new String[arraySize[6]][arraySize[6]];
-                            testroute.Bline2_2 = new String[arraySize[7]][arraySize[7]];
-                            testroute.Bline2_3 = new String[arraySize[8]][arraySize[8]];
-                            testroute.Bline2_4 = new String[arraySize[9]][arraySize[9]];
-                            testroute.Bline2_5 = new String[arraySize[10]][arraySize[10]];
-                            testroute.Bline2_6 = new String[arraySize[11]][arraySize[11]];
-                            testroute.Bline2_7 = new String[arraySize[12]][arraySize[12]];
-                            testroute.Bline2_8 = new String[arraySize[13]][arraySize[13]];
-                            testroute.Bline2_9 = new String[arraySize[14]][arraySize[14]];
-                            testroute.Bline2_10 = new String[arraySize[15]][arraySize[15]];
-                            testroute.Bline3_1 = new String[arraySize[16]][arraySize[16]];
-                            testroute.Bline3_2 = new String[arraySize[17]][arraySize[17]];
-                            testroute.Bline3_3 = new String[arraySize[18]][arraySize[18]];
-                            testroute.Bline3_4 = new String[arraySize[19]][arraySize[19]];
-                            testroute.Bline3_5 = new String[arraySize[20]][arraySize[20]];
-                            testroute.Bline3_6 = new String[arraySize[21]][arraySize[21]];
-                            testroute.Bline3_7 = new String[arraySize[22]][arraySize[22]];
-                            testroute.Bline3_8 = new String[arraySize[23]][arraySize[23]];
-                            testroute.Bline3_9 = new String[arraySize[24]][arraySize[24]];
-                            testroute.Bline3_10 = new String[arraySize[25]][arraySize[25]];
-                            testroute.Bline4_1 = new String[arraySize[26]][arraySize[26]];
-                            testroute.Bline4_2 = new String[arraySize[27]][arraySize[27]];
-                            testroute.link();
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        //If any error occured displaying the error as toast
-                        // Toast.makeText(map.this, error.toString(), Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
     }
 
     /**
@@ -776,6 +689,8 @@ public class map extends AppCompatActivity
             br.close();
 
         } catch (Exception e) {
+            Log.d("Ddata",e+"||eeeee|||||||||||||||||||||");//not metro point
+
         } finally {
             iStream.close();
             urlConnection.disconnect();
@@ -950,9 +865,9 @@ public class map extends AppCompatActivity
         mGoogleApiClient.connect();
     }
 
+
     @Override
     public void onConnected(Bundle bundle) {
-
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(100); // Update location every second
@@ -1008,8 +923,18 @@ public class map extends AppCompatActivity
     }
 
 }
+class DownloadTask extends AsyncTask<String, Void, String>  implements AsyncResponse{
+    public AsyncResponse delegate = null;
 
-class DownloadTask extends AsyncTask<String, Void, String> {
+    @Override
+    public void processFinish(String output) {
+        Log.d("dod", output + "");
+        //delegate.processFinish(output);
+
+        map.DU=Algorithm.Duration(output);
+        Log.d("ood", map.DU+"");
+        //Log.d("Duration:CalDuration",  Algorithm.Duration(output)+ "");
+    }
 
     // Downloading data in non-ui thread
     @Override

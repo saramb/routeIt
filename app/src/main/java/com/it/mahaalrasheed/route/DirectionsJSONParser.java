@@ -1,6 +1,8 @@
 package com.it.mahaalrasheed.route;
 
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -35,7 +37,7 @@ public class DirectionsJSONParser {
                     /** Getting duration from the json data */
                     jDuration = ((JSONObject) jLegs.get(j)).getJSONObject("duration");
                     HashMap<String, String> hmDuration = new HashMap<String, String>();
-                    hmDuration.put("duration", jDuration.getString("text"));
+                    hmDuration.put("duration",jDuration.getString("text") );
                     path.add(hmDuration);
                     jSteps = ( (JSONObject)jLegs.get(j)).getJSONArray("steps");
 
