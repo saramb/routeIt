@@ -55,6 +55,7 @@ public class testroute {
     static String AstarPath, BFSPath, DFSPath;
     static String AstarcoorPath,BFScoorPath, DFScoorPath;
     static int count=0;
+    static double AstarTime ,BFSTime,DFSTime;
 
     public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2, final int algorithmoption){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
@@ -84,8 +85,6 @@ public class testroute {
                         try {
                             //Initializing buffered reader
 
-                            //RetrieveSchedule();
-
 
                             reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
                             //Reading the output in the string
@@ -113,6 +112,7 @@ public class testroute {
                                 //AStar Algorithm
                                 if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==0)){
                                     Algorithm.totalTime = 0;
+                                    AstarTime = 0 ;
                                 String aStar = Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 AstarPath = aStar.substring(0, aStar.indexOf('%'));
                                 AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
@@ -120,15 +120,22 @@ public class testroute {
 
                                     Log.d("AStar:", AstarPath + "");
                                     count++;
+                                   AstarTime =  Math.round(Algorithm.totalTime);
                                 }
                                 pathCoordinates(1, AstarcoorPath);
                                 routeInfo.startRouteInfo(AstarPath, lineCoorAstar);
+                                if(AstarTime!= 0)
+
+                                    map.duration.setText("Time: " +AstarTime + " minutes");
+
                             }
 
                             if (algorithmoption ==2) {
 
                                 if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==1)){
                                     Algorithm.totalTime = 0;
+                                    BFSTime = 0;
+
 
                                     String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                     BFSPath = BFS.substring(0,BFS.indexOf('%'));
@@ -139,7 +146,7 @@ public class testroute {
                                         BFSPath+="|"+ toId;
                                         BFScoorPath= toCoorX+":"+toCoorY+"|"+ BFScoorPath;
                                     }
-                                    else {
+                                    else { //more than one station
                                         String temp = BFSPath.substring(0, BFSPath.indexOf("|"));
                                         String tempBFSPath = BFSPath.substring(BFSPath.indexOf("|") + 1);
 
@@ -177,26 +184,44 @@ public class testroute {
                                          Algorithm.BFS( fromId,Algorithm.altID,Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Algorithm.altLat, Algorithm.altLong);
 
                                 BFSPath += "|" + AltBFS.substring(0,AltBFS.indexOf('%'))+"|"+toId;
-                                BFScoorPath = toCoorX+":"+toCoorY +"|"+AltBFS.substring(AltBFS.indexOf('%') + 1)+"|"+BFScoorPath;}}}
+                                BFScoorPath = toCoorX+":"+toCoorY +"|"+AltBFS.substring(AltBFS.indexOf('%') + 1)+"|"+BFScoorPath;}
+
                                 else{
-                                    BFSPath += "|"+toId;
-                                 BFScoorPath = toCoorX+":"+toCoorY+"|"+BFScoorPath;}
+                                        BFSPath += "|"+toId;
+                                        BFScoorPath = toCoorX+":"+toCoorY+"|"+BFScoorPath;
+                                }
+                                    }
+                                    BFSTime = Math.round(Algorithm.totalTime);
+
+                                }//count condition
+
+
+
+
 
                                 pathCoordinates(2, BFScoorPath);
                                 routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
+                                if(BFSTime!= 0)
+                                map.duration.setText("Time: " + BFSTime + " minutes");
+
                             }
 
                             if (algorithmoption == 3) {
                                 //DFS Algorithm
                                 if ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==2){
                                     Algorithm.totalTime = 0;
+                                    DFSTime = 0;
                                     String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
                                 DFSPath = DFS.substring(0, DFS.indexOf('%'));
                                 DFScoorPath = DFS.substring(DFS.indexOf('%') + 1);
-                                Log.d("DFS:", DFSPath + "");}
+                                Log.d("DFS:", DFSPath + "");
+                                DFSTime = Math.round(Algorithm.totalTime);
+                                }
                                 pathCoordinates(3, DFScoorPath);
                                 routeInfo.startRouteInfo(DFSPath, lineCoorDFS);
                                 count++;
+                                if(DFSTime!= 0)
+                                    map.duration.setText("Time: "+DFSTime+" minutes");
 
                             }
 
@@ -209,8 +234,6 @@ public class testroute {
                             else
                                 map.section_label.setText("You need to walk "+Math.round(time)+" minutes to reach the first station");
 
-                            map.duration.setText("Time: "+Math.round(Algorithm.totalTime)+" minutes");
-                            Log.d("Time",Math.round(Algorithm.totalTime)+" minutes");
 
                         } catch (IOException e) {
                             e.printStackTrace();

@@ -831,31 +831,11 @@ public static double altBFS(String from , double startX, double startY, String c
         String path = goal.getName();
 
         while ( goal.getParent()!=null) {
+            totalTime +=goal.getTime();
             goal = goal.getParent();
-            if (testroute.count == 0)
-                totalA += goal.getTime();
-            else if (testroute.count == 1) {
-                totalB += goal.getTime();
-            }
-            else
-                totalD += goal.getTime();
-
-            Log.d("sumup", goal.getTime()+"");
-
             path = goal.getName ()+"|"+path;
             count++; }
-        map.totalA = totalA;
-        map.totalB = totalB;
-        map.totalD = totalD;
 
-        if (alg == 1)
-            map.duration.setText(Math.round(totalA) + " minutes");
-
-        if (alg == 3 )
-            map.duration.setText(Math.round(totalB) + " minutes");
-
-        if (alg == 4)
-            map.duration.setText(Math.round(totalD)+" minutes");
 
         return path;
     }

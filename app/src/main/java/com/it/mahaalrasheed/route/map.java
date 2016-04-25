@@ -212,7 +212,7 @@ public class map extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 duration.setText("");
-                section_label.setText("Loading...");
+               section_label.setText("Loading...");
                 left.setImageResource(R.mipmap.left);
                 swiping++;
 
@@ -472,7 +472,7 @@ public class map extends AppCompatActivity
     public static void PlotLine(ArrayList<LatLng> lineCoor, ArrayList<Integer> type) {
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
         //to zoom the camera to the starting point
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Fromlat, Fromlng), 15));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Fromlat, Fromlng), 13));
 
         try {
 
@@ -983,10 +983,11 @@ static         double DU=0;
         if (location != null) {
             lat = location.getLatitude();
             lng = location.getLongitude();
-            if(favPin)
+            if(favPin) {
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Favorites.latFav, Favorites.lngFav), 13));
-else
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 15));
+                favPin = false;
+            }else
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 13));
         }
     }
 
