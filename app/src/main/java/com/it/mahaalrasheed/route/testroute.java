@@ -350,7 +350,7 @@ public class testroute {
 
          }
 
-
+/// retrieve schedule hours
     public static  void RetrieveSchedule(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
         //Creating a RestAdapter
@@ -414,6 +414,8 @@ public class testroute {
         );
 
     }
+
+    /// retrieving unity congestion data
 
     public static  void UnityCongestion(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db

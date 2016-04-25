@@ -50,10 +50,11 @@ public class Editfav extends AppCompatActivity {
                     Toast.makeText(Editfav.this, "Changes successfully added", Toast.LENGTH_SHORT).show();
                     finish();
 
-                }else
+                }else {
                     Toast.makeText(Editfav.this, "There is no changes to save", Toast.LENGTH_SHORT).show();
+                    finish();
 
-
+                }
             }
         }) ;
         del.setOnClickListener(new View.OnClickListener() {
