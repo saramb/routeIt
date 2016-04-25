@@ -78,7 +78,7 @@ public class map extends AppCompatActivity
 
 
     //test commit
-    public static final String ROOT_URL = "http://192.168.100.20:8080/";
+    public static final String ROOT_URL = "http://192.168.100.14/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
 

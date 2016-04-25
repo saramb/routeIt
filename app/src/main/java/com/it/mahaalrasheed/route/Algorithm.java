@@ -275,8 +275,8 @@ public class Algorithm extends Application {
 
 
                     if (!explored.contains(Station.getName()) && !Stringfrontier.contains(Station.getName()))
-                        Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
-                    AddToFrontier(Station);
+                    {    Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
+                    AddToFrontier(Station);}
 
                 } //// 1)if the station is in the same line of the current
                 //// station
@@ -310,10 +310,11 @@ public class Algorithm extends Application {
                         if (Station.getName().equals(to))
                             return path(newStation)+"%"+coorPath(newStation);
 
-                        if (!explored.contains(Station.getName()) && !Stringfrontier.contains(Station.getName()))
+                        if (!explored.contains(Station.getName()) && !Stringfrontier.contains(Station.getName())) {
                             Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
-                        // add to the of frontier
+                            // add to the of frontier
                             AddToFrontier(Station);
+                        }
 
                         // 2.2)if the station is in different line of the
                         // current station
@@ -349,10 +350,10 @@ public class Algorithm extends Application {
                             if (!explored.contains(Station.getName())
                                     && !Stringfrontier.contains(Station.getName()))
 
-                                Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
+                            { Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
 
                             // add to the of frontier
-                                AddToFrontier(Station);
+                                AddToFrontier(Station);}
 
                         } // end for
 
@@ -516,8 +517,8 @@ public static double altBFS(String from , double startX, double startY, String c
                         else // bus station
                             Station = new Station(capacity2[newStation.getLine()-1],newStation.getLine(),newStation.getStreet(),i+1,newStation, TempMatrix[newStation.getStationNumber()-1][i]);
                         if (!explored.contains (Station.getName()) && !Stringfrontier.contains(Station.getName()))
-                            Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
-                        Queuefrontier.add(0,Station);
+                        {Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
+                        Queuefrontier.add(0,Station);}
 
                     }////1)if the station is in the same line of the current station
 
@@ -532,9 +533,9 @@ public static double altBFS(String from , double startX, double startY, String c
                             double x = Double.parseDouble(externals.substring(0,externals.indexOf(":")));
                             double y = Double.parseDouble(externals.substring(externals.indexOf(":")+1));
                             Extract(id,x,y, newStation);
-                            if (!explored.contains (Station.getName()) && !Stringfrontier.contains(Station.getName()))
+                            if (!explored.contains (Station.getName()) && !Stringfrontier.contains(Station.getName())){
                                 Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
-                            Queuefrontier.add(0, Station);
+                            Queuefrontier.add(0, Station);}
                         } ////2.1)if the station is in different street of the current station
 
                         //2.2)if the station is in different line of the current station
@@ -555,8 +556,8 @@ public static double altBFS(String from , double startX, double startY, String c
                                 Extract(id, x, y, newStation);
 
                                 if (!explored.contains(Station.getName()) && !Stringfrontier.contains(Station.getName()))
-                                    Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
-                                Queuefrontier.add(0,Station);
+                                {   Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
+                                Queuefrontier.add(0,Station);}
 
                             }//end for
                         }//2.2)if the station is in different line of the current station
@@ -605,8 +606,7 @@ public static double altBFS(String from , double startX, double startY, String c
     public static double Duration (String dura){
         if(!dura.equals("")){
          dur=Double.parseDouble(dura.substring(0,dura.indexOf(" ")));
-        //Log.d("HDuration", duration + "");
-        //dur=duration;
+
         Log.d("Duration", dur + "");}else Log.d("Duration", dur + "");
 
         return dur;
