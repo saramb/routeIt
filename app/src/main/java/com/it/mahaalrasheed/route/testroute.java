@@ -55,10 +55,6 @@ public class testroute {
     static String AstarPath, BFSPath, DFSPath;
     static String AstarcoorPath,BFScoorPath, DFScoorPath;
     static int count=0;
-    static double A ;
-    static double B ;
-    static double C ;
-
 
     public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2, final int algorithmoption){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
@@ -127,9 +123,6 @@ public class testroute {
                                 }
                                 pathCoordinates(1, AstarcoorPath);
                                 routeInfo.startRouteInfo(AstarPath, lineCoorAstar);
-                                 A =  Math.round(Algorithm.totalTime);
-
-
                             }
 
                             if (algorithmoption ==2) {
@@ -189,7 +182,6 @@ public class testroute {
                                     BFSPath += "|"+toId;
                                  BFScoorPath = toCoorX+":"+toCoorY+"|"+BFScoorPath;}
 
-                                B =  Math.round(Algorithm.totalTime);
                                 pathCoordinates(2, BFScoorPath);
                                 routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
                             }
@@ -202,10 +194,8 @@ public class testroute {
                                 DFSPath = DFS.substring(0, DFS.indexOf('%'));
                                 DFScoorPath = DFS.substring(DFS.indexOf('%') + 1);
                                 Log.d("DFS:", DFSPath + "");}
-                                C =  Math.round(Algorithm.totalTime);
                                 pathCoordinates(3, DFScoorPath);
                                 routeInfo.startRouteInfo(DFSPath, lineCoorDFS);
-
                                 count++;
 
                             }
@@ -219,6 +209,7 @@ public class testroute {
                             else
                                 map.section_label.setText("You need to walk "+Math.round(time)+" minutes to reach the first station");
 
+                            map.duration.setText("Time: "+Math.round(Algorithm.totalTime)+" minutes");
                             Log.d("Time",Math.round(Algorithm.totalTime)+" minutes");
 
                         } catch (IOException e) {
@@ -359,7 +350,7 @@ public class testroute {
 
          }
 
-
+/// retrieve schedule hours
     public static  void RetrieveSchedule(){
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
         //Creating a RestAdapter
@@ -389,32 +380,83 @@ public class testroute {
 
                             //Reading the output in the string
                             output = reader.readLine();
-                            Log.d("SCH",output + "");
 
 
                             //retrieving peak and off peak hours from DB
-                            int i = 0;
                             while (output.charAt(0) != '%') {
                                 Algorithm.peakB.add(Integer.parseInt(output.substring(0, output.indexOf("|"))));
                                 output = output.substring(output.indexOf("|") + 1);
                                 Algorithm.offpeakB.add(Integer.parseInt(output.substring(0, output.indexOf("|"))));
                                 output = output.substring(output.indexOf("|") + 1);
-                                Log.d("SCH", Algorithm.peakB.get(i) + "");
-                                Log.d("SCHOff", Algorithm.offpeakB.get(i++) + "");
-
                             }//while
                             output = output.substring(output.indexOf("%") + 1);
-                            Log.d("SCH", "======================");
 
-                            i = 0;
                             while (output.charAt(0) != '%') {
                                 Algorithm.peakM.add(Integer.parseInt(output.substring(0, output.indexOf("|"))));
                                 output = output.substring(output.indexOf("|") + 1);
                                 Algorithm.offpeakM.add(Integer.parseInt(output.substring(0, output.indexOf("|"))));
                                 output = output.substring(output.indexOf("|") + 1);
-                                Log.d("SCH", Algorithm.peakM.get(i) + "");
-                                Log.d("SCHOff", Algorithm.offpeakM.get(i++) + "");
                             }//while
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+
+                        }
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        //If any error occurred displaying the error as toast
+
+                    }
+                }
+        );
+
+    }
+
+    /// retrieving unity congestion data
+
+    public static  void UnityCongestion(){
+        //Here we will handle the http request to retrieve Metro coordinates from mysql db
+        //Creating a RestAdapter
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(ROOT_URL) //Setting the Root URL
+                .build(); //Finally building the adapter
+
+        //Creating object for our interface
+        routeAPI api = adapter.create(routeAPI.class);
+        //Defining the method PlotStation of our interface
+        api.UnityCongestion(
+                "2",
+                //Creating an anonymous callback
+                new Callback<Response>() {
+                    @Override
+                    public void success(Response result, Response response) {
+                        //On success we will read the server's output using buffered reader
+                        //Creating a buffered reader object
+                        BufferedReader reader = null;
+
+                        //An string to store output from the server
+                        String output = "";
+
+                        try {
+                            //Initializing buffered reader
+                            reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
+
+                            //Reading the output in the string
+                            output = reader.readLine();
+
+
+                            //retrieving peak and off peak hours from DB
+                            int i = 0;
+                            while (output.charAt(0) != '%') {
+                                Algorithm.congestion.add(Integer.parseInt(output.substring(0, output.indexOf("|"))));
+                                output = output.substring(output.indexOf("|") + 1);
+                                Log.d("SCH", Algorithm.congestion.get(i++) + "");
+
+                            }//while
+
 
                         } catch (IOException e) {
                             e.printStackTrace();

@@ -119,6 +119,7 @@ public class map extends AppCompatActivity
     public static String fromname = "From";
     public static String toname = "To";
     static Marker m;
+    boolean favPin = false;
 
     Menu myMenu;
 
@@ -145,6 +146,7 @@ public class map extends AppCompatActivity
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.774265, 46.738586), 10));
 
         testroute.RetrieveSchedule();
+        testroute.UnityCongestion();
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         //premission
 
@@ -287,6 +289,8 @@ public class map extends AppCompatActivity
         // draw marker when clicked on specific favorite location
         if (Favorites.latFav != 0) {
             m = map.addMarker(new MarkerOptions().position(new LatLng(Favorites.latFav, Favorites.lngFav)));
+            favPin = true;
+
         }
         onMapReady(map);
     }
@@ -979,6 +983,9 @@ static         double DU=0;
         if (location != null) {
             lat = location.getLatitude();
             lng = location.getLongitude();
+            if(favPin)
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Favorites.latFav, Favorites.lngFav), 13));
+else
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 15));
         }
     }
