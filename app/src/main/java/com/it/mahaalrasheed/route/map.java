@@ -152,6 +152,7 @@ public class map extends AppCompatActivity
         DisplayMap();
         buildGoogleApiClient();
         testroute.RetrieveSchedule();
+        testroute.UnityCongestion();
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         //premission
 

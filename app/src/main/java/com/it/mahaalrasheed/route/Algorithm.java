@@ -38,6 +38,7 @@ public class Algorithm extends Application {
     public static ArrayList<Integer>  offpeakM = new ArrayList<Integer>();
     public static ArrayList<Integer>  peakB = new ArrayList<Integer>();
     public static ArrayList<Integer>  offpeakB = new ArrayList<Integer>();
+    public static ArrayList<Integer>  congestion = new ArrayList<Integer>();
 
     //--------------------------Astar algorithm---------------------
     //Perform A star algorithm
@@ -717,43 +718,27 @@ public static double altBFS(String from , double startX, double startY, String c
                     Log.d("Dw",e+"ex");//not metro point
 
                 }
-             /* if (Linenext == 1 && Linecurrent == 1) {
-                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
-                        sum = peakB.get(0);
-                    }//peek
-                    else {
-                        sum = offpeakB.get(0);
-                    }//offpeak
+                //==== UNITY VERSION ====//
+
+             /*if (Linenext == 1 && Linecurrent == 1) {
+                   sum = congestion.get(0);
 
                 }//line 1
                 else if (Linenext == 2 && Linecurrent == 2) {
-                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
-                        sum = peakB.get(1);
-                    }//peek
-                    else {
-                        sum = offpeakB.get(1);
-                    }//offpeak
+                                     sum = congestion.get(0);
+
 
                 }//line 2
                 else if (Linenext == 3 && Linecurrent == 3) {
-                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
-                        sum = peakB.get(2);
-                    }//peek
-                    else {
-                        sum = offpeakB.get(2);
-                    }//offpeak
+                                     sum = congestion.get(0);
 
                 }//line 3
                 else if (Linenext == 4 && Linecurrent == 4) {
-                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
-                        sum = peakB.get(3);
-                    }//peek
-                    else {
-                        sum = offpeakB.get(3);
-                    }//offpeak
+                                      sum = congestion.get(0);
 
-                }//line 4*/
 
+                }//line 4
+*/
             }
             else        //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
             {
