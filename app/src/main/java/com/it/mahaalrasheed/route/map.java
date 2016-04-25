@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -134,23 +133,17 @@ public class map extends AppCompatActivity
     public static String[] itemname = new String[100];
     public static Integer[] imgid = new Integer[100];
 
+    static double totalA = 0, totalB = 0, totalD = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
-        Boolean isInternetPresent = cd.isConnectingToInternet(); // true or false
-
-        if (!isInternetPresent)
-            showInternetDisabledAlertToUser();
-
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-            showGPSDisabledAlertToUser();
-
+        
         DisplayMap();
         buildGoogleApiClient();
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.774265, 46.738586), 10));
+
         testroute.RetrieveSchedule();
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         //premission
@@ -220,11 +213,17 @@ public class map extends AppCompatActivity
                 section_label.setText("Loading...");
                 left.setImageResource(R.mipmap.left);
                 swiping++;
+
                 if (swiping == 3) {
                     right.setImageResource(R.mipmap.no_swip);
                     swiping = 3;
                 }
                 testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
+
+                if (swiping == 3)
+                    duration.setText("Time: "+Math.round(Algorithm.totalD) + " minutes");
+                else
+                    duration.setText("Time: "+Math.round(Algorithm.totalB) + " minutes");
             }
         });
 
@@ -240,6 +239,11 @@ public class map extends AppCompatActivity
                     swiping = 1;
                 }
                 testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
+
+                if (swiping == 3)
+                    duration.setText("Time: "+Math.round(Algorithm.totalA) + " minutes");
+                else
+                    duration.setText("Time: "+Math.round(Algorithm.totalB) + " minutes");
             }
         });
 
@@ -292,9 +296,11 @@ public class map extends AppCompatActivity
         frag.getLayoutParams().height = (int)(display.getHeight()*0.2);
         swiping = 1;
         left.setImageResource(R.mipmap.no_swip);
+        duration.setText("");
         section_label.setText("Loading...");
         testroute.count =0;
         testroute.route(Fromlat, Fromlng, Tolat, Tolng, 1);
+        duration.setText("Time: "+Math.round(Algorithm.totalA) + " minutes");
     }
 
     public static int getPixelsFromDp(Context context, float dp) {

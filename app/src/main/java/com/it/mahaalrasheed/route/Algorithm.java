@@ -1,7 +1,6 @@
 package com.it.mahaalrasheed.route;
 
 import android.app.Application;
-import android.os.Handler;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -38,6 +37,8 @@ public class Algorithm extends Application {
     public static ArrayList<Integer>  offpeakM = new ArrayList<Integer>();
     public static ArrayList<Integer>  peakB = new ArrayList<Integer>();
     public static ArrayList<Integer>  offpeakB = new ArrayList<Integer>();
+
+    static double totalA = 0, totalB = 0, totalD = 0, alg = 0;
 
     //--------------------------Astar algorithm---------------------
     //Perform A star algorithm
@@ -536,7 +537,7 @@ public static double altBFS(String from , double startX, double startY, String c
                             externals = externals.substring(externals.indexOf("|")+1);
                             double x = Double.parseDouble(externals.substring(0,externals.indexOf(":")));
                             double y = Double.parseDouble(externals.substring(externals.indexOf(":")+1));
-                            Extract(id,x,y, newStation);
+                            Extract(id, x, y, newStation);
                             if (!explored.contains (Station.getName()) && !Stringfrontier.contains(Station.getName())){
                                 Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
                             Queuefrontier.add(0, Station);}
@@ -841,13 +842,36 @@ public static double altBFS(String from , double startX, double startY, String c
     //--------------------------path---------------------
     // to find the path from source to destination
     public static String path ( Station goal ){
+        alg++;
         String path = goal.getName();
+
         while ( goal.getParent()!=null) {
-            totalTime+= goal.getTime();
-            goal = goal.getParent ();
+            goal = goal.getParent();
+            if (testroute.count == 0)
+                totalA += goal.getTime();
+            else if (testroute.count == 1) {
+                totalB += goal.getTime();
+            }
+            else
+                totalD += goal.getTime();
+
+            Log.d("sumup", goal.getTime()+"");
+
             path = goal.getName ()+"|"+path;
-        count++;
-       }
+            count++; }
+        map.totalA = totalA;
+        map.totalB = totalB;
+        map.totalD = totalD;
+
+        if (alg == 1)
+            map.duration.setText(Math.round(totalA) + " minutes");
+
+        if (alg == 3 )
+            map.duration.setText(Math.round(totalB) + " minutes");
+
+        if (alg == 4)
+            map.duration.setText(Math.round(totalD)+" minutes");
+
         return path;
     }
 
