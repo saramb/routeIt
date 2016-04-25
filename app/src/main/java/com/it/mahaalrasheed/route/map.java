@@ -296,6 +296,10 @@ public class map extends AppCompatActivity
     }
 
     public void test() {
+        if (Fromlat == 0 || Fromlng == 0) {
+            from.setText("Current Location");
+            Fromlng = lng;
+            Fromlat = lat;}
         android.view.Display display = ((android.view.WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         frag.getLayoutParams().height = (int)(display.getHeight()*0.2);
         swiping = 1;
@@ -636,14 +640,17 @@ static         double DU=0;
             // Handle the map action
             Intent intent = new Intent(this, map.class);
             startActivity(intent);
+            finish();
 
         } else if (id == R.id.nav_gallery) {  //favorites
             Intent intent = new Intent(this, Favorites.class);
             startActivity(intent);
+            finish();
 
         } else if (id == R.id.nav_manage) {  //about us
             Intent intent = new Intent(this, aboutusnav.class);
             startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -836,7 +843,6 @@ static         double DU=0;
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-
                                 }
                             }).show();
                 else
@@ -983,10 +989,10 @@ static         double DU=0;
         if (location != null) {
             lat = location.getLatitude();
             lng = location.getLongitude();
-            if(favPin) {
+            if(favPin){
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Favorites.latFav, Favorites.lngFav), 13));
-                favPin = false;
-            }else
+            favPin = false;}
+else
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 13));
         }
     }
