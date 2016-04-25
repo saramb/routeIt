@@ -34,6 +34,10 @@ public class Algorithm extends Application {
     public static boolean altFlag = true;
     public static int count = 1;
     public static double totalTime = 0;
+    public static ArrayList<Integer> peakM = new ArrayList<Integer>();
+    public static ArrayList<Integer>  offpeakM = new ArrayList<Integer>();
+    public static ArrayList<Integer>  peakB = new ArrayList<Integer>();
+    public static ArrayList<Integer>  offpeakB = new ArrayList<Integer>();
 
     //--------------------------Astar algorithm---------------------
     //Perform A star algorithm
@@ -616,10 +620,7 @@ public static double altBFS(String from , double startX, double startY, String c
     public static double Schedule(String idCurrent , String idNext, double coordinateX, double coordinateY,double nextcordX,double nextcordY) {
 
         double sum = 0;
-        int[] peakM = {180, 180, 180, 220, 180, 220};
-        int offpeakM = 420;
-        int peakB = 420;
-        int offpeakB = 600;
+
         String IDcurrent, IDnext;
         int MBcurrent, MBnext, Linecurrent, Linenext;
         IDcurrent = idCurrent;
@@ -641,55 +642,55 @@ public static double altBFS(String from , double startX, double startY, String c
             if(Linenext ==Linecurrent) {
                 if (Linenext == 1 && Linecurrent == 1) {
                     if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
-                        sum = peakM[0];
+                        sum = peakM.get(0);
                     }//peek
                     else {
-                        sum = offpeakM;
+                        sum = offpeakM.get(0);
                     }//offpeak
 
                 }//line 1
                 else if (Linenext == 2 && Linecurrent == 2) {
                     if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
-                        sum = peakM[1];
+                        sum = peakM.get(1);
                     }//peek
                     else {
-                        sum = offpeakM;
+                        sum = offpeakM.get(1);
                     }//offpeak
 
                 }//line 2
                 else if (Linenext == 3 && Linecurrent == 3) {
                     if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
-                        sum = peakM[2];
+                        sum = peakM.get(2);
                     }//peek
                     else {
-                        sum = offpeakM;
+                        sum = offpeakM.get(2);
                     }//offpeak
 
                 }//line 3
                 else if (Linenext == 4 && Linecurrent == 4) {
                     if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
-                        sum = peakM[3];
+                        sum = peakM.get(3);
                     }//peek
                     else {
-                        sum = offpeakM;
+                        sum = offpeakM.get(3);
                     }//offpeak
 
                 }//line 4
                 else if (Linenext == 5 && Linecurrent == 5) {
                     if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
-                        sum = peakM[4];
+                        sum = peakM.get(4);
                     }//peek
                     else {
-                        sum = offpeakM;
+                        sum = offpeakM.get(4);
                     }//offpeak
 
                 }//line 5
                 else if (Linenext == 6 && Linecurrent == 6) {
                     if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
-                        sum = peakM[5];
+                        sum = peakM.get(5);
                     }//peek
                     else {
-                        sum = offpeakM;
+                        sum = offpeakM.get(5);
                     }//offpeak
                 }//line 6
             }
@@ -716,12 +717,43 @@ public static double altBFS(String from , double startX, double startY, String c
                     Log.d("Dw",e+"ex");//not metro point
 
                 }
-            /*    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
-                    sum = peakB;
-                }//peek
-                else {
-                    sum = offpeakB;
-                }//offpeak*/
+             /* if (Linenext == 1 && Linecurrent == 1) {
+                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
+                        sum = peakB.get(0);
+                    }//peek
+                    else {
+                        sum = offpeakB.get(0);
+                    }//offpeak
+
+                }//line 1
+                else if (Linenext == 2 && Linecurrent == 2) {
+                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
+                        sum = peakB.get(1);
+                    }//peek
+                    else {
+                        sum = offpeakB.get(1);
+                    }//offpeak
+
+                }//line 2
+                else if (Linenext == 3 && Linecurrent == 3) {
+                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
+                        sum = peakB.get(2);
+                    }//peek
+                    else {
+                        sum = offpeakB.get(2);
+                    }//offpeak
+
+                }//line 3
+                else if (Linenext == 4 && Linecurrent == 4) {
+                    if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 19)) {
+                        sum = peakB.get(3);
+                    }//peek
+                    else {
+                        sum = offpeakB.get(3);
+                    }//offpeak
+
+                }//line 4*/
+
             }
             else        //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
             {

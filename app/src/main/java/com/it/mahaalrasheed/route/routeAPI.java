@@ -122,8 +122,8 @@ public interface routeAPI {
             Callback<Response> callback);
 
     @FormUrlEncoded
-    @POST("/RetrieveHours.php")
-    public void RetrieveHours(
+    @POST("/RetrieveSchedule.php")
+    public void RetrieveSchedule(
             @Field("id") String id,
             Callback<Response> callback);
 

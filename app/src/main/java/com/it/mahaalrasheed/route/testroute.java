@@ -83,6 +83,10 @@ public class testroute {
 
                         try {
                             //Initializing buffered reader
+
+                            //RetrieveSchedule();
+
+
                             reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
                             //Reading the output in the string
                             output = reader.readLine();
@@ -345,6 +349,80 @@ public class testroute {
         );
 
          }
+
+
+    public static  void RetrieveSchedule(){
+        //Here we will handle the http request to retrieve Metro coordinates from mysql db
+        //Creating a RestAdapter
+        RestAdapter adapter = new RestAdapter.Builder()
+                .setEndpoint(ROOT_URL) //Setting the Root URL
+                .build(); //Finally building the adapter
+
+        //Creating object for our interface
+        routeAPI api = adapter.create(routeAPI.class);
+        //Defining the method PlotStation of our interface
+        api.RetrieveSchedule(
+                "2",
+                //Creating an anonymous callback
+                new Callback<Response>() {
+                    @Override
+                    public void success(Response result, Response response) {
+                        //On success we will read the server's output using buffered reader
+                        //Creating a buffered reader object
+                        BufferedReader reader = null;
+
+                        //An string to store output from the server
+                        String output = "";
+
+                        try {
+                            //Initializing buffered reader
+                            reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
+
+                            //Reading the output in the string
+                            output = reader.readLine();
+
+
+
+                            //retrieving peak and off peak hours from DB
+                            int i=0;
+                            while (output.charAt(0) != '%') {
+                                Algorithm.peakB.add(Integer.parseInt(output.substring(0, output.indexOf("|"))));
+                                output = output.substring(output.indexOf("|") + 1);
+                                Algorithm.offpeakB.add(Integer.parseInt(output.substring(0, output.indexOf("|"))));
+                                output = output.substring(output.indexOf("|") + 1);
+                                Log.d("SCH",Algorithm.peakB.get(i)+"");
+                                Log.d("SCHOff",Algorithm.offpeakB.get(i++)+"");
+
+                            }//while
+                            output = output.substring(output.indexOf("%") + 1);
+                            Log.d("SCH","======================");
+
+                            i =0;
+                            while (output.charAt(0) != '%') {
+                                Algorithm.peakM.add(Integer.parseInt(output.substring(0, output.indexOf("|"))));
+                                output = output.substring(output.indexOf("|") + 1);
+                                Algorithm.offpeakM.add(Integer.parseInt(output.substring(0, output.indexOf("|"))));
+                                output = output.substring(output.indexOf("|") + 1);
+                                Log.d("SCH",Algorithm.peakM.get(i)+"");
+                                Log.d("SCHOff",Algorithm.offpeakM.get(i++)+"");
+                            }//while
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+
+                        }
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        //If any error occurred displaying the error as toast
+
+                    }
+                }
+        );
+
+    }
     public static void MetroLinks(int  firstline,int station1 ,int station2,String fromID,String toID ){
         if (firstline == 1) {
             Mline1[station1][station2] = toID;

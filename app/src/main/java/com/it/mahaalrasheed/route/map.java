@@ -151,6 +151,7 @@ public class map extends AppCompatActivity
 
         DisplayMap();
         buildGoogleApiClient();
+        testroute.RetrieveSchedule();
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         //premission
 
@@ -215,7 +216,8 @@ public class map extends AppCompatActivity
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                section_label.setText("right");
+                duration.setText("");
+                section_label.setText("Loading...");
                 left.setImageResource(R.mipmap.left);
                 swiping++;
                 if (swiping == 3) {
@@ -229,7 +231,8 @@ public class map extends AppCompatActivity
         left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                section_label.setText("left");
+                duration.setText("");
+                section_label.setText("Loading...");
                 swiping--;
                 right.setImageResource(R.mipmap.right);
                 if (swiping == 1) {
@@ -289,7 +292,7 @@ public class map extends AppCompatActivity
         frag.getLayoutParams().height = (int)(display.getHeight()*0.2);
         swiping = 1;
         left.setImageResource(R.mipmap.no_swip);
-        section_label.setText("AStar");
+        section_label.setText("Loading...");
         testroute.count =0;
         testroute.route(Fromlat, Fromlng, Tolat, Tolng, 1);
     }
