@@ -76,9 +76,8 @@ public class map extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 
-    //test commit
-    public static final String ROOT_URL = "http://192.168.100.14/";
-    //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
+    public static final String ROOT_URL = "http://10.6.192.155/";
+    //public static final String ROOT_URL = "http://rawan.16mb.
 
 
     private Button infoButton;
@@ -134,7 +133,6 @@ public class map extends AppCompatActivity
     public static String[] itemname = new String[100];
     public static Integer[] imgid = new Integer[100];
 
-    static double totalA = 0, totalB = 0, totalD = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,8 +143,11 @@ public class map extends AppCompatActivity
         buildGoogleApiClient();
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.774265, 46.738586), 10));
 
+        //Method to retrieve time data from DB
         testroute.RetrieveSchedule();
         testroute.UnityCongestion();
+
+
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         //premission
 
@@ -650,7 +651,6 @@ static         double DU=0;
         } else if (id == R.id.nav_manage) {  //about us
             Intent intent = new Intent(this, aboutusnav.class);
             startActivity(intent);
-            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -704,7 +704,7 @@ static         double DU=0;
                             output = reader.readLine();
 
 
-                            if (output.length() != 1) {
+                            if (output.length() > 1) {
                                 //Check if there is an output from server
                                 notif = output;
                             } else if (output.length() == 1) {
