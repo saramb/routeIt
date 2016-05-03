@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -77,7 +76,7 @@ public class map extends AppCompatActivity
 
 
     //test commit
-    public static final String ROOT_URL = "http://192.168.100.14/";
+    public static final String ROOT_URL = "http://10.6.192.155/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
 
@@ -114,7 +113,7 @@ public class map extends AppCompatActivity
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
 
-    String provider,notif,Locationname, page;
+    String notif,Locationname, page;
     static int notifID;
     public static String fromname = "From";
     public static String toname = "To";
@@ -133,8 +132,12 @@ public class map extends AppCompatActivity
 
     public static String[] itemname = new String[100];
     public static Integer[] imgid = new Integer[100];
+    static double DU=0;
 
-    static double totalA = 0, totalB = 0, totalD = 0;
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +146,6 @@ public class map extends AppCompatActivity
         
         DisplayMap();
         buildGoogleApiClient();
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.774265, 46.738586), 10));
 
         testroute.RetrieveSchedule();
         testroute.UnityCongestion();
@@ -256,21 +258,19 @@ public class map extends AppCompatActivity
 
         if (page != null) {
             if (page.equals("from")) {
+                    map.clear();
                 fromname = Locationname;
                 Fromlng = getIntent().getDoubleExtra("lng", 0);
                 Fromlat = getIntent().getDoubleExtra("lat", 0);
                 from.setText(fromname);
+
             } else if (page.equals("to")) {
+                    map.clear();
                 from.setText(fromname);
                 toname = Locationname;
                 Tolng = getIntent().getDoubleExtra("lng", 0);
                 Tolat = getIntent().getDoubleExtra("lat", 0);
                 to.setText(toname);
-                if (Fromlat == 0 || Fromlng == 0) {
-                    from.setText("Current Location");
-                    Fromlng = lng;
-                    Fromlat = lat;
-                }
                 if (Fromlng == Tolng && Fromlat == Tolat)
                     new AlertDialog.Builder(map.this)
                             .setMessage("The point you have chosen for 'From' is the same point in 'To'")
@@ -290,7 +290,6 @@ public class map extends AppCompatActivity
         if (Favorites.latFav != 0) {
             m = map.addMarker(new MarkerOptions().position(new LatLng(Favorites.latFav, Favorites.lngFav)));
             favPin = true;
-
         }
         onMapReady(map);
     }
@@ -308,7 +307,7 @@ public class map extends AppCompatActivity
         section_label.setText("Loading...");
         testroute.count =0;
         testroute.route(Fromlat, Fromlng, Tolat, Tolng, 1);
-        duration.setText("Time: "+Math.round(Algorithm.totalA) + " minutes");
+        //duration.setText("Time: "+Math.round(Algorithm.totalA) + " minutes");
     }
 
     public static int getPixelsFromDp(Context context, float dp) {
@@ -331,71 +330,6 @@ public class map extends AppCompatActivity
             // Getting GoogleMap object from the fragment
             map = fm.getMap();
         } //!!!!!!!!!!Map part end
-    }
-
-    //maha
-    private void showGPSDisabledAlertToUser(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
-                .setCancelable(false)
-                .setPositiveButton("Enable",
-                        new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int id){
-                                Intent callGPSSettingIntent = new Intent(
-                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                startActivity(callGPSSettingIntent);
-                            }
-                        });
-        alertDialogBuilder.setNegativeButton("No",
-                new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int id){
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-
-    public void showInternetDisabledAlertToUser(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("There is no internet connection on your device. Would you like to enable it?")
-                .setCancelable(false)
-                .setPositiveButton("Enable",
-                        new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int id){
-                                Intent callGPSSettingIntent = new Intent(
-                                        android.provider.Settings.ACTION_SETTINGS);
-                                startActivity(callGPSSettingIntent);
-                                check();
-
-                            }
-                        });
-        alertDialogBuilder.setNegativeButton("No",
-                new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int id){
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-    static Boolean isInternetPresent;
-
-    public void check(){
-        ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
-        isInternetPresent = cd.isConnectingToInternet();
-        if(!isInternetPresent){
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    check();
-                }
-            }, 10);
-        }
-        else
-        {
-            return;}
     }
 
     private void PlotStation() {
@@ -450,7 +384,7 @@ public class map extends AppCompatActivity
                             }
 
                             for (int k = 0; k < i; k++) {
-                                 m = map.addMarker(new MarkerOptions()
+                                m = map.addMarker(new MarkerOptions()
                                         .position(SPOTS_ARRAY[k].getPosition())
                                         .title("Title")
                                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_metro)));
@@ -476,7 +410,7 @@ public class map extends AppCompatActivity
     public static void PlotLine(ArrayList<LatLng> lineCoor, ArrayList<Integer> type) {
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
         //to zoom the camera to the starting point
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Fromlat, Fromlng), 13));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Fromlat, Fromlng), 10));
 
         try {
 
@@ -534,37 +468,6 @@ public class map extends AppCompatActivity
             e.printStackTrace();
         }
 
-    }
-static         double DU=0;
-
-    public static double CalDuration(ArrayList<LatLng> lineCoor,int deptTime,double goalX,double goalY) {
-        DurFlag=false;
-        Log.d("DurFlag: ",DurFlag + "");
-
-        try {
-
-            for (int j = 0; j < lineCoor.size() - 1; j++) {
-
-                LatLng tempCoor1 = lineCoor.get(j);
-                LatLng tempCoor2 = lineCoor.get(j + 1);
-                Log.e("type", tempCoor1 + ":" + tempCoor2);
-                String tem1=tempCoor1+"";
-                String tem2=tempCoor2+"";
-
-                // Getting URL to the Google Directions API
-                String url2 = getDirectionsUrl(tempCoor1, tempCoor2, 2, deptTime);
-                DownloadTask downloadTask2 = new DownloadTask();
-                // Start downloading json data from Google Directions API
-                //downloadTask2.delegate= this;
-
-                Log.d("D",downloadTask2.execute(url2)+"");//not metro point
-            }}catch (Exception e){}
-               // CalcDuration c=new CalcDuration();
-               // return c.CalcDuration(url2);
-        DU=Algorithm.Duration("");
-        //check();
-        Log.d("DU",DU+"");
-        return DU;
     }
 
     @Override
@@ -726,8 +629,6 @@ static         double DU=0;
         );
     }
 
-    static String url2;
-    static String rl2;
     public static String getDirectionsUrl(LatLng origin, LatLng dest,int type,int deptTime) {
 
 // Origin of route
@@ -826,9 +727,6 @@ static         double DU=0;
             protected void onClickConfirmed(View v, Marker marker) {
                 // Here we can perform some action triggered after clicking the button
 
-               // if (m != null)
-                  //  m.remove();
-
                 Fromlat = latat;
                 Fromlng = longt;
 
@@ -858,8 +756,6 @@ static         double DU=0;
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
                 // Here we can perform some action triggered after clicking the button
-               // if (m != null)
-                  //  m.remove();
 
                 Tolat = latat;
                 Tolng = longt;
@@ -891,9 +787,6 @@ static         double DU=0;
                 getResources().getDrawable(R.drawable.cast_ic_notification_2)) {
             @Override
             protected void onClickConfirmed(View v, Marker marker) {
-
-                //if (m != null)
-                   // m.remove();
 
                 F = new FavoriteClass();
                 F.setId((Favorites.id)++);
@@ -991,8 +884,9 @@ static         double DU=0;
             lng = location.getLongitude();
             if(favPin){
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Favorites.latFav, Favorites.lngFav), 13));
-            favPin = false;}
-else
+            favPin = false;
+            Favorites.latFav=0;}
+            else
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 13));
         }
     }
