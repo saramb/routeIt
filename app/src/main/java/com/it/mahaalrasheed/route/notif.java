@@ -68,7 +68,6 @@ public class notif extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item)
     {
         if (item.getItemId()== R.id.back){
-            callBack();
             finish();
         }
         return true;

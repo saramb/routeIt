@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -76,7 +77,7 @@ public class map extends AppCompatActivity
 
 
     //test commit
-    public static final String ROOT_URL = "http://10.6.192.155/";
+    public static final String ROOT_URL = "http://192.168.100.14/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
 
@@ -134,10 +135,7 @@ public class map extends AppCompatActivity
     public static Integer[] imgid = new Integer[100];
     static double DU=0;
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+    static double totalA = 0, totalB = 0, totalD = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,8 +145,11 @@ public class map extends AppCompatActivity
         DisplayMap();
         buildGoogleApiClient();
 
+        //Method to retrieve time data from DB
         testroute.RetrieveSchedule();
         testroute.UnityCongestion();
+
+
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         //premission
 
@@ -307,7 +308,7 @@ public class map extends AppCompatActivity
         section_label.setText("Loading...");
         testroute.count =0;
         testroute.route(Fromlat, Fromlng, Tolat, Tolng, 1);
-        //duration.setText("Time: "+Math.round(Algorithm.totalA) + " minutes");
+        duration.setText("Time: "+Math.round(Algorithm.totalA) + " minutes");
     }
 
     public static int getPixelsFromDp(Context context, float dp) {
@@ -553,7 +554,6 @@ public class map extends AppCompatActivity
         } else if (id == R.id.nav_manage) {  //about us
             Intent intent = new Intent(this, aboutusnav.class);
             startActivity(intent);
-            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -607,7 +607,7 @@ public class map extends AppCompatActivity
                             output = reader.readLine();
 
 
-                            if (output.length() != 1) {
+                            if (output.length() > 1) {
                                 //Check if there is an output from server
                                 notif = output;
                             } else if (output.length() == 1) {

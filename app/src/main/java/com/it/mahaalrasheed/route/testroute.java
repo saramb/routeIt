@@ -477,7 +477,7 @@ public class testroute {
                             while (output.charAt(0) != '%') {
                                 Algorithm.congestion.add(Integer.parseInt(output.substring(0, output.indexOf("|"))));
                                 output = output.substring(output.indexOf("|") + 1);
-                                Log.d("SCH", Algorithm.congestion.get(i++) + "");
+                                Log.d("SCHSCH", Algorithm.congestion.get(i++) + "");
 
                             }//while
 
