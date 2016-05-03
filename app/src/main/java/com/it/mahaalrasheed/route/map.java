@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -85,6 +84,7 @@ public class map extends AppCompatActivity
     private Button infoButton1;
     private Button infoButton2;
     static Button from, to;
+
     ListView lv;
     static TextView section_label,duration;
     static ImageView img1;
