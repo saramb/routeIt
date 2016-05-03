@@ -17,7 +17,7 @@ import retrofit.client.Response;
 public class routeInfo {
 
 
-    private static String ROOT_URL = map.ROOT_URL;
+    private static String ROOT_URL = Splash.ROOT_URL;
 
     public static ArrayList<String>stationName = new ArrayList<String>();
     public static ArrayList<Integer> linenumber = new ArrayList<Integer>();

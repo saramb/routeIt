@@ -17,7 +17,7 @@ import retrofit.client.Response;
 
 public class testroute {
 
-    static String ROOT_URL = map.ROOT_URL;
+    static String ROOT_URL = Splash.ROOT_URL;
     static ArrayList<LatLng> lineCoor = new ArrayList<LatLng>();
     static ArrayList<LatLng> lineCoorAstar = new ArrayList<LatLng>();
     static ArrayList<LatLng> lineCoorBFS = new ArrayList<LatLng>();
@@ -61,7 +61,7 @@ public class testroute {
         //Here we will handle the http request to retrieve Metro coordinates from mysql db
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(ROOT_URL) //Setting the Root URL
+                .setEndpoint( Splash.ROOT_URL) //Setting the Root URL
                 .build(); //Finally building the adapter
         //Creating object for our interface
         routeAPI api = adapter.create(routeAPI.class);
@@ -88,100 +88,102 @@ public class testroute {
                             reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
                             //Reading the output in the string
                             output = reader.readLine();
-                            fromId = output.substring(0, output.indexOf("/"));
-                            output = output.substring(output.indexOf("/") + 1);
-                            fromCoorX = output.substring(0, output.indexOf("/"));
-                            output = output.substring(output.indexOf("/") + 1);
-                            fromCoorY = output.substring(0, output.indexOf("/"));
-                            output = output.substring(output.indexOf("/") + 1);
-                            distanceFrom = output.substring(0, output.indexOf(":"));
-                            output = output.substring(output.indexOf(":") + 1);
-                            toId = output.substring(0, output.indexOf("/"));
-                            output = output.substring(output.indexOf("/") + 1);
-                            toCoorX = output.substring(0, output.indexOf("/"));
-                            output = output.substring(output.indexOf("/") + 1);
-                            toCoorY = output.substring(0, output.indexOf("/"));
-                            output = output.substring(output.indexOf("/") + 1);
-                            distanceTo = output.substring(0);
 
-                            String fromname = map.from.getText().toString().toString();
-                            String toname = map.to.getText().toString().toString();
+                                fromId = output.substring(0, output.indexOf("/"));
+                                output = output.substring(output.indexOf("/") + 1);
+                                fromCoorX = output.substring(0, output.indexOf("/"));
+                                output = output.substring(output.indexOf("/") + 1);
+                                fromCoorY = output.substring(0, output.indexOf("/"));
+                                output = output.substring(output.indexOf("/") + 1);
+                                distanceFrom = output.substring(0, output.indexOf(":"));
+                                output = output.substring(output.indexOf(":") + 1);
+                                toId = output.substring(0, output.indexOf("/"));
+                                output = output.substring(output.indexOf("/") + 1);
+                                toCoorX = output.substring(0, output.indexOf("/"));
+                                output = output.substring(output.indexOf("/") + 1);
+                                toCoorY = output.substring(0, output.indexOf("/"));
+                                output = output.substring(output.indexOf("/") + 1);
+                                distanceTo = output.substring(0);
 
-                            if (algorithmoption == 1 ) {
-                                //AStar Algorithm
-                                if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==0)){
-                                    Algorithm.totalTime = 0;
-                                    AstarTime = 0 ;
-                                String aStar = Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
-                                AstarPath = aStar.substring(0, aStar.indexOf('%'));
-                                AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
-                                    Log.d("AStarTime:", Algorithm.totalTime + "");
+                                String fromname = map.from.getText().toString().toString();
+                                String toname = map.to.getText().toString().toString();
 
-                                    Log.d("AStar:", AstarPath + "");
-                                    count++;
-                                   AstarTime =  Math.round(Algorithm.totalTime);
+                                if (algorithmoption == 1) {
+                                    //AStar Algorithm
+                                    if (((!map.fromname.equals(fromname) && !map.toname.equals(toname)) || count == 0)) {
+                                        Algorithm.totalTime = 0;
+                                        AstarTime = 0;
+                                        String aStar = Algorithm.Astar(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                                        AstarPath = aStar.substring(0, aStar.indexOf('%'));
+                                        AstarcoorPath = aStar.substring(aStar.indexOf('%') + 1);
+                                        Log.d("AStarTime:", Algorithm.totalTime + "");
+
+                                        Log.d("AStar:", AstarPath + "");
+                                        count++;
+                                        AstarTime = Math.round(Algorithm.totalTime);
+                                    }
+                                    pathCoordinates(1, AstarcoorPath);
+                                    routeInfo.startRouteInfo(AstarPath, lineCoorAstar);
+                                    if (AstarTime != 0)
+
+                                        map.duration.setText("Time: " + AstarTime + " minutes");
+
                                 }
-                                pathCoordinates(1, AstarcoorPath);
-                                routeInfo.startRouteInfo(AstarPath, lineCoorAstar);
-                                if(AstarTime!= 0)
+                                if (algorithmoption == 2) {
 
-                                    map.duration.setText("Time: " +AstarTime + " minutes");
-
-                            }
-                                if (algorithmoption ==2) {
-
-                                    if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==1)){
+                                    if (((!map.fromname.equals(fromname) && !map.toname.equals(toname)) || count == 1)) {
                                         Algorithm.totalTime = 0;
                                         BFSTime = 0;
-                                        BFSPath="";
-                                        BFScoorPath ="";
+                                        BFSPath = "";
+                                        BFScoorPath = "";
 
                                         String BFS = "";
 
 
-                                        BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
-                                        BFSPath = BFS.substring(0,BFS.indexOf('%'));
+                                        BFS = Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                                        BFSPath = BFS.substring(0, BFS.indexOf('%'));
                                         BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
-                                        BFSPath += "|"+toId;
-                                        BFScoorPath = toCoorX+":"+toCoorY+"|"+BFScoorPath;
+                                        BFSPath += "|" + toId;
+                                        BFScoorPath = toCoorX + ":" + toCoorY + "|" + BFScoorPath;
+                                        Algorithm.totalTime += Algorithm.Station.getTime();
+                                        count++;
                                         BFSTime = Math.round(Algorithm.totalTime);
                                         Log.d("BFS:", BFSPath + "");
                                     } //count condition
                                     pathCoordinates(2, BFScoorPath);
                                     routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
-                                    count++;
 
-                                    if(BFSTime!= 0)
+                                    if (BFSTime != 0)
                                         map.duration.setText("Time: " + BFSTime + " minutes");
 
                                 }
-                            if (algorithmoption == 3) {
-                                //DFS Algorithm
-                                if ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==2){
-                                    Algorithm.totalTime = 0;
-                                    DFSTime = 0;
-                                    String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
-                                DFSPath = DFS.substring(0, DFS.indexOf('%'));
-                                DFScoorPath = DFS.substring(DFS.indexOf('%') + 1);
-                                Log.d("DFS:", DFSPath + "");
-                                DFSTime = Math.round(Algorithm.totalTime);
+                                if (algorithmoption == 3) {
+                                    //DFS Algorithm
+                                    if ((!map.fromname.equals(fromname) && !map.toname.equals(toname)) || count == 2) {
+                                        Algorithm.totalTime = 0;
+                                        DFSTime = 0;
+                                        String DFS = Algorithm.DFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                                        DFSPath = DFS.substring(0, DFS.indexOf('%'));
+                                        DFScoorPath = DFS.substring(DFS.indexOf('%') + 1);
+                                        Log.d("DFS:", DFSPath + "");
+                                        count++;
+                                        DFSTime = Math.round(Algorithm.totalTime);
+                                    }
+                                    pathCoordinates(3, DFScoorPath);
+                                    routeInfo.startRouteInfo(DFSPath, lineCoorDFS);
+                                    if (DFSTime != 0)
+                                        map.duration.setText("Time: " + DFSTime + " minutes");
+
                                 }
-                                pathCoordinates(3, DFScoorPath);
-                                routeInfo.startRouteInfo(DFSPath, lineCoorDFS);
-                                count++;
-                                if(DFSTime!= 0)
-                                    map.duration.setText("Time: "+DFSTime+" minutes");
 
-                            }
+                                double sum = Double.parseDouble(testroute.distanceFrom);
+                                double time = 15 * (sum / 0.6);
 
-                            double sum = Double.parseDouble(testroute.distanceFrom) ;
-                            double time = 15*(sum/0.6);
+                                if (time > 30)
+                                    map.section_label.setText("You need a car to reach the first station");
 
-                            if (time > 30 )
-                                map.section_label.setText("You need a car to reach the first station");
-
-                            else
-                                map.section_label.setText("You need to walk "+Math.round(time)+" minutes to reach the first station");
+                                else
+                                    map.section_label.setText("You need to walk " + Math.round(time) + " minutes to reach the first station");
 
 
                         } catch (IOException e) {
@@ -228,6 +230,8 @@ public class testroute {
 
                             //Reading the output in the string
                             output = reader.readLine();
+                            Log.d("outputlink",output+"");
+
                             boolean flag = true;
                             while (flag) {
                                 fromId = output.substring(0, output.indexOf("/"));
@@ -304,6 +308,115 @@ public class testroute {
                                 }
 
                             }//while
+                            printt(Mline1);
+
+                            Log.d("Matrix M2 :", "=================");
+
+                            printt(Mline2);
+
+                            Log.d("Matrix M3:", "=================");
+
+                            printt(Mline3);
+
+                            Log.d("Matrix M4:", "=================");
+
+                            printt(Mline4);
+
+                            Log.d("Matrix M5:", "=================");
+
+                            printt(Mline5);
+
+                            Log.d("Matrix M6:", "=================");
+
+                            printt(Mline6);
+
+                            Log.d("Matrix B2_1:", "=================");
+
+                            printt(Bline2_1);
+
+                            Log.d("Matrix B2_2:", "=================");
+
+                            printt(Bline2_2);
+
+                            Log.d("Matrix B2_3:", "=================");
+
+                            printt(Bline2_3);
+
+                            Log.d("Matrix :", "=================");
+
+                            printt(Bline2_4);
+
+                            Log.d("Matrix :", "=================");
+
+                            printt(Bline2_5);
+
+                            Log.d("Matrix :", "=================");
+
+                            printt(Bline2_6);
+
+                            Log.d("Matrix :", "=================");
+
+                            printt(Bline2_7);
+
+                            Log.d("Matrix :", "=================");
+
+                            printt(Bline2_8);
+
+                            Log.d("Matrix :", "=================");
+
+                            printt(Bline2_9);
+
+                            Log.d("Matrix B2_10:", "=================");
+
+                            printt(Bline2_10);
+
+                            Log.d("Matrix B3_1:", "=================");
+
+                            printt(Bline3_1);
+
+                            Log.d("Matrix :", "=================");
+
+                            printt(Bline3_2);
+
+                            Log.d("Matrix :", "=================");
+
+                            printt(Bline3_3);
+
+                            Log.d("Matrix :", "=================");
+
+                            printt(Bline3_4);
+
+                            Log.d("Matrix :", "=================");
+
+                            printt(Bline3_5);
+
+                            Log.d("Matrix :", "Bline3_6=================");
+
+                            printt(Bline3_6);
+
+                            Log.d("Matrix :", "Bline3_7=================");
+
+                            printt(Bline3_7);
+
+                            Log.d("Matrix :", "=================");
+
+                            printt(Bline3_8);
+
+                            Log.d("Matrix :", "=================");
+
+                            printt(Bline3_9);
+
+                            Log.d("Matrix B3_10:", "=================");
+
+                            printt(Bline3_10);
+
+                            Log.d("Matrix B4_1:", "=================");
+
+                            printt(Bline4_1);
+
+                            Log.d("Matrix :", "=================");
+
+                            printt(Bline4_2);
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -733,7 +846,7 @@ public class testroute {
         String coordeinates = coorPath;
         boolean flag1 = true;
         String coor="";
-        if(coordeinates.length()==0)
+        if(coordeinates == null)
             flag1=false;
 
         while (flag1){
@@ -759,4 +872,26 @@ public class testroute {
 
         lineCoor= new ArrayList<LatLng>();
     }
+
+    public static void printt(String[][] matrix){
+
+        String s="";
+
+        for(int i = 0 ; i < matrix.length ; i ++)
+
+        {s="[";
+
+            for(int j = 0 ; j < matrix.length;j++)
+
+
+
+                s=s+ matrix[i][j]+",";
+
+
+
+             Log.d("Matrix :", s+"]");
+
+        }}
+
 }
+

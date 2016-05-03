@@ -76,8 +76,7 @@ public class map extends AppCompatActivity
 
 
     //test commit
-    public static final String ROOT_URL = "http://192.168.100.16/";
-    //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
+   //public static final String ROOT_URL = "http://192.168.100.16/";
 
 
     private Button infoButton;
@@ -380,7 +379,7 @@ public class map extends AppCompatActivity
 
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(ROOT_URL) //Setting the Root URL
+                .setEndpoint(Splash.ROOT_URL) //Setting the Root URL
                 .build(); //Finally building the adapter
 
         //Creating object for our interface
@@ -613,7 +612,7 @@ public class map extends AppCompatActivity
         //Here we will handle the http request to retrieve from mysql db
         //Creating a RestAdapter
         RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(ROOT_URL) //Setting the Root URL
+                .setEndpoint(Splash.ROOT_URL) //Setting the Root URL
                 .build(); //Finally building the adapter
 
         //Creating object for our interface
@@ -808,9 +807,6 @@ public class map extends AppCompatActivity
 
                                 }
                             }).show();
-
-                else
-                    Toast.makeText(getApplicationContext(), "The point is added", Toast.LENGTH_SHORT).show();
 
                 marker.remove();
                 test();

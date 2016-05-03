@@ -7,6 +7,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +25,10 @@ public class Splash extends AppCompatActivity {
     static Boolean isInternetPresent;
     static LocationManager locationManager;
     boolean flag = false;
+    public static final String ROOT_URL ="http://rawan.16mb.com/RouteIt/";
+    //public static final String ROOT_URL = "http://192.168.100.16/";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +62,7 @@ public class Splash extends AppCompatActivity {
         //Creating a RestAdapter
         SPLASH_DISPLAY_LENGTH = 1200;
         RestAdapter adapter = new RestAdapter.Builder()
-                .setEndpoint(map.ROOT_URL) //Setting the Root URL
+                .setEndpoint(ROOT_URL) //Setting the Root URL
                 .build(); //Finally building the adapter
 
         //Creating object for our interface
