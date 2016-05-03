@@ -243,7 +243,7 @@ public class Algorithm extends Application {
         frontier = new ArrayList<Station>();
         Stringfrontier = new ArrayList<String>();
         explored = new ArrayList<String>();
-
+        Station First =null;
         double startX = StartX;
         double startY = StartY;
 
@@ -251,6 +251,7 @@ public class Algorithm extends Application {
 
         // Extraction of Source station
         Extraction(from, startX, startY);
+        First = newStation;
 
         while (true) {
 
@@ -303,23 +304,15 @@ public class Algorithm extends Application {
                         Extract(id, x, y, newStation);
 
 
-                        //ALT
-                        if(altFlag){
-                            altID = id;
-                            altLat=x;
-                            altLong = y;
-                            altFlag = false;
-                            Station.setName(to);
+                        if (Station.getName().equals(to)){
+                            return path(Station)+"%"+coorPath(Station);
                         }
-                        //ALT
-
-                        if (Station.getName().equals(to))
-                            return path(newStation)+"%"+coorPath(newStation);
 
                         if (!explored.contains(Station.getName()) && !Stringfrontier.contains(Station.getName())) {
                             Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
                             // add to the of frontier
                             AddToFrontier(Station);
+
                         }
 
                         // 2.2)if the station is in different line of the
@@ -341,17 +334,11 @@ public class Algorithm extends Application {
                             }
 
                             Extract(id, x, y, newStation);
-                            //ALT
-                            if(altFlag){
-                                altID = id;
-                                altLat=x;
-                                altLong = y;
-                                altFlag = false;
-                                Station.setName(to);
+
+                            if (Station.getName().equals(to)){
+                                return path(Station)+"%"+coorPath(Station);
                             }
-                            //ALT
-                            if (Station.getName().equals(to))
-                                return path(newStation)+"%"+coorPath(newStation);
+
 
                             if (!explored.contains(Station.getName())
                                     && !Stringfrontier.contains(Station.getName()))
@@ -359,7 +346,9 @@ public class Algorithm extends Application {
                             { Station.setTime(Schedule(Station.getParent().getName(), Station.getName(), Station.getX(), Station.getY(), Station.getParent().getX(), Station.getParent().getY()));
 
                             // add to the of frontier
-                                AddToFrontier(Station);}
+                                AddToFrontier(Station);
+
+                                }
 
                         } // end for
 

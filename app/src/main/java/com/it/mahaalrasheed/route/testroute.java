@@ -128,84 +128,33 @@ public class testroute {
                                     map.duration.setText("Time: " +AstarTime + " minutes");
 
                             }
+                                if (algorithmoption ==2) {
 
-                            if (algorithmoption ==2) {
+                                    if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==1)){
+                                        Algorithm.totalTime = 0;
+                                        BFSTime = 0;
+                                        BFSPath="";
+                                        BFScoorPath ="";
 
-                                if ( ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==1)){
-                                    Algorithm.totalTime = 0;
-                                    BFSTime = 0;
+                                        String BFS = "";
 
 
-                                    String BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
-                                    BFSPath = BFS.substring(0,BFS.indexOf('%'));
-                                BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
-                                Log.d("BFS:", BFSPath + "");
-                                    count++;
-                                    if (BFSPath.indexOf("|")==-1 ){
-                                        BFSPath+="|"+ toId;
-                                        BFScoorPath= toCoorX+":"+toCoorY+"|"+ BFScoorPath;
-                                    }
-                                    else { //more than one station
-                                        String temp = BFSPath.substring(0, BFSPath.indexOf("|"));
-                                        String tempBFSPath = BFSPath.substring(BFSPath.indexOf("|") + 1);
-
-                                        String tempcoor = BFScoorPath.substring(0, BFScoorPath.indexOf("|"));
-                                        String tempBFScoorPath = BFScoorPath.substring(BFScoorPath.indexOf("|") + 1);
-
-                                        double tempLat = Double.parseDouble(tempcoor.substring(0, tempcoor.indexOf(":")));
-                                        double tempLong = Double.parseDouble(tempcoor.substring(tempcoor.indexOf(":") + 1));
-
-                                        String tempChild = "";
-
-                                        while (tempBFSPath.indexOf("|") != -1) {
-                                            //first child
-                                            String tempComp = tempBFSPath.substring(0, tempBFSPath.indexOf("|"));
-                                            String tempCoor = tempBFScoorPath.substring(0, tempBFScoorPath.indexOf("|"));
-
-                                            tempBFSPath = tempBFSPath.substring(tempBFSPath.indexOf("|") + 1);
-                                            tempBFScoorPath = tempBFScoorPath.substring(tempBFScoorPath.indexOf("|") + 1);
-
-                                            if (tempComp.charAt(0) != temp.charAt(0) || tempComp.charAt(2) != temp.charAt(2)) {
-                                                Algorithm.altID = tempComp;
-                                                Algorithm.altLat = Double.parseDouble(tempCoor.substring(0, tempCoor.indexOf(":")));
-                                                Algorithm.altLong = Double.parseDouble(tempCoor.substring(tempCoor.indexOf(":") + 1));
-
-                                                Algorithm.totalTime = Algorithm.altBFS(temp, tempLat, tempLong, tempComp, tempChild);
-                                                tempBFSPath = "";
-                                            }
-                                            tempChild = temp;
-                                            temp = tempComp;
-                                            tempLat = Double.parseDouble(tempCoor.substring(tempCoor.indexOf(":") + 1));
-                                            tempLong = Double.parseDouble(tempCoor.substring(0, tempCoor.indexOf(":")));
-                                        }
-                                    if ( Algorithm.altLat !=0 && Algorithm.altLong!=0){
-                                        String AltBFS = Algorithm.BFS(Algorithm.altID, toId, Algorithm.altLat, Algorithm.altLong, Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
-                                         Algorithm.BFS( fromId,Algorithm.altID,Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Algorithm.altLat, Algorithm.altLong);
-
-                                BFSPath += "|" + AltBFS.substring(0,AltBFS.indexOf('%'))+"|"+toId;
-                                BFScoorPath = toCoorX+":"+toCoorY +"|"+AltBFS.substring(AltBFS.indexOf('%') + 1)+"|"+BFScoorPath;}
-
-                                else{
+                                        BFS=Algorithm.BFS(fromId, toId, Double.parseDouble(fromCoorX), Double.parseDouble(fromCoorY), Double.parseDouble(toCoorX), Double.parseDouble(toCoorY));
+                                        BFSPath = BFS.substring(0,BFS.indexOf('%'));
+                                        BFScoorPath = BFS.substring(BFS.indexOf('%') + 1);
                                         BFSPath += "|"+toId;
                                         BFScoorPath = toCoorX+":"+toCoorY+"|"+BFScoorPath;
+                                        BFSTime = Math.round(Algorithm.totalTime);
+                                        Log.d("BFS:", BFSPath + "");
+                                    } //count condition
+                                    pathCoordinates(2, BFScoorPath);
+                                    routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
+                                    count++;
+
+                                    if(BFSTime!= 0)
+                                        map.duration.setText("Time: " + BFSTime + " minutes");
+
                                 }
-                                    }
-                                    BFSTime = Math.round(Algorithm.totalTime);
-
-                                }//count condition
-
-
-
-
-
-
-                                pathCoordinates(2, BFScoorPath);
-                                routeInfo.startRouteInfo(BFSPath, lineCoorBFS);
-                                if(BFSTime!= 0)
-                                map.duration.setText("Time: " + BFSTime + " minutes");
-
-                            }
-
                             if (algorithmoption == 3) {
                                 //DFS Algorithm
                                 if ((!map.fromname.equals(fromname) && !map.toname.equals(toname))|| count==2){

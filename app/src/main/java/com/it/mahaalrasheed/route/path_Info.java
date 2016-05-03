@@ -20,6 +20,14 @@ public class path_Info extends AppCompatActivity {
 
         setContentView(R.layout.activity_path__info);
 
+        map.img1.setImageResource(R.mipmap.no_swip);
+        map.img2.setImageResource(R.mipmap.no_swip);
+        map.img3.setImageResource(R.mipmap.no_swip);
+        map.img4.setImageResource(R.mipmap.no_swip);
+        map.img5.setImageResource(R.mipmap.no_swip);
+        map.img6.setImageResource(R.mipmap.no_swip);
+        map.img7.setImageResource(R.mipmap.no_swip);
+
         for( int i =0;i<routeInfo.number;i++){
             itemname[i]=routeInfo.stationName.get(i);
 
@@ -28,8 +36,7 @@ public class path_Info extends AppCompatActivity {
             else
             imgid[i]= R.mipmap.busicon;
 
-            if(i == 0 )
-                map.img1.setImageResource(imgid[i]);
+            if(i == 0 ) map.img1.setImageResource(imgid[i]);
             else
             if(i == 1 ) map.img2.setImageResource(imgid[i]);
             else

@@ -76,7 +76,7 @@ public class map extends AppCompatActivity
 
 
     //test commit
-    public static final String ROOT_URL = "http://10.6.192.155/";
+    public static final String ROOT_URL = "http://192.168.100.16/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
 
@@ -215,8 +215,24 @@ public class map extends AppCompatActivity
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //Clearing every thing before loading
                 duration.setText("");
                section_label.setText("Loading...");
+                img1.setImageResource(R.mipmap.no_swip);
+                img2.setImageResource(R.mipmap.no_swip);
+                next1.setImageResource(R.mipmap.no_swip);
+                img3.setImageResource(R.mipmap.no_swip);
+                next2.setImageResource(R.mipmap.no_swip);
+                img4.setImageResource(R.mipmap.no_swip);
+                next3.setImageResource(R.mipmap.no_swip);
+                img5.setImageResource(R.mipmap.no_swip);
+                next4.setImageResource(R.mipmap.no_swip);
+                img6.setImageResource(R.mipmap.no_swip);
+                next5.setImageResource(R.mipmap.no_swip);
+                img7.setImageResource(R.mipmap.no_swip);
+                next6.setImageResource(R.mipmap.no_swip);
+
                 left.setImageResource(R.mipmap.left);
                 swiping++;
 
@@ -226,18 +242,28 @@ public class map extends AppCompatActivity
                 }
                 testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
 
-                if (swiping == 3)
-                    duration.setText("Time: "+Math.round(Algorithm.totalD) + " minutes");
-                else
-                    duration.setText("Time: "+Math.round(Algorithm.totalB) + " minutes");
             }
         });
 
         left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Clearing every thing before loading
                 duration.setText("");
                 section_label.setText("Loading...");
+                img1.setImageResource(R.mipmap.no_swip);
+                img2.setImageResource(R.mipmap.no_swip);
+                next1.setImageResource(R.mipmap.no_swip);
+                img3.setImageResource(R.mipmap.no_swip);
+                next2.setImageResource(R.mipmap.no_swip);
+                img4.setImageResource(R.mipmap.no_swip);
+                next3.setImageResource(R.mipmap.no_swip);
+                img5.setImageResource(R.mipmap.no_swip);
+                next4.setImageResource(R.mipmap.no_swip);
+                img6.setImageResource(R.mipmap.no_swip);
+                next5.setImageResource(R.mipmap.no_swip);
+                img7.setImageResource(R.mipmap.no_swip);
+                next6.setImageResource(R.mipmap.no_swip);
                 swiping--;
                 right.setImageResource(R.mipmap.right);
                 if (swiping == 1) {
@@ -246,10 +272,6 @@ public class map extends AppCompatActivity
                 }
                 testroute.route(Fromlat, Fromlng, Tolat, Tolng, swiping);
 
-                if (swiping == 3)
-                    duration.setText("Time: "+Math.round(Algorithm.totalA) + " minutes");
-                else
-                    duration.setText("Time: "+Math.round(Algorithm.totalB) + " minutes");
             }
         });
 
@@ -305,8 +327,22 @@ public class map extends AppCompatActivity
         frag.getLayoutParams().height = (int)(display.getHeight()*0.2);
         swiping = 1;
         left.setImageResource(R.mipmap.no_swip);
+        //Clearing every thing before loading
         duration.setText("");
         section_label.setText("Loading...");
+        img1.setImageResource(R.mipmap.no_swip);
+        img2.setImageResource(R.mipmap.no_swip);
+        next1.setImageResource(R.mipmap.no_swip);
+        img3.setImageResource(R.mipmap.no_swip);
+        next2.setImageResource(R.mipmap.no_swip);
+        img4.setImageResource(R.mipmap.no_swip);
+        next3.setImageResource(R.mipmap.no_swip);
+        img5.setImageResource(R.mipmap.no_swip);
+        next4.setImageResource(R.mipmap.no_swip);
+        img6.setImageResource(R.mipmap.no_swip);
+        next5.setImageResource(R.mipmap.no_swip);
+        img7.setImageResource(R.mipmap.no_swip);
+        next6.setImageResource(R.mipmap.no_swip);
         testroute.count =0;
         testroute.route(Fromlat, Fromlng, Tolat, Tolng, 1);
     }
@@ -402,7 +438,7 @@ public class map extends AppCompatActivity
                     @Override
                     public void failure(RetrofitError error) {
                         //If any error occurred displaying the error as toast
-                        Toast.makeText(map.this, error.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(map.this, "You have weak internet connection", Toast.LENGTH_LONG).show();
                     }
                 }
         );
@@ -623,7 +659,7 @@ public class map extends AppCompatActivity
                     @Override
                     public void failure(RetrofitError error) {
                         //If any error occured displaying the error as toast
-                        Toast.makeText(map.this, error.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(map.this, "You have weak internet connection", Toast.LENGTH_LONG).show();
                     }
                 }
         );
@@ -743,8 +779,7 @@ public class map extends AppCompatActivity
                                 public void onClick(DialogInterface dialog, int which) {
                                 }
                             }).show();
-                else
-                    Toast.makeText(getApplicationContext(), "The point is added", Toast.LENGTH_SHORT).show();
+
 
                 marker.remove();
             }
