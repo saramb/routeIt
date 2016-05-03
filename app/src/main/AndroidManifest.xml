@@ -62,7 +62,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".path_Info"
-            android:label=""/>
+            android:label="Route Information"/>
         <activity android:name=".Editfav"
             android:label="Edit Favorite"
             ></activity>

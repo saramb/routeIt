@@ -85,7 +85,6 @@ public class testroute {
                         try {
                             //Initializing buffered reader
 
-
                             reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
                             //Reading the output in the string
                             output = reader.readLine();
@@ -226,8 +225,8 @@ public class testroute {
 
                             }
 
-                            double sum = Double.parseDouble(testroute.distanceFrom) + Double.parseDouble(testroute.distanceTo);
-                            double time = 15*(sum/15);
+                            double sum = Double.parseDouble(testroute.distanceFrom) ;
+                            double time = 15*(sum/0.6);
 
                             if (time > 30 )
                                 map.section_label.setText("You need a car to reach the first station");

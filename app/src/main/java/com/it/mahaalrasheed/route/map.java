@@ -76,7 +76,7 @@ public class map extends AppCompatActivity
 
 
     //test commit
-    public static final String ROOT_URL = "http://192.168.100.14/";
+    public static final String ROOT_URL = "http://10.6.192.155/";
     //public static final String ROOT_URL = "http://rawan.16mb.com/tesst/";
 
 
@@ -144,6 +144,7 @@ public class map extends AppCompatActivity
         
         DisplayMap();
         buildGoogleApiClient();
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.774265, 46.738586), 10));
 
         //Method to retrieve time data from DB
         testroute.RetrieveSchedule();
@@ -308,7 +309,6 @@ public class map extends AppCompatActivity
         section_label.setText("Loading...");
         testroute.count =0;
         testroute.route(Fromlat, Fromlng, Tolat, Tolng, 1);
-        duration.setText("Time: "+Math.round(Algorithm.totalA) + " minutes");
     }
 
     public static int getPixelsFromDp(Context context, float dp) {

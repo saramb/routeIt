@@ -151,12 +151,7 @@ public class Splash extends AppCompatActivity {
                                 check2();
                             }
                         });
-        alertDialogBuilder.setNegativeButton("No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
@@ -176,12 +171,7 @@ public class Splash extends AppCompatActivity {
 
                             }
                         });
-        alertDialogBuilder.setNegativeButton("No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
