@@ -58,7 +58,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,7 +142,7 @@ public class map extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        
+
         DisplayMap();
         buildGoogleApiClient();
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.774265, 46.738586), 10));
@@ -677,7 +679,8 @@ public class map extends AppCompatActivity
 
 // Building the parameters to the web service
         String parameters = str_origin + "&" + str_dest + "&" + sensor;
-        String parameters2 = str_origin + "&" + str_dest + "&" + deptTime+"&"+"key=AIzaSyAnD0zTSJWDgBJLNXzMPbTd7x_RTjeiqiA";
+
+        String parameters2 = str_origin + "&" + str_dest + "&" +"departure_time="+deptTime+"&mode=driving"+"&"+"key=AIzaSyAnD0zTSJWDgBJLNXzMPbTd7x_RTjeiqiA";
 
 // Output format
         String output = "json";
