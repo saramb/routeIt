@@ -76,14 +76,14 @@ public class map extends AppCompatActivity
 
 
     //test commit
-   //public static final String ROOT_URL = "http://192.168.100.16/";
+    //public static final String ROOT_URL = "http://192.168.100.14/";
+    public static final String ROOT_URL = "http://rawan.16mb.com/RouteIt/";
 
 
     private Button infoButton;
     private Button infoButton1;
     private Button infoButton2;
     static Button from, to;
-
     ListView lv;
     static TextView section_label,duration;
     static ImageView img1;
@@ -95,7 +95,6 @@ public class map extends AppCompatActivity
     static ImageView img7,next1,next2 ,next3 ,next4,next5 ,next6 ;
     ImageButton left, right;
     static boolean DurFlag;
-
 
     static RelativeLayout frag;
 
@@ -133,8 +132,6 @@ public class map extends AppCompatActivity
     public static String[] itemname = new String[100];
     public static Integer[] imgid = new Integer[100];
     static double DU=0;
-
-    static double totalA = 0, totalB = 0, totalD = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,19 +278,31 @@ public class map extends AppCompatActivity
 
         if (page != null) {
             if (page.equals("from")) {
-                    map.clear();
+
+                map.clear();
+
+                toname = "To";
+                Tolng = 0;
+                Tolat =0;
+                to.setText(toname);
+
                 fromname = Locationname;
                 Fromlng = getIntent().getDoubleExtra("lng", 0);
                 Fromlat = getIntent().getDoubleExtra("lat", 0);
                 from.setText(fromname);
 
             } else if (page.equals("to")) {
-                    map.clear();
-                from.setText(fromname);
+                map.clear();
+                if (Fromlat == 0 || Fromlng == 0) {
+                    from.setText("Current Location");
+                    Fromlng = lng;
+                    Fromlat = lat;}
+
                 toname = Locationname;
                 Tolng = getIntent().getDoubleExtra("lng", 0);
                 Tolat = getIntent().getDoubleExtra("lat", 0);
                 to.setText(toname);
+
                 if (Fromlng == Tolng && Fromlat == Tolat)
                     new AlertDialog.Builder(map.this)
                             .setMessage("The point you have chosen for 'From' is the same point in 'To'")
@@ -349,6 +358,15 @@ public class map extends AppCompatActivity
     public static int getPixelsFromDp(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Fromlng = 0;
+        Fromlat = 0;
+        fromname="From";
+        from.setText(fromname);
     }
 
     public void DisplayMap() {
@@ -765,10 +783,15 @@ public class map extends AppCompatActivity
                 Fromlat = latat;
                 Fromlng = longt;
 
-                if (Favorites.nameFav.equals(""))
+                toname = "To";
+                Tolng = 0;
+                Tolat =0;
+                to.setText(toname);
+
+               // if (Favorites.nameFav.equals(""))
                     from.setText(Fromlat + "," + Fromlng);
-                else
-                    from.setText(Favorites.nameFav + "");
+               // else
+                   // from.setText(Favorites.nameFav + "");
                 // Here action triggered after clicking the button
                 if (Tolat == Fromlat && Tolng == Fromlng)
                     new AlertDialog.Builder(map.this)
@@ -794,10 +817,11 @@ public class map extends AppCompatActivity
                 Tolat = latat;
                 Tolng = longt;
 
-                if (Favorites.nameFav.equals(""))
+
+                //if (Favorites.nameFav.equals(""))
                     to.setText(Tolat + "," + Tolng);
-                else
-                    to.setText(Favorites.nameFav + "");
+                //else
+                   // to.setText(Favorites.nameFav + "");
                 if (Tolat == Fromlat && Tolng == Fromlng)
                     new AlertDialog.Builder(map.this)
                             .setMessage("The point you have chosen for 'From' is the same point in 'To'")
