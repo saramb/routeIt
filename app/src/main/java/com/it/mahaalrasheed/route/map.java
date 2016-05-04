@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -58,9 +59,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,8 +106,8 @@ public class map extends AppCompatActivity
     static ArrayList<Polyline> polylines = new ArrayList<Polyline>();
     static GoogleMap map;
     private ViewGroup infoWindow;
-    static double Tolng, Fromlng, lng,latat;
-    static double Tolat, Fromlat, lat,longt;
+    static double Tolng, Fromlng=0, lng,latat;
+    static double Tolat, Fromlat=0, lat,longt;
     Location location;
     MapFragment fm;
     private GoogleApiClient mGoogleApiClient;
@@ -186,6 +185,7 @@ public class map extends AppCompatActivity
         next5 = (ImageView) findViewById(R.id.next4);
         next6 = (ImageView) findViewById(R.id.next6);
 
+
         frag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,6 +214,7 @@ public class map extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
+                map.clear();
                 //Clearing every thing before loading
                 duration.setText("");
                section_label.setText("Loading...");
@@ -246,6 +247,8 @@ public class map extends AppCompatActivity
         left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                map.clear();
+
                 //Clearing every thing before loading
                 duration.setText("");
                 section_label.setText("Loading...");
@@ -300,6 +303,7 @@ public class map extends AppCompatActivity
                     Fromlng = lng;
                     Fromlat = lat;}
 
+                from.setText(fromname);
                 toname = Locationname;
                 Tolng = getIntent().getDoubleExtra("lng", 0);
                 Tolat = getIntent().getDoubleExtra("lat", 0);
@@ -333,8 +337,15 @@ public class map extends AppCompatActivity
             from.setText("Current Location");
             Fromlng = lng;
             Fromlat = lat;}
+
         android.view.Display display = ((android.view.WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        frag.getLayoutParams().height = (int)(display.getHeight()*0.2);
+
+        frag.getLayoutParams().height = (int)(display.getHeight()*0.3);
+        duration.setTop((int)(frag.getHeight()*0.2));
+        section_label.setTop((int) (frag.getHeight() * 0.25));
+        left.setTop((int)(frag.getHeight()*0.3));
+        right.setTop((int)(frag.getHeight()*0.3));
+
         swiping = 1;
         left.setImageResource(R.mipmap.no_swip);
         //Clearing every thing before loading
@@ -365,10 +376,6 @@ public class map extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        Fromlng = 0;
-        Fromlat = 0;
-        fromname="From";
-        from.setText(fromname);
     }
 
     public void DisplayMap() {
@@ -756,6 +763,20 @@ public class map extends AppCompatActivity
         return data;
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            // do something on back.
+            from.setText("From");
+            Fromlng = 0;
+            Fromlat = 0;
+            fromname="From";
+            finish();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
@@ -785,6 +806,9 @@ public class map extends AppCompatActivity
 
                 Fromlat = latat;
                 Fromlng = longt;
+
+                android.view.Display display = ((android.view.WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+                frag.getLayoutParams().height = 0;
 
                 toname = "To";
                 Tolng = 0;

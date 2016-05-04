@@ -54,7 +54,7 @@ public class testroute {
     static  String [][] Bline4_2 = null;
     static String AstarPath, BFSPath, DFSPath;
     static String AstarcoorPath,BFScoorPath, DFScoorPath;
-    static int count=0;
+    static int count;
     static double AstarTime ,BFSTime,DFSTime;
 
     public static void route(double fromCoor1, double fromCoor2,double toCoor1,double toCoor2, final int algorithmoption){
