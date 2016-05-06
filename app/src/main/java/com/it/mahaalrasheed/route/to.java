@@ -53,6 +53,7 @@ public class to extends AppCompatActivity implements
         protected void onCreate(Bundle savedInstanceState) {
 
             super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
             setContentView(R.layout.activity_to);
 
             BOUNDS_MOUNTAIN_VIEW = from.BOUNDS_MOUNTAIN_VIEW;
