@@ -17,7 +17,7 @@ public class path_Info extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
         setContentView(R.layout.activity_path__info);
 
         map.img1.setImageResource(R.mipmap.no_swip);
