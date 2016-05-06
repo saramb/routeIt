@@ -694,7 +694,7 @@ public static double altBFS(String from , double startX, double startY, String c
             Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             if (Linenext == Linecurrent) {
-                ArrayList<LatLng> durationCoor=new ArrayList<>();
+               ArrayList<LatLng> durationCoor=new ArrayList<>();
                 durationCoor.add(new LatLng(coordinateX, coordinateY));
                 durationCoor.add(new LatLng(nextcordX, nextcordY));
 
@@ -708,8 +708,8 @@ public static double altBFS(String from , double startX, double startY, String c
 
                 }
                 //==== UNITY VERSION ====//
-
-             /*if (Linenext == 1 && Linecurrent == 1) {
+/*
+             if (Linenext == 1 && Linecurrent == 1) {
                    sum = congestion.get(0);
 
                 }//line 1
@@ -726,8 +726,8 @@ public static double altBFS(String from , double startX, double startY, String c
                                       sum = congestion.get(0);
 
 
-                }//line 4
-*/
+                }//line 4*/
+
             }
             else        //distance in (mile/hr)/ 0.621371 => kilo/hr / (speed) 120 => hr (time) => time *60 => min
             {
